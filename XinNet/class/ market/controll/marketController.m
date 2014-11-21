@@ -26,19 +26,19 @@
     [super viewDidLoad];
     self.title =@"市场行情";
     self.view.backgroundColor =[UIColor whiteColor];
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(moreClick:)];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"more.png" highlightedSearch:@"more.png" target:(self) action:@selector(moreClick:)];
     [self addTableView];
     
     _moreSelectedBtn =[[UIButton alloc]init];
 }
 -(void)addTableView{
-    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 20, kWidth, kHeight-20) style:UITableViewStylePlain];
+    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight) style:UITableViewStylePlain];
     _tableView.delegate =self;
     _tableView.dataSource =self;
     _tableView.backgroundColor =[UIColor whiteColor];
     _tableView.showsHorizontalScrollIndicator = NO;
     _tableView.showsVerticalScrollIndicator = NO;
-//    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     [self.view addSubview:_tableView];
 
@@ -107,7 +107,7 @@
 #pragma mark---TableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return 68;
+    return 80;
     
 }
 
@@ -132,6 +132,9 @@
     if (!cell) {
         cell=[[marketCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
         
+        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
+        [cell.contentView addSubview:cellLine];
+        cellLine.backgroundColor =HexRGB(0xe6e3e4);
     }
     return cell;
 }

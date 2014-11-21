@@ -9,11 +9,11 @@
 #import "jobDetailsView.h"
 #import "YYSearchButton.h"
 #import "YYalertView.h"
-#define YYBODER 20
+#define YYBODER 16
 @interface jobDetailsView ()<UIScrollViewDelegate,YYalertViewDelegate>
 {
     UIScrollView *_bigScrollView;
-    UIScrollView *_jobScrollView;
+    UIView *_jobScrollView;
     UIScrollView *_companyScrollView;
     UIButton *_selectedBtn;
 }
@@ -23,7 +23,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor =[UIColor whiteColor];
+    self.view.backgroundColor =HexRGB(0xe9f1f6);
     self.title = @"招聘详情";
     
     _selectedBtn =[[UIButton alloc]init];
@@ -34,7 +34,7 @@
 }
 -(void)addScrollview{
     
-    _bigScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 94, kWidth, kHeight-94)];
+    _bigScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 116, kWidth, kHeight-94)];
     _bigScrollView.contentSize = CGSizeMake(kWidth*2, kHeight-64);
     _bigScrollView.backgroundColor =[UIColor whiteColor];
     _bigScrollView.delegate = self;
@@ -51,62 +51,88 @@
     
 }
 -(void)addJobScrollView{
-    _jobScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-94)];
-    //    _jobScrollView.contentSize = CGSizeMake(kWidth, kHeight-64);
-    _jobScrollView.backgroundColor =[UIColor whiteColor];
-    _jobScrollView.bounces = YES;
+    _jobScrollView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-94)];
+    _jobScrollView.backgroundColor =HexRGB(0xe9f1f6);
     [_bigScrollView addSubview:_jobScrollView];
     [self addJoblabel];
     
 }
 -(void)addJoblabel{
+    
+    UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(YYBODER, 10, kWidth-YYBODER*2, 100)];
+    [_jobScrollView addSubview:headerImage];
+    headerImage.backgroundColor =[UIColor lightGrayColor];
+    
+    UIView *lineView =[[UIView alloc]initWithFrame:CGRectMake(YYBODER, 120, kWidth-YYBODER*2+2, 81)];
+    [_jobScrollView addSubview:lineView];
+    lineView.backgroundColor =HexRGB(0xe6e3e4);
+    
     for (int i=0; i<2; i++) {
-        NSArray *titleArr =@[@"求职岗位",@"时间"];
-        UILabel *timeLabel =[[UILabel alloc]initWithFrame:CGRectMake(0, YYBODER+i%3*30, kWidth, 20)];
+        NSArray *titleArr =@[@"   求职岗位:",@"   时间:"];
+        UILabel *timeLabel =[[UILabel alloc]initWithFrame:CGRectMake(YYBODER+1, 121+i%3*40, kWidth-YYBODER*2, 39)];
         timeLabel.text =titleArr[i];
-        timeLabel.textAlignment=NSTextAlignmentCenter;
+        timeLabel.backgroundColor =[UIColor whiteColor];
         [_jobScrollView addSubview:timeLabel];
 
     }
-    UIView *lineView =[[UIView alloc]initWithFrame:CGRectMake(0, 80, kWidth, 1)];
-    [_jobScrollView addSubview:lineView];
-    lineView.backgroundColor =[UIColor lightGrayColor];
+   
     
-    UILabel *contentLabel =[[UILabel alloc]initWithFrame:CGRectMake(YYBODER, 90, kWidth-YYBODER*2, 300)];
-    contentLabel.text =@"详情内容";
-    contentLabel.textAlignment=NSTextAlignmentCenter;
-
-    [_jobScrollView addSubview:contentLabel];
+//    UILabel *contentLabel =[[UILabel alloc]initWithFrame:CGRectMake(YYBODER, 90, kWidth-YYBODER*2, 300)];
+//    contentLabel.text =@"详情内容";
+//    contentLabel.textAlignment=NSTextAlignmentCenter;
+//
+//    [_jobScrollView addSubview:contentLabel];
     
 }
 -(void)addWriteBtn{
     YYSearchButton *wirteBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
-    wirteBtn.frame = CGRectMake(20, kHeight-54,kWidth-YYBODER*2-70,44);
+    wirteBtn.frame = CGRectMake(YYBODER, kHeight-40,kWidth-YYBODER*2,30);
     [wirteBtn addTarget:self action:@selector(wirteBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [wirteBtn setTitle:@"           写评论" forState:UIControlStateNormal];
-    [wirteBtn setImage:[UIImage imageNamed:@"nav_code.png"] forState:UIControlStateNormal];
+    [wirteBtn setTitle:@"     写评论" forState:UIControlStateNormal];
+    [wirteBtn setImage:[UIImage imageNamed:@"write.png"] forState:UIControlStateNormal];
     wirteBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
     [wirteBtn setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
     [self.view addSubview:wirteBtn];
     
-    YYSearchButton *collectBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
-    collectBtn.frame = CGRectMake(wirteBtn.frame.size.width+30, kHeight-54,60,44);
-    [collectBtn addTarget:self action:@selector(wirteBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [collectBtn setTitle:@"收藏" forState:UIControlStateNormal];
-    collectBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
-    [collectBtn setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
-    [self.view addSubview:collectBtn];
-    
+//    YYSearchButton *collectBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
+//    collectBtn.frame = CGRectMake(wirteBtn.frame.size.width+30, kHeight-54,60,44);
+//    [collectBtn addTarget:self action:@selector(wirteBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+//    [collectBtn setTitle:@"收藏" forState:UIControlStateNormal];
+//    collectBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
+//    [collectBtn setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
+//    [self.view addSubview:collectBtn];
+//    
     
     
 }
 
 -(void)addCompanyScrollView{
     _companyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(kWidth, 0, kWidth, kHeight-94)];
-    _bigScrollView.backgroundColor =[UIColor whiteColor];
+    _bigScrollView.backgroundColor =HexRGB(0xe9f1f6);
     _companyScrollView.bounces = YES;
     [_bigScrollView addSubview:_companyScrollView];
+    [self addCompanylabel];
     
+}
+
+-(void)addCompanylabel{
+    
+    UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(YYBODER, 10, kWidth-YYBODER*2, 100)];
+    [_companyScrollView addSubview:headerImage];
+    headerImage.backgroundColor =[UIColor lightGrayColor];
+    
+    UIView *lineView =[[UIView alloc]initWithFrame:CGRectMake(YYBODER, 120, kWidth-YYBODER*2+2, 81)];
+    [_companyScrollView addSubview:lineView];
+    lineView.backgroundColor =HexRGB(0xe6e3e4);
+    
+    for (int i=0; i<2; i++) {
+        NSArray *titleArr =@[@"   公司名称:",@"   公司简介:"];
+        UILabel *timeLabel =[[UILabel alloc]initWithFrame:CGRectMake(YYBODER+1, 121+i%3*40, kWidth-YYBODER*2, 39)];
+        timeLabel.text =titleArr[i];
+        timeLabel.backgroundColor =[UIColor whiteColor];
+        [_companyScrollView addSubview:timeLabel];
+        
+    }
 }
 
 -(void)addChooseBtn{
@@ -117,10 +143,10 @@
         
         [chooseBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
         [chooseBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
-        chooseBtn.frame =CGRectMake(20+i%3*((kWidth-20)/2), 64, (kWidth-20)/2, 30);
+        chooseBtn.frame =CGRectMake(20+i%3*((kWidth-40)/2), 75, (kWidth-40)/2, 40);
         [chooseBtn setTitle:titleArr[i] forState:UIControlStateNormal];
-        [chooseBtn setImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
-        [chooseBtn setImage:[UIImage imageNamed:@"finish1.png"] forState:UIControlStateSelected];
+        [chooseBtn setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
+        [chooseBtn setBackgroundImage:[UIImage imageNamed:@"finish1.png"] forState:UIControlStateSelected];
         [chooseBtn addTarget:self action:@selector(chooseBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         
         chooseBtn.tag = 200+i;

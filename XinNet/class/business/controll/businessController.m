@@ -36,7 +36,7 @@
     _orangLin =[[UIView alloc]init];
     [self.view addSubview:_orangLin];
     _orangLin.frame =CGRectMake(0, 93, 107, 2);
-    _orangLin.backgroundColor =HexRGB(0x069dd4);
+    _orangLin.backgroundColor =HexRGB(0x38c166);
 
     [self addbusinessBtn];
     [self addBigCompanyScrollView];
@@ -189,8 +189,11 @@
         cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
         cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
     }
+    UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
+    [cell.contentView addSubview:cellLine];
+    cellLine.backgroundColor =HexRGB(0xe6e3e4);
     cell.textLabel.text = @"标题";
-    cell.imageView.image = [UIImage imageNamed:@"l.png"];
+    cell.imageView.image = [UIImage imageNamed:@"business_img.png"];
     return cell;
 }
 
@@ -199,7 +202,7 @@
     
     companyBackView =[[UIView alloc]initWithFrame:CGRectMake(0, 64, kWidth, 30)];
     [self.view addSubview:companyBackView];
-    companyBackView.backgroundColor =HexRGB(0xe1e9e9);
+    companyBackView.backgroundColor =HexRGB(0xf8f8f8);
     
     UIView *companyBackLine =[[UIView alloc]initWithFrame:CGRectMake(0, 29, kWidth, 1)];
     companyBackLine.backgroundColor =[UIColor lightGrayColor];
@@ -213,7 +216,7 @@
         [companyBackView addSubview:companyBtn];
         
         [companyBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
-        [companyBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
+        [companyBtn setTitleColor:HexRGB(0x38c66) forState:UIControlStateSelected];
         
         [companyBtn setBackgroundImage:[UIImage imageNamed:@"deleteBtn _selected.png"] forState:UIControlStateHighlighted];
         companyBtn.frame =CGRectMake(0+p%3*kWidth/3, 0, kWidth/3, 30);

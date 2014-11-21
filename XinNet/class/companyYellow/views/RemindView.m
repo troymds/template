@@ -14,7 +14,7 @@
 
 + (void)showViewWithTitle:(NSString *)title location:(LocationType)location
 {
-    CGSize size = [AdaptationSize getSizeFromString:title Font:[UIFont systemFontOfSize:13] withHight:25 withWidth:CGFLOAT_MAX];
+    CGSize size = [AdaptationSize getSizeFromString:title Font:[UIFont systemFontOfSize:PxFont(23)] withHight:25 withWidth:CGFLOAT_MAX];
     UILabel *remindLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width+20, 50)];
     CGPoint center = CGPointMake(kWidth/2, kHeight-90);
     if (location == TOP) {
@@ -25,8 +25,8 @@
     }
     remindLabel.text = title;
     remindLabel.textAlignment = NSTextAlignmentCenter;
-    remindLabel.font = [UIFont systemFontOfSize:13];
-    remindLabel.backgroundColor = [UIColor lightGrayColor];
+    remindLabel.font = [UIFont systemFontOfSize:PxFont(23)];
+    remindLabel.backgroundColor = HexRGB(0xa5a4a4);
     remindLabel.textColor = [UIColor whiteColor];
     remindLabel.center = center;
     [[UIApplication sharedApplication].keyWindow addSubview:remindLabel];

@@ -19,11 +19,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor =[UIColor whiteColor];
+    self.view.backgroundColor =HexRGB(0xe9f1f6);
     
     
     [self addCollectionAndShareSDK];
-    self.title = @"详情";
 
     [self addLabel];
     
@@ -39,16 +38,17 @@
     backCollectView.backgroundColor =[UIColor clearColor];
     self.navigationItem.titleView = backCollectView;
     
-    UILabel *titiLabel =[[UILabel alloc]initWithFrame:CGRectMake(100, 0, 100, 44)];
+    UILabel *titiLabel =[[UILabel alloc]initWithFrame:CGRectMake(70, 0, 100, 44)];
     titiLabel.text =@"详情";
-    titiLabel.font =[UIFont systemFontOfSize:23];
+    titiLabel.font =[UIFont systemFontOfSize:PxFont(23)];
     [backCollectView addSubview:titiLabel];
     titiLabel.backgroundColor =[UIColor clearColor];
     
     for (int i=0; i<2; i++) {
         NSArray *titleArr =@[@"收藏",@"分享"];
         YYSearchButton * collectionBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
-        collectionBtn.frame =CGRectMake(200+i%3*50, 12, 40, 20);
+        collectionBtn.frame =CGRectMake(170+i%3*40, 18, 30, 20);
+        collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
         collectionBtn.tag = 2000+i;
         [collectionBtn setTitle:titleArr[i] forState:UIControlStateNormal];
         [collectionBtn addTarget:self action:@selector(collectionBtn:) forControlEvents:UIControlEventTouchUpInside];
@@ -154,7 +154,7 @@
     UILabel *titleLabel=[[UILabel alloc]initWithFrame:CGRectMake(0, 70, kWidth, 30)];
     [self.view addSubview:titleLabel];
     titleLabel.text =@"新闻标题";
-    titleLabel.font =[UIFont systemFontOfSize:23];
+    titleLabel.font =[UIFont systemFontOfSize:PxFont(22)];
     titleLabel.textAlignment =NSTextAlignmentCenter;
     
     for (int i=0; i<2; i++) {
@@ -162,7 +162,7 @@
         UILabel *titleLabel=[[UILabel alloc]initWithFrame:CGRectMake(i%3*(kWidth/2), 100, kWidth/2, 30)];
         [self.view addSubview:titleLabel];
         titleLabel.text =titleArr[i];
-        titleLabel.font =[UIFont systemFontOfSize:18];
+        titleLabel.font =[UIFont systemFontOfSize:PxFont(18)];
         titleLabel.textAlignment =NSTextAlignmentCenter;
         
         UIView *line =[[UIView alloc]initWithFrame:CGRectMake(0, 135+i%3*(100+370), kWidth, 1)];
@@ -171,8 +171,9 @@
     }
     
     
-    UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(30, 138, kWidth-60, 100)];
+    UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(16, 145, kWidth-32, 100)];
     headerImage.backgroundColor =[UIColor purpleColor];
+    headerImage.image =[UIImage imageNamed:@"Loa_img.png"];
     [self.view addSubview:headerImage];
     
     
@@ -180,7 +181,7 @@
     [self.view addSubview:contentLable];
     contentLable.text =@"新闻正文";
     contentLable.numberOfLines = 0;
-    contentLable.font =[UIFont systemFontOfSize:20];
+    contentLable.font =[UIFont systemFontOfSize:PxFont(22)];
     contentLable.textAlignment =NSTextAlignmentCenter;
     
     YYSearchButton *writeBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];

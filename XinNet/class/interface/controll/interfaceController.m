@@ -8,7 +8,7 @@
 
 #import "interfaceController.h"
 #import "interfaceDetailsView.h"
-#import "AppMacro.h"
+#import "interfaceCell.h"
 
 @interface interfaceController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
@@ -41,7 +41,7 @@
     _orangLin =[[UIView alloc]init];
     [self.view addSubview:_orangLin];
     _orangLin.frame =CGRectMake(0, 93, 107, 2);
-    _orangLin.backgroundColor =HexRGB(0x069dd4);
+    _orangLin.backgroundColor =HexRGB(0x38c166);
 
     [self addbusinessBtn];
     [self addBigCompanyScrollView];
@@ -171,7 +171,7 @@
 }
 #pragma mark  -----TableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 70;
+    return 80;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -191,13 +191,17 @@
 -(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellIndexfider =@"cell";
-    UITableViewCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
+    interfaceCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
     if (!cell) {
-        cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
+        cell=[[interfaceCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
         cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
+        
+        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
+        [cell.contentView addSubview:cellLine];
+        cellLine.backgroundColor =HexRGB(0xe6e3e4);
     }
-    cell.textLabel.text = @"标题";
-    cell.imageView.image = [UIImage imageNamed:@"l.png"];
+    
+    
     return cell;
 }
 
@@ -220,7 +224,7 @@
         [companyBackView addSubview:companyBtn];
         
         [companyBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
-        [companyBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
+        [companyBtn setTitleColor:HexRGB(0x38c166) forState:UIControlStateSelected];
         
         [companyBtn setBackgroundImage:[UIImage imageNamed:@"deleteBtn _selected.png"] forState:UIControlStateHighlighted];
         companyBtn.frame =CGRectMake(0+p%3*kWidth/3, 0, kWidth/3, 30);

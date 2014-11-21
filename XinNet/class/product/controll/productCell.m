@@ -1,17 +1,18 @@
 //
-//  marketCell.m
-//  NewView
+//  productCell.m
+//  XinNet
 //
-//  Created by YY on 14-11-18.
-//  Copyright (c) 2014年 ___普而摩___. All rights reserved.
+//  Created by YY on 14-11-21.
+//  Copyright (c) 2014年 tianj. All rights reserved.
 //
 
-#import "marketCell.h"
-@implementation marketCell
+#import "productCell.h"
+
+@implementation productCell
 @synthesize supplyImage,read_numLabel,companyLabel,nameLabel;
 
 - (void)awakeFromNib {
-    
+    // Initialization code
 }
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -25,7 +26,7 @@
         
         
         nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 11, 240, 20)];
-        nameLabel.text = @"新闻标题";
+        nameLabel.text = @"产品标题";
         nameLabel.font =[UIFont systemFontOfSize:PxFont(23)];
         [self addSubview:nameLabel];
         nameLabel.textColor=HexRGB(0x3a3a3a);
@@ -34,7 +35,7 @@
         
         
         companyLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 32, 190, 20)];
-        companyLabel.text = @"来源";
+        companyLabel.text = @"所属公司";
         [self addSubview:companyLabel];
         companyLabel.numberOfLines = 0;
         companyLabel.font =[UIFont systemFontOfSize:PxFont(18)];
@@ -42,7 +43,7 @@
         
         
         read_numLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 52, 60, 20)];
-        read_numLabel.text = @"时间";
+        read_numLabel.text = @"产品价格";
         [self addSubview:read_numLabel];
         read_numLabel.font =[UIFont systemFontOfSize:PxFont(18)];
         read_numLabel.textColor = HexRGB(0x808080);
