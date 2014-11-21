@@ -8,7 +8,7 @@
 
 #import "productController.h"
 #import "productDetailsView.h"
-#import "AppMacro.h"
+#import "productCell.h"
 @interface productController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
     
@@ -31,11 +31,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title =@"产品管理";
     self.view.backgroundColor =[UIColor whiteColor];
     _orangLin =[[UIView alloc]init];
     [self.view addSubview:_orangLin];
     _orangLin.frame =CGRectMake(0, 93, 107, 2);
-    _orangLin.backgroundColor =HexRGB(0x069dd4);
+    _orangLin.backgroundColor =HexRGB(0x38c166);
     
     [self addbusinessBtn];
     [self addBigCompanyScrollView];
@@ -114,12 +115,55 @@
         [UIView animateWithDuration:0.01 animations:^{
             _orangLin.frame = CGRectMake(scrollView.contentOffset.x/3,93, kWidth/3, 2);
         }];
+        
+        if (scrollView.contentOffset.x==0) {
+            for (UIView *subView in companyBackView.subviews) {
+                if ([subView isKindOfClass:[UIButton class]]) {
+                    UIButton *btn =(UIButton *)subView;
+                    if (btn.tag ==20) {
+                        _selectedBtn=btn;
+                        _selectedBtn.selected = YES;
+                    }else{
+                        btn.selected = NO;
+                    }
+                }
+            }
+            
+        }else if(scrollView.contentOffset.x==kWidth){
+            for (UIView *subView in companyBackView.subviews) {
+                if ([subView isKindOfClass:[UIButton class]]) {
+                    UIButton *btn =(UIButton *)subView;
+                    if (btn.tag ==21) {
+                        _selectedBtn=btn;
+                        _selectedBtn.selected=YES;
+                    }else{
+                        btn.selected = NO;
+                    }
+                    
+                }
+            }
+        }
+        else if(scrollView.contentOffset.x==kWidth*2){
+            for (UIView *subView in companyBackView.subviews) {
+                if ([subView isKindOfClass:[UIButton class]]) {
+                    UIButton *btn =(UIButton *)subView;
+                    if (btn.tag ==22) {
+                        _selectedBtn=btn;
+                        _selectedBtn.selected=YES;
+                    }else{
+                        btn.selected = NO;
+                    }
+                    
+                }
+            }
+        }
+
     }
     
 }
 #pragma mark  -----TableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 70;
+    return 80;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -139,13 +183,14 @@
 -(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellIndexfider =@"cell";
-    UITableViewCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
+    productCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
     if (!cell) {
-        cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
-        cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
+        cell=[[productCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
     }
-    cell.textLabel.text = @"标题";
-    cell.imageView.image = [UIImage imageNamed:@"l.png"];
+    UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
+    [cell.contentView addSubview:cellLine];
+    cellLine.backgroundColor =HexRGB(0xe6e3e4);
+   
     return cell;
 }
 
@@ -168,7 +213,7 @@
         [companyBackView addSubview:companyBtn];
         
         [companyBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
-        [companyBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
+        [companyBtn setTitleColor:HexRGB(0x38c166) forState:UIControlStateSelected];
         
         
         [companyBtn setBackgroundImage:[UIImage imageNamed:@"deleteBtn _selected.png"] forState:UIControlStateHighlighted];

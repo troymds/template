@@ -25,7 +25,7 @@
     [self addTableView];
 }
 -(void)addTableView{
-    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 20, kWidth, kHeight-20) style:UITableViewStylePlain];
+    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight) style:UITableViewStylePlain];
     _tableView.delegate =self;
     _tableView.dataSource =self;
     _tableView.backgroundColor =[UIColor whiteColor];
@@ -38,7 +38,7 @@
     
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 60;
+    return 80;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -63,7 +63,9 @@
         cell=[[companyYellowCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
         cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
 
-        
+        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
+        [cell.contentView addSubview:cellLine];
+        cellLine.backgroundColor =HexRGB(0xe6e3e4);
     }
     return cell;
 }

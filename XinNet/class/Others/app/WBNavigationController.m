@@ -47,7 +47,7 @@
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackOpaque;
 }
 -(UIBarButtonItem *)createBackButton{
-    return [UIBarButtonItem itemWithIcon:@"nav_return.png" highlightedIcon:@"nav_return_pre.png" target:self action:@selector(backItem)];
+    return [UIBarButtonItem itemWithIcon:@"reture_right.png" highlightedIcon:@"reture_right@2x" target:self action:@selector(backItem)];
 
     
 }

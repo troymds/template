@@ -45,7 +45,7 @@
     [_searchImage addTarget:self action:@selector(searchBarBtn) forControlEvents:UIControlEventTouchUpInside];
     
     
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(zbarSdk)];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"pressent_img" highlightedSearch:@"pressent_img" target:(self) action:@selector(zbarSdk)];
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_logo.png" highlightedSearch:@"nav_logo.png" target:(self) action:nil];
     self.view.userInteractionEnabled = YES;
     
@@ -64,16 +64,19 @@
     for (int i=0; i<9; i++) {
         NSArray *titleArray =@[@"市场行情",@"企业黄页",@"供求商机",@"产品管理",@"话题广场",@"关于我们",@"企业招聘",@"展会信息",@"更多内容"];
         UIImageView *MainImage =[[UIImageView alloc]init];
+        
         MainImage.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+10+i/3*(kHeight/3-30),width,width);
-        MainImage.backgroundColor =[UIColor redColor];
+        MainImage.image = [UIImage imageNamed:[NSString stringWithFormat:@"home_img%d",i+1 ]];
+        MainImage.backgroundColor =[UIColor clearColor];
         [self.view addSubview:MainImage];
         MainImage.userInteractionEnabled = YES;
         
         UIButton *titleBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [self.view addSubview:titleBtn];
         titleBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+100+i/3*(kHeight/3-30), width, 30);
+        [titleBtn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
         [titleBtn setTitle:titleArray[i] forState:UIControlStateNormal];
-        titleBtn.titleLabel.font =[UIFont systemFontOfSize:16];
+        titleBtn.titleLabel.font =[UIFont systemFontOfSize:18];
         [titleBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         
         UITapGestureRecognizer *singleTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClickImage:)];

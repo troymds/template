@@ -21,17 +21,22 @@
     [super viewDidLoad];
     self.view.backgroundColor =[UIColor whiteColor];
     self.title = @ "企业招聘";
+    
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(collectClick:)];
     [self addTableView];
     
 }
+-(void)collectClick:(UIButton *)collect{
+    
+}
 -(void)addTableView{
-    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 20, kWidth, kHeight-20) style:UITableViewStylePlain];
+    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight) style:UITableViewStylePlain];
     _tableView.delegate =self;
     _tableView.dataSource =self;
     _tableView.backgroundColor =[UIColor whiteColor];
     _tableView.showsHorizontalScrollIndicator = NO;
     _tableView.showsVerticalScrollIndicator = NO;
-//    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     [self.view addSubview:_tableView];
 
@@ -39,7 +44,7 @@
 #pragma mark---TableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return 60;
+    return 80;
     
 }
 
@@ -63,7 +68,12 @@
     companyJobCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
     if (!cell) {
         cell=[[companyJobCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
+        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
+        cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
+
         
+        [cell.contentView addSubview:cellLine];
+        cellLine.backgroundColor =HexRGB(0xe6e3e4);
     }
     return cell;
 }

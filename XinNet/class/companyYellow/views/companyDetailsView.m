@@ -7,7 +7,6 @@
 //
 
 #import "companyDetailsView.h"
-#import "YYSearchButton.h"
 #import "YYalertView.h"
 #import "RemindView.h"
 
@@ -15,7 +14,7 @@
 #import "productController.h"
 #import "businessController.h"
 #import "companyJOBController.h"
-#define YYBODER 20
+#define YYBODER 16
 @interface companyDetailsView ()<YYalertViewDelegate>
 
 @end
@@ -26,42 +25,63 @@
     [super viewDidLoad];
     self.title=@"企业详情";
 
-    self.view.backgroundColor =[UIColor whiteColor];
+    self.view.backgroundColor =HexRGB(0xe9f1f6);
+    
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(sharSdk:)];
     [self addImageView];
 
+}
+-(void)sharSdk:(UIButton *)share{
+    
 }
 -(void)addImageView{
     UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(YYBODER, 70, kWidth-YYBODER*2, 100)];
     headerImage.backgroundColor =[UIColor purpleColor];
     [self.view addSubview:headerImage];
     
-    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(YYBODER-1, 179, kWidth-YYBODER*2, kHeight-502)];
-    line.backgroundColor =[UIColor lightGrayColor];
+    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(YYBODER-1, 179, kWidth-YYBODER*2, 165)];
+    line.backgroundColor =HexRGB(0xe6e3e4);
     [self.view addSubview:line];
     
     
     for (int i=0; i<4; i++) {
-        NSArray *titleArr =@[@"    公司名称:",@"    联系人:",@"    联系方式:",@"    公司地址:"];
+        NSArray *titleArr =@[@"  公司名称:",@"  联系人:",@"  联系方式:",@"  公司地址:      展开式地图定位"];
         UILabel *contentLable=[[UILabel alloc]initWithFrame:CGRectMake(1, 1+i%4*41, kWidth-YYBODER*2-2, 40)];
         [line addSubview:contentLable];
         contentLable.text =titleArr[i];
         contentLable.backgroundColor =[UIColor whiteColor];
         contentLable.numberOfLines = 0;
-        contentLable.font =[UIFont systemFontOfSize:18];
+        contentLable.font =[UIFont systemFontOfSize:PxFont(18)];
+        
+        
 
     }
     for (int t=0; t<2; t++) {
         NSArray *titleArr =@[@"收藏",@"订阅"];
-        YYSearchButton * collectionBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
-        collectionBtn.frame =CGRectMake((kWidth-150)+t%3*50, 12,40, 20);
+        UIButton * collectionBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+        collectionBtn.frame =CGRectMake((kWidth-150)+t%3*50, 10,40, 50);
         [collectionBtn setTitle:titleArr[t] forState:UIControlStateNormal];
         [collectionBtn addTarget:self action:@selector(redingBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        collectionBtn.imageEdgeInsets =UIEdgeInsetsMake(-10, 0, 30, 0);
+        [collectionBtn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"collect%d",t]] forState:UIControlStateNormal];
         [line addSubview:collectionBtn];
+        collectionBtn.backgroundColor =[UIColor clearColor];
+        [collectionBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        collectionBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(13)];
+        collectionBtn.titleEdgeInsets=UIEdgeInsetsMake(0, -35, 0, 0);
+        
+        UIImageView *failImg =[[UIImageView alloc]initWithFrame:CGRectMake((kWidth-150)+t%3*50, 43,60, 30 )];
+        [line addSubview:failImg];
+        failImg.backgroundColor =[UIColor whiteColor];
+        failImg.userInteractionEnabled = YES;
+    
+    
+    
     }
    
     
-    UIView *line1 =[[UIView alloc]initWithFrame:CGRectMake(YYBODER-1, 350, kWidth-YYBODER*2, kHeight-502)];
-    line1.backgroundColor =[UIColor lightGrayColor];
+    UIView *line1 =[[UIView alloc]initWithFrame:CGRectMake(YYBODER-1, 350, kWidth-YYBODER*2, 165)];
+    line1.backgroundColor =HexRGB(0xe6e3e4);
     [self.view addSubview:line1];
     
     for (int l=0; l<4; l++) {
@@ -69,24 +89,26 @@
         UIButton *contentLable1=[UIButton buttonWithType:UIButtonTypeCustom];
         contentLable1.frame = CGRectMake(1, 1+l%4*41, kWidth-YYBODER*2-2, 40);
         [line1 addSubview:contentLable1];
-        [contentLable1 setImage:[UIImage imageNamed:@"nav_code"] forState:UIControlStateNormal];
-        contentLable1.imageEdgeInsets = UIEdgeInsetsMake(0, 270, 0, 10);
-        contentLable1.titleEdgeInsets =UIEdgeInsetsMake(0, 0, 0, 235);
+        [contentLable1 setImage:[UIImage imageNamed:@"reture_left.png"] forState:UIControlStateNormal];
+        contentLable1.imageEdgeInsets = UIEdgeInsetsMake(0, 250, 0, 10);
+        contentLable1.titleEdgeInsets =UIEdgeInsetsMake(0, -20, 0, 215);
         [contentLable1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [contentLable1 setTitle:titleArr1[l] forState:UIControlStateNormal];
         contentLable1.backgroundColor =[UIColor whiteColor];
         contentLable1.titleLabel.font =[UIFont systemFontOfSize:18];
         [contentLable1 addTarget:self action:@selector(contentBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        contentLable1.titleLabel.font =[UIFont systemFontOfSize:PxFont(18)];
+        
         contentLable1.tag = 100+l;
     }
 
     
     
     YYSearchButton *findBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
-    findBtn.frame = CGRectMake(20, kHeight-54,kWidth-YYBODER*2,44);
+    findBtn.frame = CGRectMake(YYBODER, kHeight-40,kWidth-YYBODER*2,30);
     [findBtn addTarget:self action:@selector(wirteBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [findBtn setTitle:@"           写评论" forState:UIControlStateNormal];
-    [findBtn setImage:[UIImage imageNamed:@"nav_code.png"] forState:UIControlStateNormal];
+    [findBtn setTitle:@"     写评论" forState:UIControlStateNormal];
+    [findBtn setImage:[UIImage imageNamed:@"write.png"] forState:UIControlStateNormal];
     findBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
     [findBtn setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
     [self.view addSubview:findBtn];

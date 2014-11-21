@@ -24,6 +24,7 @@
         nameLabel.text = @"招聘标题";
         nameLabel.font =[UIFont systemFontOfSize:PxFont(23)];
         [self addSubview:nameLabel];
+        nameLabel.textColor =HexRGB(0x3a3a3a);
         nameLabel.textColor=[UIColor blackColor];
         
         
@@ -33,13 +34,16 @@
         companyLabel.text = @"招聘企业";
         [self addSubview:companyLabel];
         companyLabel.numberOfLines = 0;
-        companyLabel.font =[UIFont systemFontOfSize:PxFont(23)];
+        companyLabel.textColor = HexRGB(0x808080);
+        companyLabel.font =[UIFont systemFontOfSize:PxFont(20)];
         
         
-        read_numLabel = [[UILabel alloc] initWithFrame:CGRectMake(kWidth-60, 30, 60, 20)];
+        read_numLabel = [[UILabel alloc] initWithFrame:CGRectMake(YYBorder, 55, 60, 20)];
         read_numLabel.text = @"时间";
         [self addSubview:read_numLabel];
-        read_numLabel.font =[UIFont systemFontOfSize:PxFont(17)];
+        read_numLabel.font =[UIFont systemFontOfSize:PxFont(20)];
+        read_numLabel.textColor = HexRGB(0x808080);
+
         
     }
     return self;
