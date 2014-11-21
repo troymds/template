@@ -613,8 +613,8 @@
 		04B68C9F1A1B5851002A35AF = {
 			isa = PBXGroup;
 			children = (
-				04AAECDC1A1ED8AD00B5254B /* framework */,
 				04B68CAA1A1B5851002A35AF /* XinNet */,
+				04AAECDC1A1ED8AD00B5254B /* framework */,
 				04B68CC41A1B5852002A35AF /* XinNetTests */,
 				04B68CA91A1B5851002A35AF /* Products */,
 			);
