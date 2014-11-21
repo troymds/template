@@ -1,0 +1,30 @@
+//
+//  XinNet-Prefix.pch
+//  XinNet
+//
+//  Created by tianj on 14-11-18.
+//  Copyright (c) 2014年 tianj. All rights reserved.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
+#import"AppMacro.h"
+#import "UIBarButtonItem+MJ.h"
+
+#ifdef DEBUG
+#define MYNSLog(...) NSLog(__VA_ARGS__)
+#else
+#define MYNSLog(...)
+#endif
+
+
+#endif
+

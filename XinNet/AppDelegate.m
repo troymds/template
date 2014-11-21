@@ -7,6 +7,15 @@
 //
 
 #import "AppDelegate.h"
+#import "MainController.h"
+#import "WBNavigationController.h"
+#import "UIBarButtonItem+MJ.h"
+#import <ShareSDK/ShareSDK.h>
+#import <TencentOpenAPI/QQApi.h>
+#import <TencentOpenAPI/QQApiInterface.h>
+#import <TencentOpenAPI/TencentOAuth.h>
+#import "WeiboSDK.h"
+#import "WXApi.h"
 
 @interface AppDelegate ()
 
@@ -14,10 +23,53 @@
 
 @implementation AppDelegate
 
+- (void)shareRegister
+{
+    //分享
+    [ShareSDK registerApp:shareAppKey];
+    
+    //添加新浪微博应用 注册网址 http://open.weibo.com
+    [ShareSDK connectSinaWeiboWithAppKey:@"568898243"
+                               appSecret:@"38a4f8204cc784f81f9f0daaf31e02e3"
+                             redirectUri:@"http://www.sharesdk.cn"];
+    //当使用新浪微博客户端分享的时候需要按照下面的方法来初始化新浪的平台
+    [ShareSDK  connectSinaWeiboWithAppKey:@"568898243"
+                                appSecret:@"38a4f8204cc784f81f9f0daaf31e02e3"
+                              redirectUri:@"http://www.sharesdk.cn"
+                              weiboSDKCls:[WeiboSDK class]];
+    
+    //添加QQ空间应用  注册网址  http://connect.qq.com/intro/login/
+    [ShareSDK connectQZoneWithAppKey:@"100371282"
+                           appSecret:@"aed9b0303e3ed1e27bae87c33761161d"
+                   qqApiInterfaceCls:[QQApiInterface class]
+                     tencentOAuthCls:[TencentOAuth class]];
+    
+    //添加QQ应用  注册网址  http://open.qq.com/
+    [ShareSDK connectQQWithQZoneAppKey:@"100371282"
+                     qqApiInterfaceCls:[QQApiInterface class]
+                       tencentOAuthCls:[TencentOAuth class]];
+    
+    //添加微信应用 注册网址 http://open.weixin.qq.com
+    [ShareSDK connectWeChatWithAppId:WXAppId
+                           wechatCls:[WXApi class]];
+    
+    //短信分享
+    [ShareSDK connectSMS];
+}
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
-    return YES;
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    MainController *mainVC=[[MainController alloc]init];
+    WBNavigationController *navVc =[[WBNavigationController alloc]initWithRootViewController:mainVC];
+    
+    self.window.rootViewController =navVc;
+    
+    [self shareRegister];
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];    return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
