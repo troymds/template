@@ -17,14 +17,17 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.backgroundColor = HexRGB(0xe9f1f6);
         _titileBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _titileBtn.frame = CGRectMake(10,5,kWidth-20,25);
         [_titileBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _titileBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [self.contentView addSubview:_titileBtn];
         
-        _commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,30,kWidth,40)];
-        _commentLabel.backgroundColor = [UIColor clearColor];
+        _commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(10,30,kWidth-20,40)];
+        _commentLabel.backgroundColor = [UIColor whiteColor];
+        _commentLabel.font = [UIFont systemFontOfSize:contentFont];
+        _commentLabel.textColor = HexRGB(0x3a3a3a);
         _commentLabel.numberOfLines = 0;
         [self.contentView addSubview:_commentLabel];
     }

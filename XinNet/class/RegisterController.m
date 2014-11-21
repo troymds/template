@@ -35,7 +35,6 @@
     }
     self.title = @"注册";
     // Do any additional setup after loading the view.
-    
     [self addView];
 }
 
@@ -157,7 +156,13 @@
             break;
         case macroType:
         {
-            NSLog(@"点击条款");
+            
+            NSString *filePath =[[NSBundle mainBundle] pathForResource:@"protocol" ofType:@"html"];
+            NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:filePath]];
+            UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, kWidth,kHeight-64)];
+            [webView loadRequest:request];
+            
+            [self.view addSubview:webView];
         }
             break;
         //下一步

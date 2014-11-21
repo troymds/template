@@ -17,8 +17,10 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        
+        self.backgroundColor = HexRGB(0xe9f1f6);
         _bgView = [[UIView alloc] initWithFrame:CGRectZero];
-        _bgView.backgroundColor = HexRGB(0xd5d5d5);
+        _bgView.backgroundColor = HexRGB(0xffffff);
         _bgView.layer.cornerRadius = 4;
         _bgView.layer.masksToBounds = YES;
         [self.contentView addSubview:_bgView];
@@ -30,10 +32,11 @@
         [_bgView addSubview:_contenLabel];
         
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _dateLabel.textColor = HexRGB(0x808080);
         _dateLabel.backgroundColor = [UIColor clearColor];
         _dateLabel.font = [UIFont systemFontOfSize:11];
-        _dateLabel.textAlignment = NSTextAlignmentRight;
-        [_bgView addSubview:_dateLabel];
+        _dateLabel.textAlignment = NSTextAlignmentCenter;
+        [self.contentView addSubview:_dateLabel];
         
     }
     return self;
@@ -41,13 +44,13 @@
 
 - (void)setObject:(SystemMsgItem *)item
 {
-    CGSize size = [AdaptationSize getSizeFromString:item.content Font:[UIFont systemFontOfSize:ContenFont] withHight:CGFLOAT_MAX withWidth:ContenWidht];
-    _bgView.frame = CGRectMake(LeftDistance,TopDistance,ContenWidht,size.height+MiddleDistance+DateHeight);
+    CGSize size = [AdaptationSize getSizeFromString:item.content Font:[UIFont systemFontOfSize:ContenFont] withHight:CGFLOAT_MAX withWidth:BgWidth-20];
+    _bgView.frame = CGRectMake(LeftDistance,TopDistance,BgWidth,size.height+10+bottomHeight);
     
-    _contenLabel.frame = CGRectMake(0, 0,ContenWidht,size.height);
+    _contenLabel.frame = CGRectMake(10,10,BgWidth-20,size.height);
     _contenLabel.text = item.content;
     
-    _dateLabel.frame = CGRectMake(0,size.height+MiddleDistance,ContenWidht-10,DateHeight);
+    _dateLabel.frame = CGRectMake(0,10,kWidth,DateHeight);
     _dateLabel.text = item.date;
 }
 

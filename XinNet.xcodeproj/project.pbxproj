@@ -74,6 +74,13 @@
 		04AAED0F1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 04AAECFC1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.bundle */; };
 		04AAED101A1EE0E300B5254B /* ShareSDKFlatShareViewUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AAECFD1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.framework */; };
 		04AAED111A1EE0E300B5254B /* ShareSDKShareActionSheet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AAECFE1A1EE0E300B5254B /* ShareSDKShareActionSheet.framework */; };
+		04AAED2D1A1EE46800B5254B /* myComment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AAED281A1EE46800B5254B /* myComment@2x.png */; };
+		04AAED2E1A1EE46800B5254B /* myDemand@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AAED291A1EE46800B5254B /* myDemand@2x.png */; };
+		04AAED2F1A1EE46800B5254B /* myFavorite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AAED2A1A1EE46800B5254B /* myFavorite@2x.png */; };
+		04AAED301A1EE46800B5254B /* myMsg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AAED2B1A1EE46800B5254B /* myMsg@2x.png */; };
+		04AAED311A1EE46800B5254B /* mySubscrip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AAED2C1A1EE46800B5254B /* mySubscrip@2x.png */; };
+		04AAED331A1EE5A400B5254B /* right_sore@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AAED321A1EE5A400B5254B /* right_sore@2x.png */; };
+		04AAED471A1F325100B5254B /* protocol.html in Resources */ = {isa = PBXBuildFile; fileRef = 04AAED461A1F325100B5254B /* protocol.html */; };
 		04B68CAE1A1B5851002A35AF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B68CAD1A1B5851002A35AF /* main.m */; };
 		04B68CB11A1B5851002A35AF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B68CB01A1B5851002A35AF /* AppDelegate.m */; };
 		04B68CB71A1B5852002A35AF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04B68CB51A1B5852002A35AF /* Main.storyboard */; };
@@ -233,6 +240,13 @@
 		04AAECFC1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ShareSDKFlatShareViewUI.bundle; sourceTree = "<group>"; };
 		04AAECFD1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKFlatShareViewUI.framework; sourceTree = "<group>"; };
 		04AAECFE1A1EE0E300B5254B /* ShareSDKShareActionSheet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKShareActionSheet.framework; sourceTree = "<group>"; };
+		04AAED281A1EE46800B5254B /* myComment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "myComment@2x.png"; path = "images/me/myComment@2x.png"; sourceTree = "<group>"; };
+		04AAED291A1EE46800B5254B /* myDemand@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "myDemand@2x.png"; path = "images/me/myDemand@2x.png"; sourceTree = "<group>"; };
+		04AAED2A1A1EE46800B5254B /* myFavorite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "myFavorite@2x.png"; path = "images/me/myFavorite@2x.png"; sourceTree = "<group>"; };
+		04AAED2B1A1EE46800B5254B /* myMsg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "myMsg@2x.png"; path = "images/me/myMsg@2x.png"; sourceTree = "<group>"; };
+		04AAED2C1A1EE46800B5254B /* mySubscrip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "mySubscrip@2x.png"; path = "images/me/mySubscrip@2x.png"; sourceTree = "<group>"; };
+		04AAED321A1EE5A400B5254B /* right_sore@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "right_sore@2x.png"; path = "images/me/right_sore@2x.png"; sourceTree = "<group>"; };
+		04AAED461A1F325100B5254B /* protocol.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = protocol.html; sourceTree = "<group>"; };
 		04B68CA81A1B5851002A35AF /* XinNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XinNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04B68CAC1A1B5851002A35AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		04B68CAD1A1B5851002A35AF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -354,6 +368,7 @@
 		04AAEC0B1A1EC9E200B5254B /* images */ = {
 			isa = PBXGroup;
 			children = (
+				04AAED121A1EE3E800B5254B /* me */,
 				04AAEC0C1A1EC9F200B5254B /* Default-568h@2x.png */,
 				04AAEC0D1A1EC9F200B5254B /* finish_pre@2x.png */,
 				04AAEC0E1A1EC9F200B5254B /* finish@2x.png */,
@@ -608,6 +623,19 @@
 				04AAECFE1A1EE0E300B5254B /* ShareSDKShareActionSheet.framework */,
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		04AAED121A1EE3E800B5254B /* me */ = {
+			isa = PBXGroup;
+			children = (
+				04AAED321A1EE5A400B5254B /* right_sore@2x.png */,
+				04AAED281A1EE46800B5254B /* myComment@2x.png */,
+				04AAED291A1EE46800B5254B /* myDemand@2x.png */,
+				04AAED2A1A1EE46800B5254B /* myFavorite@2x.png */,
+				04AAED2B1A1EE46800B5254B /* myMsg@2x.png */,
+				04AAED2C1A1EE46800B5254B /* mySubscrip@2x.png */,
+			);
+			name = me;
 			sourceTree = "<group>";
 		};
 		04B68C9F1A1B5851002A35AF = {
@@ -1127,6 +1155,7 @@
 		556EB0D41A1B598F006D5E0F /* Resouse */ = {
 			isa = PBXGroup;
 			children = (
+				04AAED461A1F325100B5254B /* protocol.html */,
 				556EB0D51A1B598F006D5E0F /* images */,
 			);
 			path = Resouse;
@@ -1323,15 +1352,20 @@
 			files = (
 				04AAED061A1EE0E300B5254B /* ShareSDKLocalizable.strings in Resources */,
 				55C76F911A1C8C5A0074640C /* SHSJT_up@2x.png in Resources */,
+				04AAED301A1EE46800B5254B /* myMsg@2x.png in Resources */,
+				04AAED2D1A1EE46800B5254B /* myComment@2x.png in Resources */,
 				04AAEC121A1EC9F200B5254B /* finish_pre@2x.png in Resources */,
 				04B68CB71A1B5852002A35AF /* Main.storyboard in Resources */,
+				04AAED471A1F325100B5254B /* protocol.html in Resources */,
 				04AAEC151A1EC9F200B5254B /* on@2x.png in Resources */,
 				04B68CBC1A1B5852002A35AF /* LaunchScreen.xib in Resources */,
 				55C76F901A1C8C5A0074640C /* l.png in Resources */,
 				04AAED0C1A1EE0E300B5254B /* WeiboSDK.bundle in Resources */,
 				556EB0F61A1B598F006D5E0F /* nav_code@2x.png in Resources */,
+				04AAED311A1EE46800B5254B /* mySubscrip@2x.png in Resources */,
 				04AAEC111A1EC9F200B5254B /* Default-568h@2x.png in Resources */,
 				556EB0F81A1B598F006D5E0F /* nav_return@2x.png in Resources */,
+				04AAED331A1EE5A400B5254B /* right_sore@2x.png in Resources */,
 				04AAED0A1A1EE0E300B5254B /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
 				556EB0F91A1B598F006D5E0F /* nav_searchhome@2x.png in Resources */,
 				04AAEC141A1EC9F200B5254B /* off@2x.png in Resources */,
@@ -1340,6 +1374,8 @@
 				04AAED0F1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.bundle in Resources */,
 				55BA01151A1D752400D19D4E /* finish1@2x.png in Resources */,
 				04AAED071A1EE0E300B5254B /* Resource.bundle in Resources */,
+				04AAED2F1A1EE46800B5254B /* myFavorite@2x.png in Resources */,
+				04AAED2E1A1EE46800B5254B /* myDemand@2x.png in Resources */,
 				55BA01141A1D752400D19D4E /* finish@2x.png in Resources */,
 				556EB0F71A1B598F006D5E0F /* nav_logo@2x.png in Resources */,
 			);

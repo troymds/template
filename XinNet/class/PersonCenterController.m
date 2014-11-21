@@ -37,9 +37,9 @@
 
 - (void)addView
 {
-    NSArray *imgArray = [NSArray arrayWithObjects:@"l",@"l",@"l",@"l", nil];   // 左边的图片
+    NSArray *imgArray = [NSArray arrayWithObjects:@"myMsg.png",@"myComment.png",@"myFavorite.png",@"myDemand.png", nil];   // 左边的图片
     NSArray *titileArray = [NSArray arrayWithObjects:@"我的消息",@"我的评论",@"我的收藏",@"我的求购", nil];
-    CGFloat height = 40;
+    CGFloat height = 55;
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth,titileArray.count*height)];
     [self.view addSubview:bgView];
     for (int i = 0 ; i < titileArray.count; i++) {
@@ -53,7 +53,11 @@
         listView.titleLabel.text = [titileArray objectAtIndex:i];
         listView.imgView.image = [UIImage imageNamed:[imgArray objectAtIndex:i]];
         listView.tag = 1000+i;
+        UIImageView *img = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"right_sore.png"]];
+        img.frame = CGRectMake(0,0, 30, 30);
+        img.center = CGPointMake(kWidth-15-5,height/2);
         listView.delegate = self;
+        [listView addSubview:img];
         [bgView addSubview:listView];
     }
 }

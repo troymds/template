@@ -13,6 +13,8 @@
 #import "SystemMsgItem.h"
 #import "companyDetailsView.h"
 
+
+#define TopHeight 44   //顶部高度
 #define systemType 2000
 #define subscripType 2001
 #define scrollvType  1999
@@ -29,6 +31,7 @@
     BOOL firstLoad;  //订阅消息已经加载
     
     BOOL isSystem;  //判断是不是系统消息界面
+    UIView *slideLine;   //滚动线条
 }
 @end
 
@@ -36,7 +39,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = HexRGB(0xffffff);
+    self.view.backgroundColor = HexRGB(0xe9f1f6);
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout  = UIRectEdgeNone;
     }
@@ -53,19 +56,18 @@
 
 - (void)addTopButton
 {
-    CGFloat height = 35;
-    btnBgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,kWidth,height)];
+    btnBgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,kWidth,TopHeight)];
     [self.view addSubview:btnBgView];
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 34,kWidth,1)];
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,TopHeight-1,kWidth,1)];
     line.backgroundColor = HexRGB(0xd5d5d5);
     [btnBgView addSubview:line];
     NSArray *array = [NSArray arrayWithObjects:@"系统消息",@"订阅消息", nil];
     for (int i = 0 ; i < array.count;i++) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = CGRectMake((kWidth/2)*i, 0,kWidth/2,height);
+        btn.frame = CGRectMake((kWidth/2)*i, 0,kWidth/2,TopHeight);
         [btn setTitle:[array objectAtIndex:i] forState:UIControlStateNormal];
-        [btn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
-        [btn setTitleColor:HexRGB(0x18b0e7) forState:UIControlStateSelected];
+        [btn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
+        [btn setTitleColor:HexRGB(0x38c166) forState:UIControlStateSelected];
         [btn addTarget:self action:@selector(topBtnDown:) forControlEvents:UIControlEventTouchUpInside];
         btn.tag = 2000+i;
         [btnBgView addSubview:btn];
@@ -73,11 +75,14 @@
             btn.selected = YES;
         }
     }
+    slideLine = [[UIView alloc] initWithFrame:CGRectMake(0,TopHeight-1,kWidth/2, 2)];
+    slideLine.backgroundColor = HexRGB(0x38c166);
+    [btnBgView addSubview:slideLine];
 }
 
 - (void)addScrollView
 {
-    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0,35, kWidth,kHeight-35-64)];
+    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0,TopHeight, kWidth,kHeight-TopHeight-64)];
     _scrollView.pagingEnabled = YES;
     _scrollView.delegate = self;
     _scrollView.tag = scrollvType;
@@ -86,6 +91,7 @@
     
     _systemTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0,kWidth, _scrollView.frame.size.height)];
     _systemTableView.tag = systemType;
+    _systemTableView.backgroundColor = HexRGB(0xe9f1f6);
     _systemTableView.delegate = self;
     _systemTableView.dataSource = self;
     _systemTableView.separatorColor = [UIColor clearColor];
@@ -104,6 +110,9 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (scrollView.tag == scrollvType) {
+        [UIView animateWithDuration:0.01 animations:^{
+            slideLine.frame = CGRectMake(scrollView.contentOffset.x/2,TopHeight-1,kWidth/2, 2);
+        }];
         if (scrollView.contentOffset.x == 0) {
             
             isSystem = YES;
@@ -219,6 +228,7 @@
         cell.nameLabel.text = item.conpanyName;
         cell.imageView.image = [UIImage imageNamed:item.imgStr];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;
     }
     return nil;
@@ -245,8 +255,8 @@
 {
     CGFloat height = 0 ;
     SystemMsgItem *item = [_systemArray objectAtIndex:indexPath.row];
-    CGSize size = [AdaptationSize getSizeFromString:item.content Font:[UIFont systemFontOfSize:ContenFont] withHight:CGFLOAT_MAX withWidth:ContenWidht];
-    height+=TopDistance+size.height+MiddleDistance+DateHeight+5;
+    CGSize size = [AdaptationSize getSizeFromString:item.content Font:[UIFont systemFontOfSize:ContenFont] withHight:CGFLOAT_MAX withWidth:BgWidth-20];
+    height+=TopDistance+size.height+bottomHeight+10;
     return height;
 }
 

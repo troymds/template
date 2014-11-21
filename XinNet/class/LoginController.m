@@ -14,6 +14,7 @@
 
 #define topDistance  20
 #define leftDistance 10
+
 #define autoBtn 1000
 #define loseBtn 1001
 #define loginBtn 2000
@@ -35,7 +36,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = HexRGB(0xffffff);
+    self.view.backgroundColor = HexRGB(0xe9f1f6);
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
@@ -50,11 +51,23 @@
 - (void)addView
 {
     CGFloat y = topDistance;
-    _userNameField = [[UITextField alloc] initWithFrame:CGRectMake(leftDistance,y,kWidth-leftDistance*2,35)];
+    CGFloat height = 45;  //输入框高度
+    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(leftDistance,y,kWidth-leftDistance*2,height*2)];
+    bgView.backgroundColor = [UIColor whiteColor];
+    bgView.layer.borderColor = HexRGB(0xd5d5d5).CGColor;
+    [self.view addSubview:bgView];
+    
+    UILabel *userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,60, height)];
+    userNameLabel.backgroundColor = [UIColor clearColor];
+    userNameLabel.textColor = HexRGB(0x3a3a3a);
+    userNameLabel.text = @"账号:";
+    [bgView addSubview:userNameLabel];
+    
+    _userNameField = [[UITextField alloc] initWithFrame:CGRectMake(60,y,kWidth-leftDistance*2-60,height)];
     _userNameField.placeholder = @"请输入手机号/邮箱";
     _userNameField.layer.borderColor = HexRGB(0xd5d5d5).CGColor;
     _userNameField.layer.borderWidth = 1.0f;
-    [self.view addSubview:_userNameField];
+    [bgView addSubview:_userNameField];
     
     y+=_userNameField.frame.size.height+10;
     _secretField = [[UITextField alloc] initWithFrame:CGRectMake(leftDistance,y, kWidth-leftDistance*2,35)];

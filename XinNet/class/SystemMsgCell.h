@@ -11,11 +11,13 @@
 #import "AdaptationSize.h"
 
 #define LeftDistance 10
-#define ContenWidht (kWidth-LeftDistance*2)
+#define BgWidth (kWidth-LeftDistance*2)
+#define ContenWidht (kWidth-LeftDistance*2-20)
 #define ContenFont 13
-#define TopDistance 15
+#define TopDistance 34
 #define MiddleDistance 5
 #define DateHeight 20
+#define bottomHeight 20
 
 @interface SystemMsgCell : UITableViewCell
 

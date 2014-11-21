@@ -14,13 +14,14 @@
 {
     if (self = [super initWithFrame:frame]) {
         self.userInteractionEnabled = YES;
-        CGFloat leftDistance =10;
+        CGFloat leftDistance =18;
         CGFloat imgWidth = 30;
         CGFloat imgHeight = 30;
         _imgView = [[UIImageView alloc] initWithFrame:CGRectMake(leftDistance,(frame.size.height-imgHeight)/2,imgWidth,imgHeight)];
         [self addSubview:_imgView];
         
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(leftDistance+_imgView.frame.size.width+20,0, 120,frame.size.height)];
+        _titleLabel.textColor = HexRGB(0x3a3a3a);
         _titleLabel.backgroundColor = [UIColor clearColor];
         [self addSubview:_titleLabel];
     }

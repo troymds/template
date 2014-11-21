@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+#define contentFont 13
+
+
 @interface CommentCell : UITableViewCell
 
 @property (nonatomic,strong) UIButton *titileBtn;

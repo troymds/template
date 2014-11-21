@@ -21,7 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = HexRGB(0xffffff);
+    self.view.backgroundColor = HexRGB(0xe9f1f6);
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout  = UIRectEdgeNone;
     }
@@ -34,6 +34,7 @@
     _tableView.delegate =self;
     _tableView.dataSource = self;
     _tableView.separatorColor = [UIColor clearColor];
+    _tableView.backgroundColor =HexRGB(0xe9f1f6);
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
     
@@ -45,7 +46,7 @@
     for (int i =0 ; i < 5; i ++) {
         CommentItem *item = [[CommentItem alloc] init];
         item.title = @"2014上海食品展会";
-        item.comment = @"这是一大段评论内容";
+        item.comment = @"这是一大段评论内容这是一大段评论内容这是一大段评论内容这是一大段评论内容这是一大段评论内容这是一大段评论内容这是一大段评论内容";
         [_dataArray addObject:item];
     }
     [_tableView reloadData];
@@ -73,7 +74,15 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    return 90;
+}
+
+- (CGFloat)getCellHeight:(NSIndexPath *)index
+{
+    CGFloat height = 0;
+    CommentItem *item = [_dataArray objectAtIndex:index.row];
+    
+    return height;
 }
 
 
