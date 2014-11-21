@@ -15,7 +15,9 @@
     if (self = [super initWithFrame:frame]) {
         
         //头像
-        _iconImg = [[TJImageView alloc] initWithFrame:CGRectMake(0,0, 80, 60)];
+        _iconImg = [[TJImageView alloc] initWithFrame:CGRectMake(0,0, 80,80)];
+        _iconImg.layer.masksToBounds = YES;
+        _iconImg.layer.cornerRadius = _iconImg.frame.size.width/2;
         _iconImg.center = CGPointMake(kWidth/2,10+_iconImg.frame.size.height/2);
         [self addSubview:_iconImg];
         
