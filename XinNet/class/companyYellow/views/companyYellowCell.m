@@ -10,7 +10,7 @@
 #import "AppMacro.h"
 
 @implementation companyYellowCell
-@synthesize supplyImage,companyLabel,nameLabel;
+@synthesize logoImage,addressLabel,nameLabel;
 
 - (void)awakeFromNib {
     // Initialization code
@@ -20,10 +20,10 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
-        supplyImage = [[UIImageView alloc] initWithFrame:CGRectMake(16, 10, 60, 60)];
-        supplyImage.image =[UIImage imageNamed:@""];
-        supplyImage.backgroundColor =[UIColor cyanColor];
-        [self addSubview:supplyImage];
+        logoImage = [[UIImageView alloc] initWithFrame:CGRectMake(16, 10, 60, 60)];
+        logoImage.image =[UIImage imageNamed:@""];
+        logoImage.backgroundColor =[UIColor cyanColor];
+        [self addSubview:logoImage];
         
         
         
@@ -37,12 +37,12 @@
         
         
         
-        companyLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 40, 190, 20)];
-        companyLabel.text = @"公司地址";
-        [self addSubview:companyLabel];
-        companyLabel.numberOfLines = 0;
-        companyLabel.textColor =HexRGB(0x808080);
-        companyLabel.font =[UIFont systemFontOfSize:PxFont(17)];
+        addressLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 40, 190, 20)];
+        addressLabel.text = @"公司地址";
+        [self addSubview:addressLabel];
+        addressLabel.numberOfLines = 0;
+        addressLabel.textColor =HexRGB(0x808080);
+        addressLabel.font =[UIFont systemFontOfSize:PxFont(17)];
         
         
         

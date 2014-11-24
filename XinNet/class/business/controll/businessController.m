@@ -9,6 +9,8 @@
 #import "businessController.h"
 #import "AppMacro.h"
 #import "businessDetailsView.h"
+#import "businessTool.h"
+#import "businessModel.h"
 @interface businessController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
     
@@ -19,6 +21,10 @@
     UITableView *_allTableView;
     UITableView *_supplyTablView;
     UITableView *_demandTablView;
+    
+    NSMutableArray *_allBusinessArray;
+    NSMutableArray *_supplyBusinessArray;
+    NSMutableArray *_demandBusinessArray;
 
 
 }
@@ -33,15 +39,31 @@
     self.view.backgroundColor =[UIColor whiteColor];
     self.title = @"供求商机";
     
+    _allBusinessArray =[NSMutableArray array];
+    _demandBusinessArray =[NSMutableArray array];
+    _supplyBusinessArray =[NSMutableArray array];
+
+    
+    
     _orangLin =[[UIView alloc]init];
     [self.view addSubview:_orangLin];
     _orangLin.frame =CGRectMake(0, 93, 107, 2);
     _orangLin.backgroundColor =HexRGB(0x38c166);
+    [self addBigCompanyScrollView];
 
     [self addbusinessBtn];
-    [self addBigCompanyScrollView];
+    [self addLoadStatus];
 }
-
+#pragma mark ____加载数据
+-(void)addLoadStatus{
+    [businessTool statusesWithSuccess:^(NSArray *statues) {
+        [_allBusinessArray addObjectsFromArray:statues];
+        NSLog(@"%@",_allBusinessArray);
+        [self addBusinessAllTableview];
+    } page_Num:0 type_ID:0 failure:^(NSError *error) {
+        
+    }];
+   }
 #pragma mark背景scrollview
 -(void)addBigCompanyScrollView
 {
@@ -173,7 +195,7 @@
     // Dispose of any resources that can be recreated.
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 10   ;
+    return _allBusinessArray.count  ;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -193,7 +215,10 @@
     UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
     [cell.contentView addSubview:cellLine];
     cellLine.backgroundColor =HexRGB(0xe6e3e4);
-    cell.textLabel.text = @"标题";
+    businessModel *busineModel =[_allBusinessArray objectAtIndex:indexPath.row];
+    cell.textLabel.text =busineModel.title;
+
+    //    cell.textLabel.text = @"标题";
     cell.imageView.image = [UIImage imageNamed:@"business_img.png"];
     return cell;
 }

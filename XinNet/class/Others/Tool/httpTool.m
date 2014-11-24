@@ -26,10 +26,11 @@
     NSString *uuid = [SystemConfig sharedInstance].uuidStr;
     NSString *md5 = [NSString stringWithFormat:@"%@%@%@",uuid,time,@"ju34s4&6d567nuwe678l89kjdf56o34iw!e"];
     md5 = [md5 md5Encrypt];
-    
+    NSString *ios =@"ios";
+    [allParams setObject:ios forKey:@"os"];
+
     [allParams setObject:time forKey:@"time"];
     [allParams setObject:uuid forKey:@"uuid"];
-    NSLog(@"=====%@===",uuid);
     [allParams setObject:md5 forKey:@"secret"];
     
     if ([SystemConfig sharedInstance].isUserLogin) {

@@ -10,9 +10,13 @@
 #import "YYSearchButton.h"
 #import "YYalertView.h"
 #import <ShareSDK/ShareSDK.h>
-
+#import "mardetDetailsModel.h"
+#import "mardetDetailsTool.h"
 @interface markertDetailsView ()<YYalertViewDelegate>
-
+{
+    NSMutableArray *_markerDetailArray;
+    mardetDetailsModel *mardetModel;
+}
 @end
 
 @implementation markertDetailsView
@@ -20,13 +24,27 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor =HexRGB(0xe9f1f6);
-    
+    _markerDetailArray =[[NSMutableArray alloc]init];
     
     [self addCollectionAndShareSDK];
 
-    [self addLabel];
+    [self addLoadStatus];
     
 
+}
+#pragma mark----加载数据
+-(void)addLoadStatus{
+    [mardetDetailsTool statusesWithSuccess:^(NSArray *statues) {
+        NSDictionary *dict = [statues objectAtIndex:0];
+
+        [_markerDetailArray addObjectsFromArray:statues];
+        NSString *webUrl =[dict objectForKey:@"wapUrl"];
+         mardetModel =[[mardetDetailsModel alloc]init];
+        mardetModel.wapUrl =webUrl;
+        [self addLabel];
+    } newsID:_markIndex failure:^(NSError *error) {
+        
+    }];
 }
 
 //收藏与分享
@@ -151,44 +169,23 @@
 }
 
 -(void)addLabel{
-    UILabel *titleLabel=[[UILabel alloc]initWithFrame:CGRectMake(0, 70, kWidth, 30)];
-    [self.view addSubview:titleLabel];
-    titleLabel.text =@"新闻标题";
-    titleLabel.font =[UIFont systemFontOfSize:PxFont(22)];
-    titleLabel.textAlignment =NSTextAlignmentCenter;
+    UIWebView *marketWebView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-120)];
+    [self.view addSubview:marketWebView];
+    [marketWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:mardetModel.wapUrl]] ];
+    [self.view addSubview:marketWebView];
+    marketWebView.backgroundColor =[UIColor redColor];
+
     
-    for (int i=0; i<2; i++) {
-        NSArray *titleArr =@[@"时间",@"来源"];
-        UILabel *titleLabel=[[UILabel alloc]initWithFrame:CGRectMake(i%3*(kWidth/2), 100, kWidth/2, 30)];
-        [self.view addSubview:titleLabel];
-        titleLabel.text =titleArr[i];
-        titleLabel.font =[UIFont systemFontOfSize:PxFont(18)];
-        titleLabel.textAlignment =NSTextAlignmentCenter;
-        
-        UIView *line =[[UIView alloc]initWithFrame:CGRectMake(0, 135+i%3*(100+370), kWidth, 1)];
-        line.backgroundColor =[UIColor lightGrayColor];
-        [self.view addSubview:line];
-    }
-    
-    
-    UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(16, 145, kWidth-32, 100)];
-    headerImage.backgroundColor =[UIColor purpleColor];
-    headerImage.image =[UIImage imageNamed:@"Loa_img.png"];
-    [self.view addSubview:headerImage];
-    
-    
-    UILabel *contentLable=[[UILabel alloc]initWithFrame:CGRectMake(0, 240, kWidth, 130)];
-    [self.view addSubview:contentLable];
-    contentLable.text =@"新闻正文";
-    contentLable.numberOfLines = 0;
-    contentLable.font =[UIFont systemFontOfSize:PxFont(22)];
-    contentLable.textAlignment =NSTextAlignmentCenter;
+    UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, kHeight-55, kWidth, 1)];
+    [self.view addSubview:cellLine];
+    cellLine.backgroundColor =HexRGB(0xe6e3e4);
     
     YYSearchButton *writeBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:writeBtn];
     writeBtn.frame = CGRectMake(40, kHeight-44, kWidth-85, 34);
     writeBtn.contentHorizontalAlignment =UIControlContentVerticalAlignmentCenter;
-    [writeBtn setTitle:@"写评论" forState:UIControlStateNormal];
+    [writeBtn setTitle:@"评论" forState:UIControlStateNormal];
+    writeBtn.backgroundColor =[UIColor whiteColor];
     [writeBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     writeBtn.titleLabel.font =[UIFont systemFontOfSize:20];
     

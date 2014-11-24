@@ -14,9 +14,14 @@
 #import "productController.h"
 #import "businessController.h"
 #import "companyJOBController.h"
+
+#import "companyDetailTool.h"
+#import "companyDetailsModel.h"
 #define YYBODER 16
 @interface companyDetailsView ()<YYalertViewDelegate>
-
+{
+    NSMutableArray *_companyDetailArray;
+}
 @end
 
 @implementation companyDetailsView
@@ -28,15 +33,31 @@
     self.view.backgroundColor =HexRGB(0xe9f1f6);
     
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(sharSdk:)];
-    [self addImageView];
+    _companyDetailArray =[[NSMutableArray alloc]init];
+    
+    [self addLoadStatus];
+    
 
+}
+#pragma mark---加载数据
+-(void)addLoadStatus{
+    [companyDetailTool CompanyStatusesWithSuccesscategory:^(NSArray *statues) {
+        [_companyDetailArray addObjectsFromArray:statues];
+
+        [self addImageView];
+    } company_id:_companyDetailIndex CompanyFailure:^(NSError *error) {
+        
+    }];
 }
 -(void)sharSdk:(UIButton *)share{
     
 }
 -(void)addImageView{
+
+    companyDetailsModel *companyModel =[_companyDetailArray objectAtIndex:0];
+
     UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(YYBODER, 70, kWidth-YYBODER*2, 100)];
-    headerImage.backgroundColor =[UIColor purpleColor];
+    [headerImage setImageWithURL:[NSURL URLWithString:companyModel.logo] placeholderImage:placeHoderImage];
     [self.view addSubview:headerImage];
     
     UIView *line =[[UIView alloc]initWithFrame:CGRectMake(YYBODER-1, 179, kWidth-YYBODER*2, 165)];
@@ -45,7 +66,10 @@
     
     
     for (int i=0; i<4; i++) {
-        NSArray *titleArr =@[@"  公司名称:",@"  联系人:",@"  联系方式:",@"  公司地址:      展开式地图定位"];
+       NSArray *titleArr= @[[NSString stringWithFormat:@"  公司名称:%@",companyModel.name],[NSString stringWithFormat:@"   联系人:%@次",companyModel.name],[NSString stringWithFormat:@"   联系方式:%@",companyModel.tel],[NSString stringWithFormat:@"   公司地址:%@次",companyModel.contact]];
+        
+        
+        
         UILabel *contentLable=[[UILabel alloc]initWithFrame:CGRectMake(1, 1+i%4*41, kWidth-YYBODER*2-2, 40)];
         [line addSubview:contentLable];
         contentLable.text =titleArr[i];

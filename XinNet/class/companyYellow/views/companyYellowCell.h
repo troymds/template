@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface companyYellowCell : UITableViewCell
-@property (copy, nonatomic)  UIImageView *supplyImage;
+@property (copy, nonatomic)  UIImageView *logoImage;
 @property (copy, nonatomic)  UILabel *nameLabel;
-@property (copy, nonatomic)  UILabel *companyLabel;
+@property (copy, nonatomic)  UILabel *addressLabel;
 @end

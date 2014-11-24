@@ -8,7 +8,7 @@
 
 #import "marketCell.h"
 @implementation marketCell
-@synthesize supplyImage,read_numLabel,companyLabel,nameLabel;
+@synthesize marketImage,timeLabel,fromLabel,titleName;
 
 - (void)awakeFromNib {
     
@@ -18,34 +18,34 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
-        supplyImage = [[UIImageView alloc] initWithFrame:CGRectMake(16, 11, 60, 60)];
-        supplyImage.image =[UIImage imageNamed:@""];
-        supplyImage.backgroundColor =[UIColor lightGrayColor];
-        [self addSubview:supplyImage];
+        marketImage = [[UIImageView alloc] initWithFrame:CGRectMake(16, 11, 60, 60)];
+        marketImage.image =[UIImage imageNamed:@""];
+        marketImage.backgroundColor =[UIColor lightGrayColor];
+        [self addSubview:marketImage];
         
         
-        nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 11, 240, 20)];
-        nameLabel.text = @"新闻标题";
-        nameLabel.font =[UIFont systemFontOfSize:PxFont(23)];
-        [self addSubview:nameLabel];
-        nameLabel.textColor=HexRGB(0x3a3a3a);
+        titleName = [[UILabel alloc] initWithFrame:CGRectMake(86, 11, 240, 20)];
+        titleName.text = @"新闻标题";
+        titleName.font =[UIFont systemFontOfSize:PxFont(23)];
+        [self addSubview:titleName];
+        titleName.textColor=HexRGB(0x3a3a3a);
         
         
         
         
-        companyLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 32, 190, 20)];
-        companyLabel.text = @"来源";
-        [self addSubview:companyLabel];
-        companyLabel.numberOfLines = 0;
-        companyLabel.font =[UIFont systemFontOfSize:PxFont(18)];
-        companyLabel.textColor=HexRGB(0x808080);
+        fromLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 32, 190, 20)];
+        fromLabel.text = @"来源";
+        [self addSubview:fromLabel];
+        fromLabel.numberOfLines = 0;
+        fromLabel.font =[UIFont systemFontOfSize:PxFont(18)];
+        fromLabel.textColor=HexRGB(0x808080);
         
         
-        read_numLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 52, 60, 20)];
-        read_numLabel.text = @"时间";
-        [self addSubview:read_numLabel];
-        read_numLabel.font =[UIFont systemFontOfSize:PxFont(18)];
-        read_numLabel.textColor = HexRGB(0x808080);
+        timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 52, 60, 20)];
+        timeLabel.text = @"时间";
+        [self addSubview:timeLabel];
+        timeLabel.font =[UIFont systemFontOfSize:PxFont(18)];
+        timeLabel.textColor = HexRGB(0x808080);
         
     }
     return self;

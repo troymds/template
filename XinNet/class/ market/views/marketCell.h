@@ -9,10 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface marketCell : UITableViewCell
-@property (copy, nonatomic)  UIImageView *supplyImage;
-@property (copy, nonatomic)  UILabel *nameLabel;
-@property (copy, nonatomic)  UILabel *companyLabel;
-@property (copy, nonatomic)  UILabel *read_numLabel;
+@property (copy, nonatomic)  UIImageView *marketImage;
+@property (copy, nonatomic)  UILabel *titleName;
+@property (copy, nonatomic)  UILabel *fromLabel;
+@property (copy, nonatomic)  UILabel *timeLabel;
 
 
 @end

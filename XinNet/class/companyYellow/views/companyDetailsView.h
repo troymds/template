@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface companyDetailsView : UIViewController
-
+@property(nonatomic,retain)NSString *companyDetailIndex;
 @end
