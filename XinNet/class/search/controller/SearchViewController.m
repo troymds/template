@@ -148,7 +148,6 @@
 }
 
 -(void)searchBtnClick:(UIButton *)sear{
-    MYNSLog(@"%ld",(long)_selectBtn.tag);
 
     if (_selectBtn.tag ==200) {
         productController *produVc =[[productController alloc]init];

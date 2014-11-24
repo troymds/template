@@ -10,6 +10,9 @@
 #import "companyJOBController.h"
 #import "markertDetailsView.h"
 #import "marketCell.h"
+#import "marketTOOL.h"
+#import "marketModel.h"
+
 @interface marketController ()<UITableViewDataSource,UITableViewDelegate>
 {
     UITableView *_tableView;
@@ -28,9 +31,15 @@
     self.view.backgroundColor =[UIColor whiteColor];
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"more.png" highlightedSearch:@"more.png" target:(self) action:@selector(moreClick:)];
     [self addTableView];
-    
+    [self addloadStatus];
     _moreSelectedBtn =[[UIButton alloc]init];
 }
+-(void)addloadStatus{
+    [marketTOOL statusesWithSuccess:^(NSArray *statues) {
+        NSLog(@"%@",statues);
+    } lastID:0 failure:^(NSError *error) {
+        
+    }];}
 -(void)addTableView{
     _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight) style:UITableViewStylePlain];
     _tableView.delegate =self;

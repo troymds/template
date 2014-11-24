@@ -16,7 +16,8 @@
 #import <TencentOpenAPI/TencentOAuth.h>
 #import "WeiboSDK.h"
 #import "WXApi.h"
-
+#import "SystemConfig.h"
+#import "SSKeychain.h"
 @interface AppDelegate ()
 
 @end
@@ -61,6 +62,20 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    //获取用户uuid
+    NSString *retrieveuuid = [SSKeychain passwordForService:@"cn.chinapromo.userinfo" account:@"uuid"];
+    if (retrieveuuid == nil || [retrieveuuid isEqualToString:@""]) {
+        CFUUIDRef uuid = CFUUIDCreate(NULL);
+        assert(uuid!=NULL);
+        CFStringRef uuidStr = CFUUIDCreateString(NULL, uuid);
+        retrieveuuid = [NSString stringWithFormat:@"%@",uuidStr];
+        [SSKeychain setPassword:retrieveuuid forService:@"cn.chinapromo.userinfo" account:@"uuid"];
+    }
+    [SystemConfig sharedInstance].uuidStr = retrieveuuid;
+    
+    
+
     MainController *mainVC=[[MainController alloc]init];
     WBNavigationController *navVc =[[WBNavigationController alloc]initWithRootViewController:mainVC];
     
