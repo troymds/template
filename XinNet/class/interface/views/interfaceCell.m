@@ -9,7 +9,7 @@
 #import "interfaceCell.h"
 
 @implementation interfaceCell
-@synthesize supplyImage,read_numLabel,companyLabel,nameLabel;
+@synthesize interfaceImage,timeLabel,nameLabel;
 
 - (void)awakeFromNib {
     // Initialization code
@@ -19,10 +19,10 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
-        supplyImage = [[UIImageView alloc] initWithFrame:CGRectMake(16, 11, 60, 60)];
-        supplyImage.image =[UIImage imageNamed:@""];
-        supplyImage.backgroundColor =[UIColor lightGrayColor];
-        [self addSubview:supplyImage];
+        interfaceImage = [[UIImageView alloc] initWithFrame:CGRectMake(16, 11, 60, 60)];
+        interfaceImage.image =[UIImage imageNamed:@""];
+        interfaceImage.backgroundColor =[UIColor lightGrayColor];
+        [self addSubview:interfaceImage];
         
         
         nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 11, 240, 20)];
@@ -42,11 +42,11 @@
 //        companyLabel.textColor=HexRGB(0x808080);
         
         
-        read_numLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 42, 60, 20)];
-        read_numLabel.text = @"展会时间";
-        [self addSubview:read_numLabel];
-        read_numLabel.font =[UIFont systemFontOfSize:PxFont(18)];
-        read_numLabel.textColor = HexRGB(0x808080);
+        timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 42, 150, 20)];
+        timeLabel.text = @"展会时间";
+        [self addSubview:timeLabel];
+        timeLabel.font =[UIFont systemFontOfSize:PxFont(18)];
+        timeLabel.textColor = HexRGB(0x808080);
         
     }
     return self;

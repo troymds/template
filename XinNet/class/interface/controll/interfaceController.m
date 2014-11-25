@@ -9,7 +9,8 @@
 #import "interfaceController.h"
 #import "interfaceDetailsView.h"
 #import "interfaceCell.h"
-
+#import "interfaceModel.h"
+#import "interfaceTool.h"
 @interface interfaceController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
     
@@ -20,7 +21,7 @@
     UITableView *_allTableView;
     UITableView *_supplyTablView;
     UITableView *_demandTablView;
-    
+    NSMutableArray *_interfaceArray;
     
 }
 @property(nonatomic ,strong)UIScrollView *BigCompanyScrollView;
@@ -36,7 +37,7 @@
     self.view.backgroundColor =[UIColor whiteColor];
     self.title =@"展会信息";
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(collectItem)];
-
+    _interfaceArray =[NSMutableArray array];
 
     _orangLin =[[UIView alloc]init];
     [self.view addSubview:_orangLin];
@@ -44,10 +45,20 @@
     _orangLin.backgroundColor =HexRGB(0x38c166);
 
     [self addbusinessBtn];
-    [self addBigCompanyScrollView];
+    [self addLoadStatus];
 }
 -(void)collectItem{
     
+}
+#pragma mark---加载数据
+-(void)addLoadStatus{
+    [interfaceTool statusesWithSuccess:^(NSArray *statues) {
+        [_interfaceArray addObjectsFromArray:statues];
+        [self addBigCompanyScrollView];
+
+    } page_Num:(0)? 0:[NSString stringWithFormat:@"%u",[_interfaceArray count]-0] company_Id:nil keywords_Str:nil category_Id:nil failure:^(NSError *error) {
+        
+    }];
 }
 #pragma mark背景scrollview
 -(void)addBigCompanyScrollView
@@ -174,17 +185,16 @@
     return 80;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 10   ;
+    return _interfaceArray.count  ;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+    interfaceModel *interModel =[_interfaceArray objectAtIndex:indexPath.row];
+
     interfaceDetailsView *productVC =[[interfaceDetailsView alloc]init];
+    productVC.interface_Url=interModel.wapUrl;
     [self.navigationController pushViewController:productVC animated:YES];
     
 }
@@ -200,8 +210,10 @@
         [cell.contentView addSubview:cellLine];
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
     }
-    
-    
+    interfaceModel *interModel =[_interfaceArray objectAtIndex:indexPath.row];
+    [cell.interfaceImage setImageWithURL:[NSURL URLWithString:interModel.cover] placeholderImage:placeHoderImage];
+    cell.nameLabel.text =interModel.title;
+    cell.timeLabel.text =interModel.create_time;
     return cell;
 }
 

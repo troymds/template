@@ -24,7 +24,7 @@
         [self addSubview:marketImage];
         
         
-        titleName = [[UILabel alloc] initWithFrame:CGRectMake(86, 11, 240, 20)];
+        titleName = [[UILabel alloc] initWithFrame:CGRectMake(86, 11, 215, 20)];
         titleName.text = @"新闻标题";
         titleName.font =[UIFont systemFontOfSize:PxFont(23)];
         [self addSubview:titleName];
@@ -41,7 +41,7 @@
         fromLabel.textColor=HexRGB(0x808080);
         
         
-        timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 52, 60, 20)];
+        timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 52, 150, 20)];
         timeLabel.text = @"时间";
         [self addSubview:timeLabel];
         timeLabel.font =[UIFont systemFontOfSize:PxFont(18)];

@@ -9,9 +9,17 @@
 #import "productDetailsView.h"
 #import "YYSearchButton.h"
 #import "RemindView.h"
-#define YYBODER 16
-@interface productDetailsView ()
 
+#import "productDetailModel.h"
+#import "productDetailTool.h"
+#define YYBODER 16
+@interface productDetailsView ()<UIWebViewDelegate>
+{
+    productDetailModel *prodModel;
+    UIScrollView *_backScrollView;
+    UIWebView *_proWebView;
+    UIView *line;//背景线条
+}
 @end
 
 @implementation productDetailsView
@@ -20,27 +28,76 @@
     [super viewDidLoad];
     self.title =@"产品详情";
     self.view.backgroundColor =HexRGB(0xededed);
-    [self addImageView];
+    [self addLoadStatus];
+
+}
+#pragma mark ---加载数据
+-(void)addLoadStatus{
+    [productDetailTool statusesWithSuccess:^(NSArray *statues) {
+        NSDictionary *dict =[statues objectAtIndex:0];
+        prodModel =[[productDetailModel alloc]init];
+        prodModel.wapUrl =[dict objectForKey:@"wapUrl"];
+        prodModel.cover =[dict objectForKey:@"cover"];
+        prodModel.name =[dict objectForKey:@"name"];
+        prodModel.price =[dict objectForKey:@"price"];
+        prodModel.old_price =[dict objectForKey:@"old_price"];
+        [self addImageView];
+
+    } product_ID:_productIndex failure:^(NSError *error) {
+        
+    }];
+}
+#pragma mark webViewDelegate
+-(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    
+    return YES;
+}
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    
+  float  webheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
+    line.frame =CGRectMake(YYBODER-1, 120, kWidth-YYBODER*2, 202+webheight);
+
+    _proWebView.frame = CGRectMake(1, 200, kWidth-YYBODER*2-2, webheight);
+    
+    _backScrollView.contentSize = CGSizeMake(kWidth-YYBODER*2,webheight+350);
+    
     
 }
-
+#pragma mark---添加UI
 -(void)addImageView{
-    UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(YYBODER, 70, kWidth-YYBODER*2, 100)];
+    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 70, kWidth, kHeight-64)];
+    _backScrollView.userInteractionEnabled=YES;
+    _backScrollView.backgroundColor=HexRGB(0xededed);
+    [self.view addSubview:_backScrollView];
+    _backScrollView.bounces = NO;
+    _backScrollView.showsVerticalScrollIndicator = NO;
+    _backScrollView.showsHorizontalScrollIndicator = NO;
+
+    
+
+    
+    UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(YYBODER, 0, kWidth-YYBODER*2, 100)];
     headerImage.backgroundColor =[UIColor purpleColor];
-    [self.view addSubview:headerImage];
+    [headerImage setImageWithURL:[NSURL URLWithString:prodModel.cover] placeholderImage:placeHoderImage];
+    [_backScrollView addSubview:headerImage];
     
-    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(YYBODER-1, 179, kWidth-YYBODER*2, kHeight-240)];
+    line =[[UIView alloc]initWithFrame:CGRectMake(YYBODER-1, 120, kWidth-YYBODER*2, 202)];
     line.backgroundColor =HexRGB(0xe6e3e4);
-    [self.view addSubview:line];
+    [_backScrollView addSubview:line];
+    _proWebView = [[UIWebView alloc]initWithFrame:CGRectMake(1, 200, kWidth-YYBODER*2-2, 160)];
     
+    [_proWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:prodModel.wapUrl]]];
+    _proWebView.userInteractionEnabled = NO;
+    _proWebView.delegate =self;
+    
+    [line addSubview:_proWebView];
+
     for (int i=0; i<5; i++) {
-        NSArray *titleArr =@[@"   产品名称:",@"   现价:",@"   原价:",@"   所属企业:",@"   产品简介:"];
+        NSArray *titleArr =@[[NSString stringWithFormat:@"   产品名称:%@",prodModel.name],[NSString stringWithFormat:@"   现价:%@",prodModel.price],[NSString stringWithFormat:@"   原价:%@",prodModel.old_price],[NSString stringWithFormat:@"   所属企业:%@",prodModel.name],@"   产品简介:"];
         UILabel *contentLable=[[UILabel alloc]initWithFrame:CGRectMake(1, 1+i%5*41, kWidth-YYBODER*2-2, 40)];
         [line addSubview:contentLable];
-        if (i==4) {
-            contentLable.frame =CGRectMake(1, 1+i%5*41, kWidth-YYBODER*2-2, 162);
-            contentLable.numberOfLines = 0;
-        }
         contentLable.text =titleArr[i];
         contentLable.backgroundColor =[UIColor whiteColor];
         contentLable.numberOfLines = 0;

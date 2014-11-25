@@ -9,9 +9,9 @@
 #import "companyListTool.h"
 #import "companyListModel.h"
 @implementation companyListTool
-+(void)CompanyStatusesWithSuccesscategory:(StatusSuccessBlock)success Page:(NSString *)page CompanyFailure:(StatusFailureBlock)failure;
++ (void)statusesWithSuccess:(StatusSuccessBlock)success page_num:(NSString * )page keywords_Id:(NSString *)keywords failure:(StatusFailureBlock)failure
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",page,@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",page,@"page",keywords,@"keywords", nil];
     [httpTool postWithPath:@"getCompanyList" params:dic success:^(id JSON) {
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];

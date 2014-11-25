@@ -31,54 +31,15 @@
     
 }
 -(void)addheader{
-    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, YYBODER, kWidth, kHeight)];
-    _backScrollView.userInteractionEnabled=YES;
-    _backScrollView.backgroundColor=HexRGB(0xe9f1f6);
-    [self.view addSubview:_backScrollView];
-    _backScrollView.bounces = NO;
-    _backScrollView.showsVerticalScrollIndicator = NO;
-    _backScrollView.showsHorizontalScrollIndicator = NO;
-    
-   UIImageView* hearImage =[[UIImageView alloc]init];
-    hearImage.frame =CGRectMake(YYBODER,5, 60, 60);
-    hearImage.userInteractionEnabled = YES;
-    [_backScrollView addSubview:hearImage];
-    hearImage.image =[UIImage imageNamed:@"nav_code"];
-    
-   UILabel *nameLable =[[UILabel alloc]init];
-    nameLable.text = @"展会标题";
-    nameLable.backgroundColor =[UIColor clearColor];
-    nameLable.font =[UIFont systemFontOfSize:PxFont(22)];
-    nameLable.frame=CGRectMake(90, 0, 100, 30 );
-    [_backScrollView addSubview:nameLable];
-    nameLable.textColor =HexRGB(0x3a3a3a);
-    
-    UILabel *timeLabel =[[UILabel alloc]init];
-    timeLabel.text = @"展会时间";
-    timeLabel.backgroundColor =[UIColor clearColor];
-    timeLabel.font =[UIFont systemFontOfSize:PxFont(18)];
-    timeLabel.frame=CGRectMake(90, 25, 100, 30 );
-    timeLabel.textColor = HexRGB(0x808080);
-    [_backScrollView addSubview:timeLabel];
-    
-    UILabel *addLabel =[[UILabel alloc]init];
-    addLabel.text = @"来源";
-    addLabel.backgroundColor =[UIColor clearColor];
-    addLabel.font =[UIFont systemFontOfSize:PxFont(18)];
-    addLabel.frame=CGRectMake(90, 50, 60, 30 );
 
-    [_backScrollView addSubview:addLabel];
-    addLabel.textColor =HexRGB(0x808080);
+    UIWebView *companyWebView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
+    companyWebView.scrollView.bounces = NO;
+    companyWebView.scrollView.showsHorizontalScrollIndicator = NO;
+    companyWebView.scrollView.showsVerticalScrollIndicator =NO;
+    [companyWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_interface_Url]] ];
+    [self.view addSubview:companyWebView];
+    companyWebView.backgroundColor =[UIColor clearColor];
 
-    UIView *lineView =[[UIView alloc]initWithFrame:CGRectMake(0, 85, kWidth, 1)];
-    [_backScrollView addSubview:lineView];
-    lineView.backgroundColor =[UIColor lightGrayColor];
-    
-    UILabel *contentLabel =[[UILabel alloc]initWithFrame:CGRectMake(YYBODER, 90, kWidth-YYBODER*2, 300)];
-    contentLabel.text =@"详情内容";
-    contentLabel.textAlignment=NSTextAlignmentCenter;
-    
-    [_backScrollView addSubview:contentLabel];
 
 
 }
@@ -89,6 +50,7 @@
     [wirteBtn setTitle:@"       写评论" forState:UIControlStateNormal];
     [wirteBtn setImage:[UIImage imageNamed:@"write.png"] forState:UIControlStateNormal];
     wirteBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
+    wirteBtn.backgroundColor =[UIColor whiteColor];
     [wirteBtn setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
     [self.view addSubview:wirteBtn];
     

@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface productDetailsView : UIViewController
-
+@property(nonatomic,retain)NSString *productIndex;
 @end

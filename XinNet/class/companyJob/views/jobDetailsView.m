@@ -45,95 +45,40 @@
     _bigScrollView.pagingEnabled = YES;
     [self.view addSubview:_bigScrollView];
     _bigScrollView.tag =9999;
-    [self addCompanyScrollView];
-    [self addJobScrollView];
-    
-    
-}
--(void)addJobScrollView{
-    _jobScrollView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-94)];
-    _jobScrollView.backgroundColor =HexRGB(0xe9f1f6);
-    [_bigScrollView addSubview:_jobScrollView];
-    [self addJoblabel];
-    
-}
--(void)addJoblabel{
-    
-    UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(YYBODER, 10, kWidth-YYBODER*2, 100)];
-    [_jobScrollView addSubview:headerImage];
-    headerImage.backgroundColor =[UIColor lightGrayColor];
-    
-    UIView *lineView =[[UIView alloc]initWithFrame:CGRectMake(YYBODER, 120, kWidth-YYBODER*2+2, 81)];
-    [_jobScrollView addSubview:lineView];
-    lineView.backgroundColor =HexRGB(0xe6e3e4);
-    
-    for (int i=0; i<2; i++) {
-        NSArray *titleArr =@[@"   求职岗位:",@"   时间:"];
-        UILabel *timeLabel =[[UILabel alloc]initWithFrame:CGRectMake(YYBODER+1, 121+i%3*40, kWidth-YYBODER*2, 39)];
-        timeLabel.text =titleArr[i];
-        timeLabel.backgroundColor =[UIColor whiteColor];
-        [_jobScrollView addSubview:timeLabel];
 
-    }
-   
+    UIWebView *jobWebView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 10, kWidth, kHeight-140)];
+    [_bigScrollView addSubview:jobWebView];
     
-//    UILabel *contentLabel =[[UILabel alloc]initWithFrame:CGRectMake(YYBODER, 90, kWidth-YYBODER*2, 300)];
-//    contentLabel.text =@"详情内容";
-//    contentLabel.textAlignment=NSTextAlignmentCenter;
-//
-//    [_jobScrollView addSubview:contentLabel];
+    jobWebView.scrollView.bounces = NO;
+    jobWebView.scrollView.showsHorizontalScrollIndicator = NO;
+    jobWebView.scrollView.showsVerticalScrollIndicator =NO;
+    [jobWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_job_urlWeb]] ];
     
+    
+    UIWebView *companyWebView =[[UIWebView alloc]initWithFrame:CGRectMake(kWidth, 10, kWidth, kHeight-140)];
+    [_bigScrollView addSubview:companyWebView];
+    companyWebView.scrollView.bounces = NO;
+    companyWebView.scrollView.showsHorizontalScrollIndicator = NO;
+    companyWebView.scrollView.showsVerticalScrollIndicator =NO;
+    [companyWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_company_urlWeb]] ];
+
 }
+
 -(void)addWriteBtn{
     YYSearchButton *wirteBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
     wirteBtn.frame = CGRectMake(YYBODER, kHeight-40,kWidth-YYBODER*2,30);
     [wirteBtn addTarget:self action:@selector(wirteBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [wirteBtn setTitle:@"     写评论" forState:UIControlStateNormal];
+    wirteBtn.backgroundColor =[UIColor whiteColor];
     [wirteBtn setImage:[UIImage imageNamed:@"write.png"] forState:UIControlStateNormal];
     wirteBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
     [wirteBtn setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
     [self.view addSubview:wirteBtn];
     
-//    YYSearchButton *collectBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
-//    collectBtn.frame = CGRectMake(wirteBtn.frame.size.width+30, kHeight-54,60,44);
-//    [collectBtn addTarget:self action:@selector(wirteBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-//    [collectBtn setTitle:@"收藏" forState:UIControlStateNormal];
-//    collectBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
-//    [collectBtn setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
-//    [self.view addSubview:collectBtn];
-//    
-    
+
     
 }
 
--(void)addCompanyScrollView{
-    _companyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(kWidth, 0, kWidth, kHeight-94)];
-    _bigScrollView.backgroundColor =HexRGB(0xe9f1f6);
-    _companyScrollView.bounces = YES;
-    [_bigScrollView addSubview:_companyScrollView];
-    [self addCompanylabel];
-    
-}
-
--(void)addCompanylabel{
-    
-    UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(YYBODER, 10, kWidth-YYBODER*2, 100)];
-    [_companyScrollView addSubview:headerImage];
-    headerImage.backgroundColor =[UIColor lightGrayColor];
-    
-    UIView *lineView =[[UIView alloc]initWithFrame:CGRectMake(YYBODER, 120, kWidth-YYBODER*2+2, 81)];
-    [_companyScrollView addSubview:lineView];
-    lineView.backgroundColor =HexRGB(0xe6e3e4);
-    
-    for (int i=0; i<2; i++) {
-        NSArray *titleArr =@[@"   公司名称:",@"   公司简介:"];
-        UILabel *timeLabel =[[UILabel alloc]initWithFrame:CGRectMake(YYBODER+1, 121+i%3*40, kWidth-YYBODER*2, 39)];
-        timeLabel.text =titleArr[i];
-        timeLabel.backgroundColor =[UIColor whiteColor];
-        [_companyScrollView addSubview:timeLabel];
-        
-    }
-}
 
 -(void)addChooseBtn{
     for (int i=0; i<2; i++) {

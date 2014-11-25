@@ -9,14 +9,5 @@
 #import <Foundation/Foundation.h>
 
 @interface companyDetailsModel : NSObject
-@property (nonatomic, strong)NSString *address;//
-@property (nonatomic, strong)NSString *city;//
-@property (nonatomic, strong)NSString *contact;//
-@property (nonatomic, strong)NSString *type_id;//
-@property (nonatomic, strong)NSString *is_vip;//
-@property (nonatomic, strong)NSString *logo;//
-@property (nonatomic,strong)NSString *name;//
-@property (nonatomic, strong)NSString *province;//省份
-@property (nonatomic,strong)NSString *tel;//
--(instancetype)initWithDictionaryForCompany:(NSDictionary *)dict;
+@property (nonatomic, strong)NSString *wapUrl;//
 @end

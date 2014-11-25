@@ -9,6 +9,8 @@
 #import "productController.h"
 #import "productDetailsView.h"
 #import "productCell.h"
+#import "productModel.h"
+#import "productTool.h"
 @interface productController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
     
@@ -19,6 +21,8 @@
     UITableView *_allTableView;
     UITableView *_supplyTablView;
     UITableView *_demandTablView;
+    
+    NSMutableArray *_productArray;
     
     
 }
@@ -37,11 +41,23 @@
     [self.view addSubview:_orangLin];
     _orangLin.frame =CGRectMake(0, 93, 107, 2);
     _orangLin.backgroundColor =HexRGB(0x38c166);
+    _productArray =[[NSMutableArray alloc]init];
     
     [self addbusinessBtn];
-    [self addBigCompanyScrollView];
-}
 
+    [self addLoadStatus];
+}
+#pragma mark ----加载数据
+-(void)addLoadStatus
+{
+
+    [productTool statusesWithSuccess:^(NSArray *statues) {
+        [_productArray addObjectsFromArray:statues];
+        [self addBigCompanyScrollView];
+    } page_num:(0)? 0:[NSString stringWithFormat:@"%lu",[_productArray count]-0] keywords_Id:nil category_Id:nil failure:^(NSError *error) {
+        
+    }];
+}
 #pragma mark背景scrollview
 -(void)addBigCompanyScrollView
 {
@@ -58,6 +74,7 @@
     _BigCompanyScrollView.delegate = self;
     [self.view addSubview:_BigCompanyScrollView];
     [self addBusinessAllTableview];
+
     [self addBusinessDemandTableview];
     [self addBusinessSuplyTableview];
     
@@ -166,17 +183,15 @@
     return 80;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 10   ;
+    return _productArray.count   ;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+    productModel *prModel =[_productArray objectAtIndex:indexPath.row];
     productDetailsView *productVC =[[productDetailsView alloc]init];
+    productVC.productIndex =prModel.indexID;
     [self.navigationController pushViewController:productVC animated:YES];
     
 }
@@ -190,7 +205,14 @@
     UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
     [cell.contentView addSubview:cellLine];
     cellLine.backgroundColor =HexRGB(0xe6e3e4);
-   
+
+    productModel *proModel =[_productArray objectAtIndex:indexPath.row];
+    [cell.hearderImage setImageWithURL:[NSURL URLWithString:proModel.cover] placeholderImage:placeHoderImage];
+    cell.nameLabel.text= proModel.name;
+    cell.old_priceLabel.text =[NSString stringWithFormat:@"产品价格:                %@",proModel.old_price];
+//    cell.companyLabel.text = proModel.company_name;
+    cell.priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.price ];
+    
     return cell;
 }
 

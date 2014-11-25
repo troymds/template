@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface jobDetailsView : UIViewController
-
+@property(nonatomic,retain)NSString *jobDetailsIndex;
+@property(nonatomic,strong)NSString *company_urlWeb;
+@property(nonatomic,strong)NSString *job_urlWeb;
 @end
