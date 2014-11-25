@@ -13,8 +13,9 @@
 #import "MyFavoriteController.h"
 #import "MyDemandController.h"
 #import "LoginController.h"
-#import "GlobalInstance.h"
+#import "SystemConfig.h"
 #import "RemindView.h"
+#import "SubscribController.h"
 
 @interface PersonCenterController ()<MoreListViewDelegate>
 
@@ -37,8 +38,8 @@
 
 - (void)addView
 {
-    NSArray *imgArray = [NSArray arrayWithObjects:@"myMsg.png",@"myComment.png",@"myFavorite.png",@"myDemand.png", nil];   // 左边的图片
-    NSArray *titileArray = [NSArray arrayWithObjects:@"我的消息",@"我的评论",@"我的收藏",@"我的求购", nil];
+    NSArray *imgArray = [NSArray arrayWithObjects:@"myMsg.png",@"myComment.png",@"myFavorite.png",@"mySubscirp.png",@"myDemand.png", nil];   // 左边的图片
+    NSArray *titileArray = [NSArray arrayWithObjects:@"我的消息",@"我的评论",@"我的收藏",@"我的订阅",@"我的求购", nil];
     CGFloat height = 55;
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth,titileArray.count*height)];
     [self.view addSubview:bgView];
@@ -64,7 +65,7 @@
 
 - (void)moreListViewClick:(MoreListView *)view
 {
-    if ([GlobalInstance sharedInstance].isLogin) {
+    if ([SystemConfig sharedInstance].isUserLogin) {
         switch (view.tag-1000) {
             case 0:
             {
@@ -86,6 +87,12 @@
                 break;
             case 3:
             {
+                SubscribController *sc = [[SubscribController alloc] init];
+                [self.navigationController pushViewController:sc animated:YES];
+            }
+                break;
+            case 4:
+            {
                 MyDemandController *demand = [[MyDemandController alloc] init];
                 [self.navigationController pushViewController:demand animated:YES];
             }
@@ -106,13 +113,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

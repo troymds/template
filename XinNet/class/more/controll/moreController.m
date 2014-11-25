@@ -52,18 +52,36 @@
     _setView.delegate = self;
     _setView.tag = Set_Type;
     [bgView addSubview:_setView];
+    //加右侧箭头
+    UIImageView *img1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"right_sore.png"]];
+    img1.frame = CGRectMake(0,0, 30, 30);
+    img1.center = CGPointMake(kWidth-(30/2)-5,height/2);
+    [_setView addSubview:img1];
+    
     
     _adviceView = [[MoreListView alloc] initWithFrame:CGRectMake(0,height, kWidth,height)];
     _adviceView.titleLabel.text = @"意见反馈";
     _adviceView.delegate  = self;
     _adviceView.tag = Advice_Type;
     [bgView addSubview:_adviceView];
+    //加右侧箭头
+    UIImageView *img2= [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"right_sore.png"]];
+    img2.frame = CGRectMake(0,0, 30, 30);
+    img2.center = CGPointMake(kWidth-(30/2)-5,height/2);
+    [_adviceView addSubview:img2];
+    
     
     _shareView = [[MoreListView alloc] initWithFrame:CGRectMake(0,height*2, kWidth,height)];
     _shareView.titleLabel.text = @"分享软件";
     _shareView.delegate = self;
     _shareView.tag = Share_Type;
     [bgView addSubview:_shareView];
+    //加右侧箭头
+    UIImageView *img3 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"right_sore.png"]];
+    img3.frame = CGRectMake(0,0, 30, 30);
+    img3.center = CGPointMake(kWidth-(30/2)-5,height/2);
+    [_shareView addSubview:img3];
+    
     
 }
 

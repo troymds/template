@@ -17,10 +17,16 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        _iconImg = [[UIImageView alloc] initWithFrame:CGRectMake(10,5,50, 35)];
+        
+        CGFloat height = 60; //cell的高度
+        CGFloat imgWidth = 50;//图片的宽度
+        CGFloat imgHeight = 50;//图片的高度
+        CGFloat leftDistance = 10;//图片左边距
+        _iconImg = [[UIImageView alloc] initWithFrame:CGRectMake(leftDistance,(height-imgHeight)/2,imgWidth,imgHeight)];
         [self.contentView addSubview:_iconImg];
         
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10+40+10,10,200,20)];
+        
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(leftDistance+imgWidth+10,height/2-20/2,200,20)];
         _nameLabel.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:_nameLabel];
     }
@@ -40,7 +46,7 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 

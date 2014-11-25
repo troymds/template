@@ -66,7 +66,7 @@
         cell = [[CommentCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
     }
     CommentItem *item = [_dataArray objectAtIndex:indexPath.row];
-    [cell.titileBtn setTitle:item.title forState:UIControlStateNormal];
+    cell.titileLabel.text = item.title;
     cell.commentLabel.text = item.comment;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
@@ -74,15 +74,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 90;
-}
-
-- (CGFloat)getCellHeight:(NSIndexPath *)index
-{
-    CGFloat height = 0;
-    CommentItem *item = [_dataArray objectAtIndex:index.row];
-    
-    return height;
+    return 120;
 }
 
 
@@ -92,13 +84,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

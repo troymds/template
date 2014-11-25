@@ -11,6 +11,7 @@
 #import "AFHTTPClient.h"
 #import <objc/message.h>
 #import "AFHTTPRequestOperation.h"
+
 @implementation httpTool
 + (void)requestWithPath:(NSString *)path params:(NSDictionary *)params success:(HttpSuccessBlock)success failure:(HttpFailureBlock)failure method:(NSString *)method
 {
@@ -33,11 +34,13 @@
     [allParams setObject:uuid forKey:@"uuid"];
     [allParams setObject:md5 forKey:@"secret"];
     
+    //注册和登陆不需要传入参数uid  其他接口都要传
     if ([SystemConfig sharedInstance].isUserLogin) {
-        [allParams setObject:[SystemConfig sharedInstance].uid forKey:@"uid"];
+        [allParams setObject:@"9" forKey:@"uid"];
     }else{
         [allParams setObject:@"0" forKey:@"uid"];
     }
+    
     [allParams setObject:App_key forKey:@"app_key"];
     
     NSDictionary *dic = [NSBundle mainBundle].infoDictionary;
@@ -55,8 +58,6 @@
         failure(error);
     }];
     [op start];
-    
-    
     
 }
 

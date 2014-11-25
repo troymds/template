@@ -10,19 +10,29 @@
 #import "AdaptationSize.h"
 #import "NextRegisterController.h"
 #import "RemindView.h"
+#import "ProtocolView.h"
+#import "PersonalController.h"
+
+#define topDistance  20
+#define leftDistance 10
+
 
 #define macroFont 10
-#define phoneType 2000
-#define emailType 2001
-#define macroType 1999
-#define nextType 2999
+#define displayType 2000
+#define selectType 2001
+#define macroType 2002
+#define nextType 2003
 
 @interface RegisterController ()
 {
-    UITextField *_textField;
-    BOOL isEmail;
-    UIView *bgView;     //顶部两个按钮的底视图
+    UITextField *_userNameField;
+    UITextField *_secretField;
+    UIButton *playButton;//密码显示按钮
+    UIButton *nextBtn;
+    UIButton *selectBtn;//选择条款btn
+    UIView *bgView;
 }
+
 @end
 
 @implementation RegisterController
@@ -40,150 +50,171 @@
 
 - (void)addView
 {
-    bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth,35)];
+    CGFloat y = topDistance;
+    CGFloat height = 45;  //输入框高度
+    CGFloat width = kWidth - leftDistance*2;
+    bgView = [[UIView alloc] initWithFrame:CGRectMake(leftDistance,y,width,height*2)];
+    bgView.backgroundColor = [UIColor whiteColor];
+    bgView.layer.masksToBounds = YES;
+    bgView.layer.cornerRadius = 5.0f;
+    bgView.layer.borderColor = HexRGB(0xc3c3c3).CGColor;
+    bgView.layer.borderWidth = 1.0f;
     [self.view addSubview:bgView];
     
-    NSArray *array = [NSArray arrayWithObjects:@"手机号注册",@"邮箱注册", nil];
-    for (int i = 0 ; i < array.count; i++) {
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = CGRectMake((kWidth/2)*i,0,kWidth/2, 35);
-        [btn setTitle:[array objectAtIndex:i] forState:UIControlStateNormal];
-        [btn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
-        [btn setTitleColor:HexRGB(0x18b0e7) forState:UIControlStateSelected];
-        if (i == 0) {
-            btn.selected = YES;
-        }
-        btn.tag = 2000+i;
-        [btn addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
-        [bgView addSubview:btn];
-    }
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,40,kWidth,1)];
-    line.backgroundColor = HexRGB(0xd5d5d5);
-    [self.view addSubview:line];
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,height,width,1)];
+    line.backgroundColor = HexRGB(0xc3c3c3);
+    [bgView addSubview:line];
+    
+    UILabel *userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 0,55, height)];
+    userNameLabel.backgroundColor = [UIColor clearColor];
+    userNameLabel.textColor = HexRGB(0x3a3a3a);
+    userNameLabel.text = @"账号 :";
+    [bgView addSubview:userNameLabel];
+    
+    _userNameField = [[UITextField alloc] initWithFrame:CGRectMake(60,0,width-60,height)];
+    _userNameField.placeholder = @"请输入手机号或邮箱";
+    [bgView addSubview:_userNameField];
+    
+    
+    UILabel *passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(5,height,55, height)];
+    passwordLabel.backgroundColor = [UIColor clearColor];
+    passwordLabel.textColor = HexRGB(0x3a3a3a);
+    passwordLabel.text = @"密码 :";
+    [bgView addSubview:passwordLabel];
+    
+    _secretField = [[UITextField alloc] initWithFrame:CGRectMake(60,height,width-60-40,height)];
+    _secretField.secureTextEntry = YES;
+    _secretField.placeholder = @"请输入密码";
+    [bgView addSubview:_secretField];
+    
+    
+    playButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [playButton setImage:[UIImage imageNamed:@"display.png"] forState:UIControlStateNormal];
+    [playButton setImage:[UIImage imageNamed:@"play.png"] forState:UIControlStateSelected];
+    playButton.frame = CGRectMake(width-5-30,height+(height-30)/2, 30, 30);
+    playButton.tag = displayType;
+    [playButton addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
+    [bgView addSubview:playButton];
+    
+    [self addMacroView];
+}
 
-    _textField = [[UITextField alloc] initWithFrame:CGRectMake(20,40,kWidth-40,35)];
-    _textField.placeholder = @"请输入手机号";
-    [self.view addSubview:_textField];
-    
-    UIView *line1 = [[UIView alloc] initWithFrame:CGRectMake(0,70,kWidth,1)];
-    line1.backgroundColor = HexRGB(0xd5d5d5);
-    [self.view addSubview:line1];
-    
-    UIView *macroBgView = [[UIView alloc] initWithFrame:CGRectMake(0,80, kWidth,15)];
+//添加协议
+- (void)addMacroView
+{
+    UIView *macroBgView = [[UIView alloc] initWithFrame:CGRectMake(0,topDistance+bgView.frame.size.height+10, kWidth,30)];
     [self.view addSubview:macroBgView];
     //条款
+    
+    selectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    selectBtn.frame = CGRectMake(leftDistance,0,30, 30);
+    selectBtn.tag = selectType;
+    [selectBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [selectBtn setBackgroundImage:[UIImage imageNamed:@"box.png"] forState:UIControlStateNormal];
+    [selectBtn setBackgroundImage:[UIImage imageNamed:@"boxSelected.png"] forState:UIControlStateSelected];
+    [selectBtn addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
+    [macroBgView addSubview:selectBtn];
+
+    
     CGSize size;
-    size = [AdaptationSize getSizeFromString:@"已同意" Font:[UIFont systemFontOfSize:macroFont] withHight:15 withWidth:CGFLOAT_MAX];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10,0,size.width,15)];
+    size = [AdaptationSize getSizeFromString:@"已同意" Font:[UIFont systemFontOfSize:macroFont] withHight:CGFLOAT_MAX withWidth:CGFLOAT_MAX];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(leftDistance+selectBtn.frame.size.width,(macroBgView.frame.size.height-size.height)/2,size.width,size.height)];
     label.backgroundColor = [UIColor clearColor];
     label.font = [UIFont systemFontOfSize:macroFont];
     label.text = @"已同意";
     [macroBgView addSubview:label];
-
-    NSString  *macro = @"<<行者吖吖服务条款>>";     //条款名称
-    size = [AdaptationSize getSizeFromString:macro Font:[UIFont systemFontOfSize:macroFont] withHight:15 withWidth:CGFLOAT_MAX];
+    
+    NSString  *macro = @"<<新网服务条款>>";     //条款名称
+    size = [AdaptationSize getSizeFromString:macro Font:[UIFont systemFontOfSize:macroFont] withHight:CGFLOAT_MAX withWidth:CGFLOAT_MAX];
     UIButton *macBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     macBtn.titleLabel.font = [UIFont systemFontOfSize:macroFont];
-    macBtn.frame = CGRectMake(label.frame.origin.x+label.frame.size.width,0,size.width, 15);
+    macBtn.frame = CGRectMake(label.frame.origin.x+label.frame.size.width,(macroBgView.frame.size.height-size.height)/2,size.width,size.height);
     [macBtn setTitle:macro forState:UIControlStateNormal];
-    [macBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    macBtn.tag = 1999;
+    [macBtn setTitleColor:HexRGB(0x9be4aa) forState:UIControlStateNormal];
+    macBtn.tag = macroType;
     [macBtn addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
     [macroBgView addSubview:macBtn];
     
     size = [AdaptationSize getSizeFromString:@",点击下一步" Font:[UIFont systemFontOfSize:macroFont] withHight:15 withWidth:CGFLOAT_MAX];
-    UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(macBtn.frame.origin.x+macBtn.frame.size.width,0,size.width,15)];
+    UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(macBtn.frame.origin.x+macBtn.frame.size.width,(macroBgView.frame.size.height-size.height)/2,size.width,size.height)];
     label1.backgroundColor = [UIColor clearColor];
     label1.text = @",点击下一步";
     label1.font =[UIFont systemFontOfSize:macroFont];
     [macroBgView addSubview:label1];
-    
-    
-    //下一步按钮
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(20,120,kWidth-40, 35);
-    [button setTitle:@"下一步" forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [button setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
-    [button setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
 
-    button.tag = 2999;
-    [button addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:button];
+    [self addNextButton];
+}
+
+//添加下一步按钮
+- (void)addNextButton
+{    //下一步按钮
+    CGFloat y = topDistance+bgView.frame.size.height+10+30+22;
+    nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    nextBtn.frame = CGRectMake(leftDistance,y,kWidth-leftDistance*2, 35);
+    [nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
+    nextBtn.enabled = NO;
+    [nextBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [nextBtn setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
+    [nextBtn setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
+    
+    nextBtn.tag = nextType;
+    [nextBtn addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:nextBtn];
+
+    
 }
 
 - (void)btnDown:(UIButton *)btn
 {
     switch (btn.tag) {
-        //手机号注册
-        case phoneType:
+        //显示密码
+        case displayType:
         {
-            //设置顶部按钮选中状态
-            for (UIView *subViw in bgView.subviews) {
-                if ([subViw isKindOfClass:[UIButton class]]) {
-                    UIButton *button = (UIButton *)subViw;
-                    if (button.tag == phoneType) {
-                        button.selected = YES;
-                    }else{
-                        button.selected = NO;
-                    }
-                }
+            btn.selected = !btn.selected;
+            if (btn.selected) {
+                _secretField.secureTextEntry = NO;
+            }else{
+                _secretField.secureTextEntry = YES;
             }
-            isEmail = NO;
-            //改变输入框状态
-            _textField.text = @"";
-            _textField.placeholder = @"请输入手机号";
-
         }
             break;
-        //邮箱注册
-        case emailType:
+        //同意条款
+        case selectType:
         {
-            for (UIView *subViw in bgView.subviews) {
-                if ([subViw isKindOfClass:[UIButton class]]) {
-                    UIButton *button = (UIButton *)subViw;
-                    if (button.tag == emailType) {
-                        button.selected = YES;
-                    }else{
-                        button.selected = NO;
-                    }
-                }
+            btn.selected = !btn.selected;
+            if (btn.selected) {
+                nextBtn.enabled = YES;
+            }else{
+                nextBtn.enabled = NO;
             }
-            isEmail = YES;
-            _textField.text = @"";
-            _textField.placeholder = @"请输入邮箱地址";
         }
             break;
+            //展开条款
         case macroType:
         {
-            
-            NSString *filePath =[[NSBundle mainBundle] pathForResource:@"protocol" ofType:@"html"];
-            NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:filePath]];
-            UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, kWidth,kHeight-64)];
-            [webView loadRequest:request];
-            
-            [self.view addSubview:webView];
+            ProtocolView *view = [[ProtocolView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+            [view showProtocolView];
         }
             break;
         //下一步
         case nextType:
         {
-            if (_textField.text.length==0) {
-                if(isEmail){
-                    [RemindView showViewWithTitle:@"请输入邮箱地址" location:MIDDLE];
-                }else{
-                    [RemindView showViewWithTitle:@"请输入手机号" location:MIDDLE];
-                }
-            }else{
-                
-                NextRegisterController *next = [[NextRegisterController alloc] init];
-                if (isEmail) {
-                    next.isEmail = YES;
-                }else{
-                    next.isEmail = NO;
-                }
-                next.account = _textField.text;
-                [self.navigationController pushViewController:next animated:YES];
+            if ([self checkData]) {
+                NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:_userNameField.text,@"email",_secretField.text,@"password", nil];
+                [httpTool postWithPath:@"register" params:param success:^(id JSON) {
+                    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                    NSDictionary *dic = [result objectForKey:@"response"];
+                    int code = [[dic objectForKey:@"code"] intValue];
+                    if (code == 100) {
+                        PersonalController *PC = [[PersonalController alloc] init];
+                        [self.navigationController pushViewController:PC animated:YES];
+                    }else{
+                        NSString *msg= [dic objectForKey:@"msg"];
+                        [RemindView showViewWithTitle:msg location:MIDDLE];
+                    }
+                } failure:^(NSError *error) {
+                    [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+                }];
             }
         }
             break;
@@ -193,10 +224,24 @@
     }
 }
 
+- (BOOL)checkData
+{
+    if (_userNameField.text.length==0) {
+        [RemindView showViewWithTitle:@"请输入邮箱" location:MIDDLE];
+        return NO;
+    }
+    if (_secretField.text.length==0) {
+        [RemindView showViewWithTitle:@"请输入密码" location:MIDDLE];
+        return NO;
+    }
+    return YES;
+}
+
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [_textField resignFirstResponder];
+    [_userNameField resignFirstResponder];
+    [_secretField resignFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning {

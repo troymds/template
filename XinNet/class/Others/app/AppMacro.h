@@ -69,14 +69,14 @@
 #define App_key @"D66BAEC30A4AED826BCC2BB3264FC6F6"
 
 
-//// 2.日志输出宏定义
-//#ifdef DEBUG
-//// 调试状态
-//#define NSLog(...) NSLog(__VA_ARGS__)
-//#else
-//// 发布状态
-//#define NSLog(...)
-//#endif
+// 2.日志输出宏定义
+#ifdef DEBUG
+// 调试状态
+#define NSLog(...) NSLog(__VA_ARGS__)
+#else
+// 发布状态
+#define NSLog(...)
+#endif
 
 #define KCompanyMenuItemW   kWidth/3
 #define KCompanyMenuItemH   30

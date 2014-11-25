@@ -1,16 +1,16 @@
 //
-//  SelectCell.h
+//  SubscribCell.h
 //  XinNet
 //
-//  Created by tianj on 14-11-20.
+//  Created by Tianj on 14/11/22.
 //  Copyright (c) 2014年 tianj. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface SelectCell : UITableViewCell
+@interface SubscribCell : UITableViewCell
 
+@property (nonatomic,strong) UIImageView *imgView;
 @property (nonatomic,strong) UILabel *titleLabel;
-@property (nonatomic,strong) UIButton *selectBtn;
 
 @end

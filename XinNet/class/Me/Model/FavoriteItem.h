@@ -10,6 +10,14 @@
 
 @interface FavoriteItem : NSObject
 
+@property (nonatomic,copy) NSString *app_id;
+@property (nonatomic,copy) NSString *create_time;
+@property (nonatomic,copy) NSString *entity_id;
+@property (nonatomic,copy) NSString *vid;
 @property (nonatomic,copy) NSString *title;
+@property (nonatomic,copy) NSString *type;
+@property (nonatomic,copy) NSString *uid;
+
+- (id)initWithDic:(NSDictionary *)dic;
 
 @end

@@ -41,8 +41,9 @@
         //日期
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _dateLabel.backgroundColor = [UIColor clearColor];
+        _dateLabel.textColor = HexRGB(0x808080);
         _dateLabel.font = [UIFont systemFontOfSize:DateFont];
-        _dateLabel.textAlignment = NSTextAlignmentCenter;
+        _dateLabel.textAlignment = NSTextAlignmentRight;
         [self.contentView addSubview:_dateLabel];
         
     }
@@ -66,17 +67,18 @@
     self.userNameLabel.frame = CGRectMake(x, TopSapce,150,UserNameHeight);
     self.userNameLabel.text = item.userName;
     
+    self.dateLabel.frame = CGRectMake(kWidth-10-120,TopSapce+5,120,15);
+    self.dateLabel.text = item.date;
+    
+    
     y +=  UserNameHeight + MiddleSpace;
     
     
     CGSize size = [AdaptationSize getSizeFromString:item.content Font:[UIFont systemFontOfSize:ContentFont] withHight:CGFLOAT_MAX withWidth:ContentWidth];
-    if (size.height>ContentHeight) {
-        self.contentLabel.frame = CGRectMake(x,y,ContentWidth,ContentHeight);
-        y += ContentHeight;
-    }else{
-        self.contentLabel.frame = CGRectMake(x,y, ContentWidth,size.height);
-        y += size.height;
-    }
+    
+    self.contentLabel.frame = CGRectMake(x,y, ContentWidth,size.height);
+    y += size.height;
+    
     self.contentLabel.text = item.content;
     y += MiddleSpace;
     //用户是否发布了图片
@@ -85,12 +87,9 @@
         self.publishImg.frame = CGRectMake((kWidth-PublishImgWidth)/2,y, PublishImgWidth,PublishImgHeiht);
         //此处应设置图片
         self.publishImg.image = [UIImage imageNamed:@"l"];
-        y += self.publishImg.frame.size.height+MiddleSpace;
     }else{
         self.publishImg.hidden = YES;
     }
-    self.dateLabel.frame = CGRectMake(0, y,kWidth,DateHeight);
-    self.dateLabel.text = item.date;
 }
 
 - (void)drawRect:(CGRect)rect
@@ -106,7 +105,7 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 

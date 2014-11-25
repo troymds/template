@@ -16,6 +16,7 @@
     UITextView *_textView;
     TJImageView *_publishImg;
     UILabel *_markLabel;
+    UIButton *addImgBtn;
     
     BOOL isEditing;  //是否已经开始编辑
 }
@@ -38,7 +39,7 @@
 - (void)addView
 {
     //输入框
-    CGFloat leftDistance = 10;
+    CGFloat leftDistance = 20;
     _textView = [[UITextView alloc] initWithFrame:CGRectMake(leftDistance,10,kWidth-leftDistance*2,120)];
     [self.view addSubview:_textView];
     _textView.delegate = self;
@@ -51,10 +52,17 @@
     _textView.layer.borderWidth = 0.5;
     
     //图片
-    _publishImg = [[TJImageView alloc] initWithFrame:CGRectMake(leftDistance,_textView.frame.origin.y+_textView.frame.size.height+10,60,40)];
+    _publishImg = [[TJImageView alloc] initWithFrame:CGRectMake(leftDistance,_textView.frame.origin.y+_textView.frame.size.height+15,75,75)];
     _publishImg.backgroundColor = [UIColor redColor];
-    _publishImg.delegate = self;
     [self.view addSubview:_publishImg];
+    
+    addImgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    addImgBtn.frame = CGRectMake(leftDistance+_publishImg.frame.size.width+9,_publishImg.frame.origin.y,75, 75);
+    addImgBtn.tag = 1000;
+    [addImgBtn addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
+    [addImgBtn setBackgroundImage:[UIImage imageNamed:@"addImg.png"] forState:UIControlStateNormal];
+    [self.view addSubview:addImgBtn];
+    
     
     CGFloat width = 100;        //显示输入字体label的宽度
     _markLabel = [[UILabel alloc] initWithFrame:CGRectMake(kWidth-width-leftDistance,_textView.frame.origin.y+_textView.frame.size.height+10, width,20)];
@@ -65,22 +73,27 @@
     [self.view addSubview:_markLabel];
     
     //发布按钮
-    CGFloat btnWidth = 200;
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"确认发布" forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    button.tag = 1001;
     [button setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
     [button setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
-    button.frame = CGRectMake((kWidth-btnWidth)/2,_publishImg.frame.origin.y+_publishImg.frame.size.height+20,btnWidth,35);
-    button.backgroundColor = [UIColor grayColor];
-    [button addTarget:self action:@selector(btnDown) forControlEvents:UIControlEventTouchUpInside];
+    button.frame = CGRectMake(10,_publishImg.frame.origin.y+_publishImg.frame.size.height+20,kWidth-10*2,36);
+    [button addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
 }
 
 
 //发布按钮点击
-- (void)btnDown
+- (void)btnDown:(UIButton *)btn
 {
-    NSLog(@"确认发布");
+    if (btn.tag == 1000) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"选取图片" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"拍照",@"本地", nil];
+        [alertView show];
+    }else{
+        
+    }
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
@@ -127,12 +140,6 @@
     _markLabel.text = [NSString stringWithFormat:@"%d/%d",(int)_textView.text.length,MaxCount];
 }
 
-- (void)imageViewClick:(TJImageView *)view
-{
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"选取图片" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"拍照",@"本地", nil];
-    [alertView show];
-}
-
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1){
@@ -173,13 +180,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

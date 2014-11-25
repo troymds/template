@@ -128,7 +128,7 @@
                 }
             }
         }
-
+        
         if (scrollView.contentOffset.x == kWidth) {
             
             isSystem = NO;
@@ -239,7 +239,7 @@
     if (tableView.tag == systemType) {
         return [self getCellHeight:indexPath];
     }
-    return 40;
+    return 60;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -256,12 +256,9 @@
     CGFloat height = 0 ;
     SystemMsgItem *item = [_systemArray objectAtIndex:indexPath.row];
     CGSize size = [AdaptationSize getSizeFromString:item.content Font:[UIFont systemFontOfSize:ContenFont] withHight:CGFLOAT_MAX withWidth:BgWidth-20];
-    height+=TopDistance+size.height+bottomHeight+10;
+    height+=TopDistance+size.height+bottomHeight+10+5;
     return height;
 }
-
-
-
 
 
 - (void)didReceiveMemoryWarning {
@@ -270,13 +267,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end
