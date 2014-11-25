@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface productCell : UITableViewCell
-@property (copy, nonatomic)  UIImageView *supplyImage;
+@property (copy, nonatomic)  UIImageView *hearderImage;
 @property (copy, nonatomic)  UILabel *nameLabel;
 @property (copy, nonatomic)  UILabel *companyLabel;
-@property (copy, nonatomic)  UILabel *read_numLabel;
+@property (copy, nonatomic)  UILabel *priceLabel;
+@property (copy, nonatomic)  UILabel *old_priceLabel;
+
 @end

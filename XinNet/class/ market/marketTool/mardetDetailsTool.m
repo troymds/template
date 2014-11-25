@@ -7,7 +7,6 @@
 //
 
 #import "mardetDetailsTool.h"
-#import "mardetDetailsModel.h"
 @implementation mardetDetailsTool
 + (void)statusesWithSuccess:(StatusSuccessBlock)success newsID:(NSString * )newid failure:(StatusFailureBlock)failure
 {

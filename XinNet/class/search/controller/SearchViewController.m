@@ -54,7 +54,7 @@
     [classBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [classBtn setImage:[UIImage imageNamed:@"menu_up_img.png"] forState:UIControlStateNormal];
     [classBtn setImage:[UIImage imageNamed:@"menu_down_img.png"] forState:UIControlStateSelected];
-    classBtn.imageEdgeInsets =UIEdgeInsetsMake(0, kWidth-YYBODERW*2-20, 0, 10);
+    classBtn.imageEdgeInsets =UIEdgeInsetsMake(0, kWidth-YYBODERW*2-35, 0, 0);
     [classBtn addTarget:self action:@selector(classBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     classBtn.selected = YES;
     

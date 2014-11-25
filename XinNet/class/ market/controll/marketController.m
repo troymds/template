@@ -41,13 +41,14 @@
     [self addloadStatus];
 }
 -(void)addloadStatus{
+
     [marketTOOL statusesWithSuccess:^(NSArray *statues) {
         [_marketArray addObjectsFromArray:statues];
         [self addTableView];
-
-    } lastID: (0)? 0:[NSString stringWithFormat:@"%lu",[_marketArray count]-0] failure:^(NSError *error) {
+    } page_num:(0)? 0:[NSString stringWithFormat:@"%lu",[_marketArray count]-0] keywords_Id:nil category_Id:nil failure:^(NSError *error) {
         
-    }];}
+    }];
+}
 -(void)addTableView{
     _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-64) style:UITableViewStylePlain];
     _tableView.delegate =self;

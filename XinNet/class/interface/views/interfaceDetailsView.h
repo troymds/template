@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface interfaceDetailsView : UIViewController
-
+@property(nonatomic,strong)NSString *interface_Url;
 @end

@@ -56,11 +56,17 @@
 }
 #pragma mark ____加载数据
 -(void)addLoadStatus{
+//    [businessTool statusesWithSuccess:^(NSArray *statues) {
+//        [_allBusinessArray addObjectsFromArray:statues];
+//        
+//        [self addBusinessAllTableview];
+//    } page_Num:0 type_ID:0 failure:^(NSError *error) {
+//        
+//    }];
     [businessTool statusesWithSuccess:^(NSArray *statues) {
         [_allBusinessArray addObjectsFromArray:statues];
-        NSLog(@"%@",_allBusinessArray);
         [self addBusinessAllTableview];
-    } page_Num:0 type_ID:0 failure:^(NSError *error) {
+    } page_num:(0)? 0:[NSString stringWithFormat:@"%lu",[_allBusinessArray count]-0] keywords_Id:nil type_ID:nil category_Id:nil failure:^(NSError *error) {
         
     }];
    }
@@ -199,8 +205,9 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+    businessModel *buModel =[_allBusinessArray objectAtIndex:indexPath.row];
     businessDetailsView *productVC =[[businessDetailsView alloc]init];
+    productVC.businessDetailIndex = buModel.indexID;
     [self.navigationController pushViewController:productVC animated:YES];
     
 }

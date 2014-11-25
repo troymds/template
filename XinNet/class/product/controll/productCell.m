@@ -9,7 +9,7 @@
 #import "productCell.h"
 
 @implementation productCell
-@synthesize supplyImage,read_numLabel,companyLabel,nameLabel;
+@synthesize hearderImage,priceLabel,companyLabel,nameLabel,old_priceLabel;
 
 - (void)awakeFromNib {
     // Initialization code
@@ -19,10 +19,10 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
-        supplyImage = [[UIImageView alloc] initWithFrame:CGRectMake(16, 11, 60, 60)];
-        supplyImage.image =[UIImage imageNamed:@""];
-        supplyImage.backgroundColor =[UIColor lightGrayColor];
-        [self addSubview:supplyImage];
+        hearderImage = [[UIImageView alloc] initWithFrame:CGRectMake(16, 11, 60, 60)];
+        hearderImage.image =[UIImage imageNamed:@""];
+        hearderImage.backgroundColor =[UIColor lightGrayColor];
+        [self addSubview:hearderImage];
         
         
         nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 11, 240, 20)];
@@ -42,11 +42,23 @@
         companyLabel.textColor=HexRGB(0x808080);
         
         
-        read_numLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 52, 60, 20)];
-        read_numLabel.text = @"产品价格";
-        [self addSubview:read_numLabel];
-        read_numLabel.font =[UIFont systemFontOfSize:PxFont(18)];
-        read_numLabel.textColor = HexRGB(0x808080);
+        priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(150, 52, 60, 20)];
+        priceLabel.text = @"产品价格";
+        [self addSubview:priceLabel];
+        priceLabel.font =[UIFont systemFontOfSize:PxFont(18)];
+        priceLabel.textColor = HexRGB(0xfe7c75);
+        
+        old_priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 52, 220, 20)];
+        old_priceLabel.text = @"产品价格";
+        old_priceLabel.backgroundColor =[UIColor clearColor];
+        [self addSubview:old_priceLabel];
+        old_priceLabel.font =[UIFont systemFontOfSize:PxFont(18)];
+        old_priceLabel.textColor = HexRGB(0x808080);
+        
+        UIView *line =[[UIView alloc]initWithFrame:CGRectMake(205, 62, 35, 1)];
+        [self addSubview:line];
+        line.backgroundColor =HexRGB(0x808080);
+
         
     }
     return self;

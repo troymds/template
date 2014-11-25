@@ -31,13 +31,13 @@
 }
 #pragma mark ----加载数据
 -(void)addLoadStatus{
-    [companyListTool CompanyStatusesWithSuccesscategory:^(NSArray *statues) {
+
+    [companyListTool statusesWithSuccess:^(NSArray *statues) {
         [_companyArray addObjectsFromArray:statues];
         [self addTableView];
-
-    } Page:(0)? 0:[NSString stringWithFormat:@"%lu",[_companyArray count]-0] CompanyFailure:^(NSError *error) {
+    } page_num:(0)? 0:[NSString stringWithFormat:@"%u",[_companyArray count]-0] keywords_Id:nil failure:^(NSError *error) {
         
-    } ];
+    }];
 }
 -(void)addTableView{
     _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-64) style:UITableViewStylePlain];

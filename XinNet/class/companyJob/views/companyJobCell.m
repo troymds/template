@@ -9,7 +9,7 @@
 #import "companyJobCell.h"
 #define YYBorder 20
 @implementation companyJobCell
-@synthesize nameLabel,companyLabel,read_numLabel;
+@synthesize nameLabel,companyLabel,timeLael;
 - (void)awakeFromNib {
     // Initialization code
 }
@@ -38,11 +38,11 @@
         companyLabel.font =[UIFont systemFontOfSize:PxFont(20)];
         
         
-        read_numLabel = [[UILabel alloc] initWithFrame:CGRectMake(YYBorder, 55, 60, 20)];
-        read_numLabel.text = @"时间";
-        [self addSubview:read_numLabel];
-        read_numLabel.font =[UIFont systemFontOfSize:PxFont(20)];
-        read_numLabel.textColor = HexRGB(0x808080);
+        timeLael = [[UILabel alloc] initWithFrame:CGRectMake(YYBorder, 55, 60, 20)];
+        timeLael.text = @"时间";
+        [self addSubview:timeLael];
+        timeLael.font =[UIFont systemFontOfSize:PxFont(20)];
+        timeLael.textColor = HexRGB(0x808080);
 
         
     }

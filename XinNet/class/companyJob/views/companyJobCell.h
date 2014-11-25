@@ -11,5 +11,5 @@
 @interface companyJobCell : UITableViewCell
 @property (copy, nonatomic)  UILabel *nameLabel;
 @property (copy, nonatomic)  UILabel *companyLabel;
-@property (copy, nonatomic)  UILabel *read_numLabel;
+@property (copy, nonatomic)  UILabel *timeLael;
 @end

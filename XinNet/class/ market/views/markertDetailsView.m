@@ -14,7 +14,6 @@
 #import "mardetDetailsTool.h"
 @interface markertDetailsView ()<YYalertViewDelegate>
 {
-    NSMutableArray *_markerDetailArray;
     mardetDetailsModel *mardetModel;
 }
 @end
@@ -24,7 +23,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor =HexRGB(0xe9f1f6);
-    _markerDetailArray =[[NSMutableArray alloc]init];
     
     [self addCollectionAndShareSDK];
 
@@ -36,11 +34,8 @@
 -(void)addLoadStatus{
     [mardetDetailsTool statusesWithSuccess:^(NSArray *statues) {
         NSDictionary *dict = [statues objectAtIndex:0];
-
-        [_markerDetailArray addObjectsFromArray:statues];
-        NSString *webUrl =[dict objectForKey:@"wapUrl"];
          mardetModel =[[mardetDetailsModel alloc]init];
-        mardetModel.wapUrl =webUrl;
+        mardetModel.wapUrl =[dict objectForKey:@"wapUrl"];
         [self addLabel];
     } newsID:_markIndex failure:^(NSError *error) {
         
@@ -173,7 +168,7 @@
     [self.view addSubview:marketWebView];
     [marketWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:mardetModel.wapUrl]] ];
     [self.view addSubview:marketWebView];
-    marketWebView.backgroundColor =[UIColor redColor];
+    marketWebView.backgroundColor =[UIColor clearColor];
 
     
     UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, kHeight-55, kWidth, 1)];

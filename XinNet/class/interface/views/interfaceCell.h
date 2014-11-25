@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface interfaceCell : UITableViewCell
-@property (copy, nonatomic)  UIImageView *supplyImage;
+@property (copy, nonatomic)  UIImageView *interfaceImage;
 @property (copy, nonatomic)  UILabel *nameLabel;
 @property (copy, nonatomic)  UILabel *companyLabel;
-@property (copy, nonatomic)  UILabel *read_numLabel;
+@property (copy, nonatomic)  UILabel *timeLabel;
 @end
