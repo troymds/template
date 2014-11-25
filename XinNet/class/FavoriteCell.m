@@ -17,8 +17,10 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,0,kWidth-20,self.frame.size.height)];
+        CGFloat height = 62;
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(22,0,kWidth-20,height)];
         _titleLabel.backgroundColor = [UIColor clearColor];
+        _titleLabel.font = [UIFont systemFontOfSize:15];
         [self.contentView addSubview:_titleLabel];
     }
     return self;

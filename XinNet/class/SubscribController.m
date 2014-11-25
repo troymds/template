@@ -1,58 +1,62 @@
 //
-//  MyCommentController.m
+//  SubscribController.m
 //  XinNet
 //
-//  Created by tianj on 14-11-20.
+//  Created by Tianj on 14/11/22.
 //  Copyright (c) 2014年 tianj. All rights reserved.
 //
 
-#import "MyCommentController.h"
-#import "CommentCell.h"
-#import "CommentItem.h"
+#import "SubscribController.h"
+#import "SubscribCell.h"
+#import "SubscribItem.h"
+#import "companyDetailsView.h"
 
-@interface MyCommentController ()<UITableViewDataSource,UITableViewDelegate>
+@interface SubscribController ()<UITableViewDataSource,UITableViewDelegate>
 {
     UITableView *_tableView;
     NSMutableArray *_dataArray;
 }
 @end
 
-@implementation MyCommentController
+@implementation SubscribController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = HexRGB(0xe9f1f6);
+    self.view.backgroundColor = [UIColor whiteColor];
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
-        self.edgesForExtendedLayout  = UIRectEdgeNone;
+        self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     // Do any additional setup after loading the view.
-    
-    self.title = @"我的评论";
+    self.title = @"我的订阅";
     
     _dataArray = [[NSMutableArray alloc] initWithCapacity:0];
+    
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64) style:UITableViewStylePlain];
-    _tableView.delegate =self;
-    _tableView.dataSource = self;
     _tableView.separatorColor = [UIColor clearColor];
-    _tableView.backgroundColor =HexRGB(0xe9f1f6);
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
     [self.view addSubview:_tableView];
     
     [self loadData];
 }
 
+#pragma mark -----
+//加载数据
 - (void)loadData
 {
-    for (int i =0 ; i < 5; i ++) {
-        CommentItem *item = [[CommentItem alloc] init];
-        item.title = @"2014上海食品展会";
-        item.comment = @"这是一大段评论内容这是一大段评论内容这是一大段评论内容这是一大段评论内容这是一大段评论内容这是一大段评论内容这是一大段评论内容";
+    for (int i =0; i < 10; i++) {
+        SubscribItem *item = [[SubscribItem alloc] init];
+        item.imgstr = @"l.png";
+        item.title = @"公司名称";
         [_dataArray addObject:item];
     }
     [_tableView reloadData];
 }
 
 
+
+#pragma mark tableView_delegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _dataArray.count;
@@ -61,22 +65,27 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellName = @"cellName";
-    CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+    SubscribCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
     if (cell == nil) {
-        cell = [[CommentCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+        cell = [[SubscribCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
     }
-    CommentItem *item = [_dataArray objectAtIndex:indexPath.row];
-    cell.titileLabel.text = item.title;
-    cell.commentLabel.text = item.comment;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    SubscribItem *item = [_dataArray objectAtIndex:indexPath.row];
+    cell.imageView.image = [UIImage imageNamed:item.imgstr];
+    cell.titleLabel.text = item.title;
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 120;
+    return 50;
 }
 
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    companyDetailsView *detail = [[companyDetailsView alloc] init];
+    [self.navigationController pushViewController:detail animated:YES];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

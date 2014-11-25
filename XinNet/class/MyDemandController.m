@@ -9,8 +9,8 @@
 #import "MyDemandController.h"
 #import "DemandItem.h"
 #import "DemandCell.h"
-#import "DemandView.h"
-#import "businessDetailsView.h"
+#import "DemandDetailController.h"
+#import "PublishController.h"
 
 @interface MyDemandController ()<UITableViewDataSource,UITableViewDelegate>
 {
@@ -58,8 +58,10 @@
 //右导航按钮点击
 - (void)rightBarButtonDown
 {
-    DemandView *view = [[DemandView alloc] initWithTitle:@"发布"];
-    [view show];
+    PublishController *pc = [[PublishController alloc] init];
+    pc.title = @"发布";
+    pc.isPublish = YES;
+    [self.navigationController pushViewController:pc animated:YES];
 }
 
 
@@ -89,20 +91,21 @@
     DemandItem *item = [_dataArray objectAtIndex:indexPath.row];
     cell.titleLabel.text = item.title;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 40;
+    return 62;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    businessDetailsView *detail = [[businessDetailsView alloc] init];
+    DemandDetailController *detail = [[DemandDetailController alloc] init];
+    detail.title = @"发布";
     [self.navigationController pushViewController:detail animated:YES];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

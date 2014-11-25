@@ -26,8 +26,8 @@
     remindLabel.text = title;
     remindLabel.textAlignment = NSTextAlignmentCenter;
     remindLabel.font = [UIFont systemFontOfSize:PxFont(23)];
-    remindLabel.backgroundColor = HexRGB(0xa5a4a4);
-    remindLabel.textColor = [UIColor whiteColor];
+    remindLabel.backgroundColor = HexRGB(0xdbdada);
+    remindLabel.textColor = HexRGB(0x3a3a3a);
     remindLabel.center = center;
     [[UIApplication sharedApplication].keyWindow addSubview:remindLabel];
     [UIView animateWithDuration:3 animations:^{

@@ -15,6 +15,7 @@
 #import "LoginController.h"
 #import "GlobalInstance.h"
 #import "RemindView.h"
+#import "SubscribController.h"
 
 @interface PersonCenterController ()<MoreListViewDelegate>
 
@@ -37,8 +38,8 @@
 
 - (void)addView
 {
-    NSArray *imgArray = [NSArray arrayWithObjects:@"myMsg.png",@"myComment.png",@"myFavorite.png",@"myDemand.png", nil];   // 左边的图片
-    NSArray *titileArray = [NSArray arrayWithObjects:@"我的消息",@"我的评论",@"我的收藏",@"我的求购", nil];
+    NSArray *imgArray = [NSArray arrayWithObjects:@"myMsg.png",@"myComment.png",@"myFavorite.png",@"mySubscirp.png",@"myDemand.png", nil];   // 左边的图片
+    NSArray *titileArray = [NSArray arrayWithObjects:@"我的消息",@"我的评论",@"我的收藏",@"我的订阅",@"我的求购", nil];
     CGFloat height = 55;
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth,titileArray.count*height)];
     [self.view addSubview:bgView];
@@ -85,6 +86,12 @@
             }
                 break;
             case 3:
+            {
+                SubscribController *sc = [[SubscribController alloc] init];
+                [self.navigationController pushViewController:sc animated:YES];
+            }
+                break;
+            case 4:
             {
                 MyDemandController *demand = [[MyDemandController alloc] init];
                 [self.navigationController pushViewController:demand animated:YES];

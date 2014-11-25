@@ -8,7 +8,6 @@
 
 #import "MyFavoriteController.h"
 #import "FavoriteCell.h"
-#import "SelectCell.h"
 #import "FavoriteItem.h"
 #import "MoreListView.h"
 
@@ -16,6 +15,8 @@
 {
     UITableView *_tableView;
     NSMutableArray *_dataArray;
+    NSMutableArray   *deleteArray; //用于记录删除的数组
+    NSMutableDictionary *deleteDic;//用于记录删除的字典
     BOOL isEdit;   //是否处于编辑状态
     BOOL isPlay;   //是否展示选项卡
     UIView *categoryView;
@@ -34,6 +35,9 @@
     // Do any additional setup after loading the view.
     
     _dataArray = [[NSMutableArray alloc] initWithCapacity:0];
+    deleteArray = [[NSMutableArray alloc] initWithCapacity:0];
+    deleteDic = [NSMutableDictionary dictionary];
+    
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kWidth,kHeight-64) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -41,16 +45,39 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
     
-    UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(playMore)];
-    UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit)];
-    NSArray *array = [NSArray arrayWithObjects:item1,item2, nil];
-    self.navigationItem.rightBarButtonItems = array;
+    
+    [self addRightNavitems];
     
     [self addCategoryView];
     
     [self loadData];
 }
 
+//添加右导航按钮
+- (void)addRightNavitems
+{
+    UIButton *editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    editBtn.frame = CGRectMake(0, 0, 40, 25);
+    [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
+    [editBtn setTitle:@"删除" forState:UIControlStateSelected];
+    [editBtn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
+    [editBtn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateSelected];
+    [editBtn addTarget:self action:@selector(edit:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithCustomView:editBtn];
+
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame = CGRectMake(0, 0, 40, 25);
+    [button setTitle:@"分类" forState:UIControlStateNormal];
+    [button setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
+    [button setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateSelected];
+    [button addTarget:self action:@selector(playMore) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithCustomView:button];
+
+    NSArray *array = [NSArray arrayWithObjects:item1,item2, nil];
+    self.navigationItem.rightBarButtonItems = array;
+}
+
+//初始化右侧展开的分类视图
 - (void)addCategoryView
 {
     NSMutableArray *imgArray = [NSMutableArray arrayWithObjects:@"l",@"l",@"l",@"l",@"l",@"l", nil];
@@ -74,6 +101,7 @@
     }
 }
 
+//右侧展开分类视图点击
 - (void)moreListViewClick:(MoreListView *)view
 {
     [_dataArray removeAllObjects];
@@ -86,7 +114,7 @@
                 [_dataArray addObject:item];
             }
             [_tableView reloadData];
-
+            
         }
             break;
         case 1:
@@ -97,7 +125,7 @@
                 [_dataArray addObject:item];
             }
             [_tableView reloadData];
-
+            
         }
             break;
         case 2:
@@ -108,7 +136,7 @@
                 [_dataArray addObject:item];
             }
             [_tableView reloadData];
-
+            
         }
             break;
         case 3:
@@ -119,7 +147,7 @@
                 [_dataArray addObject:item];
             }
             [_tableView reloadData];
-
+            
         }
             break;
         case 4:
@@ -130,7 +158,7 @@
                 [_dataArray addObject:item];
             }
             [_tableView reloadData];
-
+            
         }
             break;
         case 5:
@@ -141,10 +169,10 @@
                 [_dataArray addObject:item];
             }
             [_tableView reloadData];
-
+            
         }
             break;
-
+            
         default:
             break;
     }
@@ -161,17 +189,27 @@
     }
     [_tableView reloadData];
 }
+
 //编辑
-- (void)edit
+- (void)edit:(UIButton *)btn
 {
     isEdit = !isEdit;
-    NSMutableArray *arr = [[NSMutableArray alloc] init];
-    for (int i = 0 ; i < _dataArray.count; i++) {
-        NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:0];
-        [arr addObject:index];
+    btn.selected = !btn.selected;
+    if (isEdit) {
+        [_tableView setEditing:YES animated:YES];
+    }else{
+        //需要删除的数据数组
+        NSMutableArray *arr = [[NSMutableArray alloc] initWithCapacity:0];
+        for (int i = 0; i < [deleteArray count]; i++) {
+            NSIndexPath *indexPath = [deleteArray objectAtIndex:i];
+            FavoriteItem *item = [_dataArray objectAtIndex:indexPath.row];
+            [arr addObject:item];
+        }
+        [_dataArray removeObjectsInArray:arr];
+        [_tableView deleteRowsAtIndexPaths:deleteArray withRowAnimation:UITableViewRowAnimationFade];
+        [deleteArray removeAllObjects];
+        [_tableView setEditing:NO];
     }
-    [_tableView reloadRowsAtIndexPaths:arr withRowAnimation:UITableViewRowAnimationAutomatic];
-//    [_tableView reloadData];
 }
 
 - (void)playMore
@@ -184,6 +222,11 @@
     }
 }
 
+- (UITableViewCellEditingStyle )tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleDelete | UITableViewCellEditingStyleInsert;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _dataArray.count;
@@ -191,38 +234,34 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (isEdit) {
-        static NSString *identify = @"identify";
-        SelectCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
-        if (cell == nil) {
-            cell = [[SelectCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identify];
-        }
-        FavoriteItem *item = [_dataArray objectAtIndex:indexPath.row];
-        cell.titleLabel.text = item.title;
-        cell.selectBtn.tag = 1000+indexPath.row;
-        [cell.selectBtn addTarget:self action:@selector(selectBtnDown:) forControlEvents:UIControlEventTouchUpInside];
-        return cell;
-    }else{
-        static NSString *cellName = @"cellName";
-        FavoriteCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
-        if (cell == nil) {
-            cell = [[FavoriteCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
-        }
-        FavoriteItem *item = [_dataArray objectAtIndex:indexPath.row];
-        cell.titleLabel.text = item.title;
-        return cell;
+    static NSString *cellName = @"cellName";
+    FavoriteCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+    if (cell == nil) {
+        cell = [[FavoriteCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
     }
-    return nil;
+    FavoriteItem *item =  [_dataArray objectAtIndex:indexPath.row];
+    cell.titleLabel.text =item.title;
+    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 40;
+    return 62;
 }
 
-- (void)selectBtnDown:(UIButton *)btn
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    btn.selected = !btn.selected;
+    if (isEdit) {
+        [deleteArray addObject:indexPath];
+    }
+}
+
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (isEdit) {
+        [deleteArray removeObject:indexPath];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -231,13 +270,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

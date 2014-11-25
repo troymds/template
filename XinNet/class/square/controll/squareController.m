@@ -66,7 +66,7 @@
 //顶部图片
 - (void)addHeadView
 {
-    SquareHeadView *headView = [[SquareHeadView alloc] initWithFrame:CGRectMake(0, 0, kWidth,120)];
+    SquareHeadView *headView = [[SquareHeadView alloc] initWithFrame:CGRectMake(0, 0, kWidth,154)];
     headView.iconImg.image = [UIImage imageNamed:@"l"];
     headView.iconImg.delegate = self;
     headView.nameLabel.text = @"我是雷某某";
@@ -161,16 +161,12 @@
     SquareUserItem *item = [_dataArray objectAtIndex:indexPath.row];
     cellHeight = TopSapce + UserNameHeight+MiddleSpace;
     CGSize size = [AdaptationSize getSizeFromString:item.content Font:[UIFont systemFontOfSize:ContentFont] withHight:CGFLOAT_MAX withWidth:ContentWidth];
-    if (size.height > ContentHeight) {
-        cellHeight += ContentHeight;
-    }else{
-        cellHeight += size.height;
-    }
+    cellHeight += size.height;
     cellHeight += MiddleSpace;
     if (item.publishImg&&item.publishImg.length!=0) {
-        cellHeight += PublishImgHeiht+MiddleSpace;
+        cellHeight += PublishImgHeiht;
     }
-    cellHeight += DateHeight +10;
+    cellHeight += 15;
     return cellHeight;
 }
 

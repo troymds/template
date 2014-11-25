@@ -7,13 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TouchLabel.h"
 
 #define contentFont 13
 
 
 @interface CommentCell : UITableViewCell
 
-@property (nonatomic,strong) UIButton *titileBtn;
+@property (nonatomic,strong) TouchLabel *titileLabel;
 
 @property (nonatomic,strong) UILabel *commentLabel;
 

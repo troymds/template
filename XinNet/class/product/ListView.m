@@ -9,7 +9,8 @@
 #import "ListView.h"
 #import "AdaptationSize.h"
 
-#define NameFontSize [UIFont systemFontOfSize:16]
+#define NameFontSize [UIFont systemFontOfSize:18]
+#define DetailFont [UIFont systemFontOfSize:16]
 
 @implementation ListView
 
@@ -19,11 +20,13 @@
     if (self = [super initWithFrame:frame]) {
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(5,0,150,frame.size.height)];
         _nameLabel.backgroundColor = [UIColor clearColor];
+        _nameLabel.textColor = HexRGB(0x3a3a3a);
         _nameLabel.font = NameFontSize;
         [self addSubview:_nameLabel];
         
         _detailLabel = [[UILabel alloc] init];
         _detailLabel.backgroundColor = [UIColor clearColor];
+        _detailLabel.textColor = HexRGB(0x3a3a3a);
         [self addSubview:_detailLabel];
     }
     return self;
