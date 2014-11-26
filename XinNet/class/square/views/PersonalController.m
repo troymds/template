@@ -14,6 +14,8 @@
 #import "RemindView.h"
 #import "GTMBase64.h"
 #import "AuthencateTool.h"
+#import "LoginController.h"
+
 
 #define leftDinstance 11
 #define topDistance 11
@@ -97,6 +99,9 @@
     
     _emailView = [[ListView alloc] initWithFrame:CGRectMake(10,firstHeight+height,width-10,height)];
     [_emailView setTitle:@"邮箱"];
+    if (_email&&_email.length!=0) {
+        _emailView.detailLabel.text = _email;
+    }
     [bgView addSubview:_emailView];
     
     _phoneView = [[TextListView alloc] initWithFrame:CGRectMake(10,firstHeight+height*2,width-10,height)];
@@ -182,8 +187,16 @@
         int code = [[dic objectForKey:@"code"]intValue];
         //更新成功
         if (code == 100) {
-            NSString *data = [dic objectForKey:@"data"];
-            [RemindView showViewWithTitle:data location:MIDDLE];
+            NSArray *array = self.navigationController.viewControllers;
+            for (UIViewController *viewController in array) {
+                if ([viewController isKindOfClass:[LoginController class]]) {
+                    [RemindView showViewWithTitle:@"信息填写完毕,请登录" location:MIDDLE];
+                    [self.navigationController popToViewController:viewController animated:YES];
+                    return ;
+                }
+            }
+            [RemindView showViewWithTitle:@"更新成功" location:MIDDLE];
+            
         }else{
             NSString *msg = [dic objectForKey:@"msg"];
             [RemindView showViewWithTitle:msg location:MIDDLE];

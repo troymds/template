@@ -11,6 +11,7 @@
 #import "RemindView.h"
 #import "LoginController.h"
 #import "SystemConfig.h"
+#import "UserItem.h"
 
 #define topDistance  20
 #define leftDistance 10
@@ -229,7 +230,12 @@
         NSLog(@"%@",result);
         int code = [[dic objectForKey:@"code"] intValue];
         if (code == 100) {
+            
+            UserItem *item = [[UserItem alloc] initWithDic:[dic objectForKey:@"data"]];
+    
             [SystemConfig sharedInstance].isUserLogin = YES;
+            [SystemConfig sharedInstance].uid = item.uid;
+            
             [self.navigationController popViewControllerAnimated:YES];
         }else{
             NSString *msg = [dic objectForKey:@"msg"];

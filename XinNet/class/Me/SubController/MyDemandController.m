@@ -86,7 +86,6 @@
 
     [httpTool postWithPath:@"getMyDemandList" params:param success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"%@",result);
         NSDictionary *dic = [result objectForKey:@"response"];
         int code = [[dic objectForKey:@"code"] intValue];
         if (code == 100) {
@@ -129,8 +128,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    DemandItem *item = [_dataArray objectAtIndex:indexPath.row];
     DemandDetailController *detail = [[DemandDetailController alloc] init];
     detail.title = @"发布";
+    detail.businessDetailIndex = item.uid;
     [self.navigationController pushViewController:detail animated:YES];
 }
 

@@ -14,6 +14,8 @@
 @property (nonatomic,copy) NSString *email;
 @property (nonatomic,copy) NSString *mobile;
 @property (nonatomic,copy) NSString *user_name;
+@property (nonatomic,copy) NSString *uid;
 
+- (id)initWithDic:(NSDictionary *)dic;
 
 @end

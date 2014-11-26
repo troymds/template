@@ -35,8 +35,8 @@
     [allParams setObject:md5 forKey:@"secret"];
     
     //注册和登陆不需要传入参数uid  其他接口都要传
-    if ([SystemConfig sharedInstance].isUserLogin) {
-        [allParams setObject:@"9" forKey:@"uid"];
+    if ([SystemConfig sharedInstance].uid) {
+        [allParams setObject:[SystemConfig sharedInstance].uid forKey:@"uid"];
     }else{
         [allParams setObject:@"0" forKey:@"uid"];
     }
