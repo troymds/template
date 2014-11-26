@@ -10,11 +10,5 @@
 
 @implementation mardetDetailsModel
 @synthesize wapUrl,collection_id,commentNum;
-//- (instancetype)initWithDictionaryForMarket:(NSDictionary *)dict{
-//    if ([super self]) {
-//        self.wapUrl =dict[@"wapUrl"];
-//    }
-//    return self;
-//}
 
 @end

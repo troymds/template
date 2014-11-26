@@ -9,8 +9,8 @@
 #import "companyJobTool.h"
 #import "companyJobModel.h"
 @implementation companyJobTool
-+ (void)statusesWithSuccess:(StatusSuccessBlock)success page_Num:(NSString * )page_num company_Id:(NSString *)company_id keywords_Str:(NSString *)keywords failure:(StatusFailureBlock)failure{
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",page_num,@"page",company_id,@"company_id",keywords,@"keywords", nil];
++ (void)statusesWithSuccess:(StatusSuccessBlock)success company_Id:(NSString *)company_id keywords_Str:(NSString *)keywords failure:(StatusFailureBlock)failure{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",@"page",@"page",company_id,@"company_id",keywords,@"keywords", nil];
     
     
     [httpTool postWithPath:@"getJobList" params:dic success:^(id JSON) {

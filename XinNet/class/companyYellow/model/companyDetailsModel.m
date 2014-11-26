@@ -9,4 +9,5 @@
 #import "companyDetailsModel.h"
 
 @implementation companyDetailsModel
+@synthesize address,indexID,city,contact,is_delete,is_vip,logo,name,position,province,tel,wapUrl;
 @end

@@ -22,7 +22,7 @@
     [super viewDidLoad];
     self.view.backgroundColor =HexRGB(0xe9f1f6);
     self.title =@"展会详情";
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(collectItem)];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"colloct_img.png" highlightedSearch:@"colloct_img.png" target:(self) action:@selector(collectItem)];
 
     [self addheader];
     [self addWriteBtn];

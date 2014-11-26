@@ -25,12 +25,15 @@
     [super viewDidLoad];
     self.view.backgroundColor =HexRGB(0xe9f1f6);
     self.title = @"招聘详情";
-    
+     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"colloct_img.png" highlightedSearch:@"colloct_img.png" target:(self) action:@selector(collectClick:)];
     _selectedBtn =[[UIButton alloc]init];
     [self addChooseBtn];
     [self addScrollview];
     [self addWriteBtn];
 
+}
+-(void)collectClick:(UIButton *)collect{
+    
 }
 -(void)addScrollview{
     
@@ -82,16 +85,16 @@
 
 -(void)addChooseBtn{
     for (int i=0; i<2; i++) {
-        NSArray *titleArr =@[@"职位详情",@"企业简介"];
+       
         UIButton *chooseBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [self.view addSubview:chooseBtn];
         
         [chooseBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
         [chooseBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
-        chooseBtn.frame =CGRectMake(20+i%3*((kWidth-40)/2), 75, (kWidth-40)/2, 40);
-        [chooseBtn setTitle:titleArr[i] forState:UIControlStateNormal];
-        [chooseBtn setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
-        [chooseBtn setBackgroundImage:[UIImage imageNamed:@"finish1.png"] forState:UIControlStateSelected];
+        chooseBtn.frame =CGRectMake(20+i%3*((kWidth-35)/2), 70, (kWidth-40)/2, 40);
+        [chooseBtn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"company_img%d.png",i]] forState:UIControlStateNormal];
+        [chooseBtn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"company_img_selected%d.png",i]] forState:UIControlStateSelected];
+
         [chooseBtn addTarget:self action:@selector(chooseBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         
         chooseBtn.tag = 200+i;

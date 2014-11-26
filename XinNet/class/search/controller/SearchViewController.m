@@ -11,6 +11,11 @@
 #import "productController.h"
 #import "businessController.h"
 #import "companyYellowController.h"
+#import "interfaceController.h"
+#import "companyJOBController.h"
+#import "marketController.h"
+#import "RemindView.h"
+#import "searchTableViewController.h"
 #define YYBODERW 16
 #define YYBODERY 11
 #define BtnWidth 288
@@ -20,7 +25,7 @@
     UIButton *classBackBtn;
     UIButton *_selectBtn;
     UIButton *classBtn;
-    
+    UITextField *keyText;
 }
 @end
 
@@ -67,7 +72,7 @@
     [self.view addSubview:backLineField];
     backLineField.backgroundColor =[UIColor lightGrayColor];
     
-    UITextField *keyText =[[UITextField alloc]initWithFrame:CGRectMake(YYBODERW, 132, BtnWidth, 43)];
+     keyText =[[UITextField alloc]initWithFrame:CGRectMake(YYBODERW, 132, BtnWidth, 43)];
     [self.view addSubview:keyText];
     keyText.borderStyle =UITextBorderStyleNone;
     keyText.backgroundColor =HexRGB(0xffffff);
@@ -103,14 +108,14 @@
 -(void)addclassMenu{
     
     
-     backMenuView =[[UIView alloc]initWithFrame:CGRectMake(YYBODERW, YYBODERY+110, kWidth-YYBODERW*2, 91)];
+     backMenuView =[[UIView alloc]initWithFrame:CGRectMake(YYBODERW, YYBODERY+110, kWidth-YYBODERW*2, 181)];
     [self.view addSubview:backMenuView];
     backMenuView.backgroundColor =[UIColor lightGrayColor];
     
-    for (int i=0; i<3; i++) {
-        NSArray *titleArr=@[@"产品管理",@"供求商机",@"企业招聘"];
+    for (int i=0; i<6; i++) {
+        NSArray *titleArr=@[@"市场行情",@"企业黄页",@"供求商机",@"产品管理",@"企业招聘",@"展会信息"];
         UIButton *classMenuBtn =[UIButton buttonWithType:UIButtonTypeCustom];
-        classMenuBtn.frame =CGRectMake(1, 1+i%3*30, kWidth-YYBODERW*2-2, 29);
+        classMenuBtn.frame =CGRectMake(1, 1+i%6*30, kWidth-YYBODERW*2-2, 29);
         classMenuBtn .backgroundColor =[UIColor whiteColor];
         [classMenuBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [classMenuBtn setTitle:titleArr[i] forState:UIControlStateNormal];
@@ -123,6 +128,7 @@
 
 }
 -(void)classBtnClick:(UIButton *)class{
+    
     class.selected =!class.selected;
 
     if (class.selected==NO) {
@@ -142,23 +148,18 @@
     
     NSString *currentTitle = menu.currentTitle;
     [classBtn setTitle:currentTitle forState:UIControlStateNormal];
-
-    
    
 }
 
 -(void)searchBtnClick:(UIButton *)sear{
-
-    if (_selectBtn.tag ==200) {
-        productController *produVc =[[productController alloc]init];
-        [self.navigationController pushViewController:produVc animated:YES];
-        
-    }else if (_selectBtn.tag ==201){
-        businessController *businessVc =[[businessController alloc]init];
-        [self.navigationController pushViewController:businessVc animated:YES];
+    if (_selectBtn.tag ==0) {
+        [RemindView showViewWithTitle:@"请选择分类!" location:MIDDLE];
     }else{
-        companyYellowController *companyVc =[[companyYellowController alloc]init];
-        [self.navigationController pushViewController:companyVc animated:YES];
+    searchTableViewController *searchVC =[[searchTableViewController alloc]init];
+    searchVC.searchSelectedIndex = _selectBtn.tag;
+    searchVC.titleStr =classBtn.titleLabel.text;
+    searchVC.keyWordesIndex =keyText.text;
+    [self.navigationController pushViewController:searchVC animated:YES];
     }
 
 }
