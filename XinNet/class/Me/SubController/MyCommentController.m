@@ -9,11 +9,16 @@
 #import "MyCommentController.h"
 #import "CommentCell.h"
 #import "CommentItem.h"
+#import "httpTool.h"
+#import "RemindView.h"
 
 @interface MyCommentController ()<UITableViewDataSource,UITableViewDelegate>
 {
     UITableView *_tableView;
     NSMutableArray *_dataArray;
+    int _page;
+    BOOL isRefresh;  //刷新
+    BOOL isLoad;  //加载
 }
 @end
 
@@ -38,18 +43,37 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
     
+    _page = 0;
     [self loadData];
 }
 
 - (void)loadData
 {
-    for (int i =0 ; i < 5; i ++) {
-        CommentItem *item = [[CommentItem alloc] init];
-        item.title = @"2014上海食品展会";
-        item.comment = @"这是一大段评论内容这是一大段评论内容这是一大段评论内容这是一大段评论内容这是一大段评论内容这是一大段评论内容这是一大段评论内容";
-        [_dataArray addObject:item];
+    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"1",@"account_center",@"10",@"pagesize", nil];
+    if (isRefresh) {
+        _page = 0;
     }
-    [_tableView reloadData];
+    if (isLoad) {
+        _page++;
+    }
+    NSString *page = [NSString stringWithFormat:@"%d",_page];
+    [param setObject:page forKey:@"page"];
+    [httpTool postWithPath:@"getCommentList" params:param success:^(id JSON) {
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        int code = [[dic objectForKey:@"code"] intValue];
+        if (code == 100) {
+            NSArray *data = [dic objectForKey:@"data"];
+            if (![data isKindOfClass:[NSNull class]]) {
+                for (NSDictionary *subDic in data) {
+                    CommentItem *item = [[CommentItem alloc] initWithDic:subDic];
+                    [_dataArray addObject:item];
+                }
+            }
+        }
+    } failure:^(NSError *error) {
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+    }];
 }
 
 
@@ -66,8 +90,6 @@
         cell = [[CommentCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
     }
     CommentItem *item = [_dataArray objectAtIndex:indexPath.row];
-    cell.titileLabel.text = item.title;
-    cell.commentLabel.text = item.comment;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }

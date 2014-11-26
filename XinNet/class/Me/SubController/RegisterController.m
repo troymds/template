@@ -206,6 +206,7 @@
                     NSDictionary *dic = [result objectForKey:@"response"];
                     int code = [[dic objectForKey:@"code"] intValue];
                     if (code == 100) {
+                        NSLog(@"%@",result);
                         PersonalController *PC = [[PersonalController alloc] init];
                         [self.navigationController pushViewController:PC animated:YES];
                     }else{

@@ -8,6 +8,8 @@
 
 #import "PublishController.h"
 #import "AdaptationSize.h"
+#import "httpTool.h"
+#import "RemindView.h"
 
 #define topDistance 11
 #define leftDistance 10
@@ -117,7 +119,6 @@
     
     numField = [[UITextField alloc] initWithFrame:CGRectMake(60,height,width-60,height)];
     numField.delegate = self;
-    numField.secureTextEntry = YES;
     [bgView addSubview:numField];
     
     
@@ -152,7 +153,47 @@
 //发布按钮点击事件
 - (void)btnDown
 {
-    
+    if ([self checkData]) {
+        NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:titleField.text,@"title",numField.text,@"num",contentView.text,@"content", nil];
+        [httpTool postWithPath:@"addDemand" params:param success:^(id JSON) {
+            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+            NSDictionary *dic = [result objectForKey:@"response"];
+            int code = [[dic objectForKey:@"code"]intValue];
+            if (code == 100) {
+                [RemindView showViewWithTitle:@"发布成功" location:MIDDLE];
+            }else{
+                NSString *msg = [dic objectForKey:@"msg"];
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+            }
+        } failure:^(NSError *error) {
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
+    }
+}
+
+- (BOOL)checkData
+{
+    if (titleField.text.length == 0) {
+        [RemindView showViewWithTitle:@"请填写标题" location:MIDDLE];
+        return NO;
+    }
+    if (numField.text.length == 0) {
+        [RemindView showViewWithTitle:@"请填写求购数量" location:MIDDLE];
+        return NO;
+    }
+    if (contentView.text.length == 0) {
+        [RemindView showViewWithTitle:@"请输入求购详情" location:MIDDLE];
+        return NO;
+    }
+    return YES;
+}
+
+
+- (void)clearData
+{
+    titleField.text = @"";
+    numField.text = @"";
+    contentView.text = @"";
 }
 
 #pragma mark textView_delegate

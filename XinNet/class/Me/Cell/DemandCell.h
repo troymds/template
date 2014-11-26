@@ -10,7 +10,6 @@
 
 @interface DemandCell : UITableViewCell
 
-@property (nonatomic,strong) UIImageView *iconImg;
 @property (nonatomic,strong) UILabel *titleLabel;
 
 

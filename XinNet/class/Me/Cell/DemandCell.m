@@ -17,13 +17,10 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(60,0,kWidth-60,self.frame.size.height)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,0,kWidth-60,self.frame.size.height)];
         _titleLabel.backgroundColor = [UIColor clearColor];
+        _titleLabel.textColor = HexRGB(0x3a3a3a);
         [self.contentView addSubview:_titleLabel];
-        
-        _iconImg = [[UIImageView alloc] initWithFrame:CGRectMake(20,5, 30, 30)];
-        _iconImg.image = [UIImage imageNamed:@"l"];
-        [self.contentView addSubview:_iconImg];
     }
     return self;
 }

@@ -10,7 +10,13 @@
 
 @interface CommentItem : NSObject
 
-@property (nonatomic,copy) NSString *title;
-@property (nonatomic,copy) NSString *comment;
+@property (nonatomic,copy) NSString *uid;
+@property (nonatomic,copy) NSString *vid;
+@property (nonatomic,copy) NSString *create_time;
+@property (nonatomic,copy) NSString *content;
+@property (nonatomic,copy) NSString *user_name;
+@property (nonatomic,copy) NSString *user_avatar;
+
+- (id)initWithDic:(NSDictionary *)dic;
 
 @end

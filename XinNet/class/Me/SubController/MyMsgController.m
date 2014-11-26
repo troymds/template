@@ -12,6 +12,8 @@
 #import "SubscripMsgItem.h"
 #import "SystemMsgItem.h"
 #import "companyDetailsView.h"
+#import "httpTool.h"
+#import "RemindView.h"
 
 
 #define TopHeight 44   //顶部高度
@@ -32,6 +34,10 @@
     
     BOOL isSystem;  //判断是不是系统消息界面
     UIView *slideLine;   //滚动线条
+    int _sysPage;   //系统消息页码
+    int _subPage;
+    BOOL isRefresh;   //刷新
+    BOOL isLoad;        //加载
 }
 @end
 
@@ -51,6 +57,8 @@
     [self addScrollView];
     //加载系统消息
     isSystem = YES;
+    _sysPage = 0;
+    _subPage = 0;
     [self loadSystemData];
 }
 
@@ -178,13 +186,34 @@
 
 - (void)loadSystemData
 {
-    for (int i =0 ; i < 10; i++) {
-        SystemMsgItem *item = [[SystemMsgItem alloc] init];
-        item.content = @"主要是关于app的消息通知，如版本更新，app打不开的说明道歉等 主要是关于app的消息通知，如版本更新，app打不开的说明道歉等";
-        item.date = @"2014-11-20";
-        [_systemArray addObject:item];
+    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize", nil];
+    if (isRefresh) {
+        _sysPage = 0;
     }
-    [_systemTableView reloadData];
+    if (isLoad) {
+        _sysPage++;
+    }
+    NSString *page = [NSString stringWithFormat:@"%d",_sysPage];
+    [param setObject:page forKey:@"page"];
+    [httpTool postWithPath:@"getSystemMessageList" params:param success:^(id JSON) {
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        
+        int code = [[dic objectForKey:@"code"]intValue];
+        if (code ==100) {
+            NSArray *array = [dic objectForKey:@"data"];
+            if (![array isKindOfClass:[NSNull class]]) {
+                for (NSDictionary *subDic in array) {
+                    SystemMsgItem *item = [[SystemMsgItem alloc] initWithDic:subDic];
+                    [_systemArray addObject:item];
+                }
+            }
+            [_systemTableView reloadData];
+        }
+    } failure:^(NSError *error) {
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+    }];
+    
 }
 
 - (void)loadSubscripData

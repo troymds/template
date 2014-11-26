@@ -51,7 +51,7 @@
     _contenLabel.text = item.content;
     
     _dateLabel.frame = CGRectMake(0,10,kWidth,DateHeight);
-    _dateLabel.text = item.date;
+    _dateLabel.text = item.create_time;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

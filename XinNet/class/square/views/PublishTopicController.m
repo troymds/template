@@ -8,6 +8,9 @@
 
 #import "PublishTopicController.h"
 #import "TJImageView.h"
+#import "httpTool.h"
+#import "RemindView.h"
+#import "GTMBase64.h"
 
 #define MaxCount 140     //输入的最多字数
 
@@ -17,8 +20,9 @@
     TJImageView *_publishImg;
     UILabel *_markLabel;
     UIButton *addImgBtn;
-    
+    NSString *content;   //发布的内容
     BOOL isEditing;  //是否已经开始编辑
+    UIImage *image;  //发布的图片
 }
 @end
 
@@ -32,7 +36,7 @@
     }
     // Do any additional setup after loading the view.
     self.title = @"发布话题";
-    
+    content = @"";
     [self addView];
 }
 
@@ -92,8 +96,72 @@
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"选取图片" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"拍照",@"本地", nil];
         [alertView show];
     }else{
-        
+        if (content.length == 0) {
+            [RemindView showViewWithTitle:@"说点什么吧" location:MIDDLE];
+        }else{
+            if (image) {
+                [self uploadImage:image];
+            }else{
+                [self uploadContent:@""];
+            }
+        }
     }
+}
+
+//上传图片
+- (void)uploadImage:(UIImage *)img
+{
+    NSData *data;
+    NSString *str;
+    if (UIImagePNGRepresentation(img)) {
+        data = UIImagePNGRepresentation(img);
+        str= @"png";
+    }else{
+        data = UIImageJPEGRepresentation(img, 1.0);
+        str = @"jpg";
+    }
+    NSString *s = [GTMBase64 stringByEncodingData:data];
+    NSString *string = [NSString stringWithFormat:@"data:image/%@;base64,%@",str,s];
+    NSLog(@"----%@",string);
+    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:string,@"image", nil];
+    [httpTool postWithPath:@"uploadImage" params:param success:^(id JSON) {
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"-----%@",result);
+        NSDictionary *dic = [result objectForKey:@"response"];
+        int code = [[dic objectForKey:@"code"]intValue];
+        if (code == 100) {
+            NSString *data = [dic objectForKey:@"data"];
+            [self uploadContent:data];
+        }else{
+            [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
+        }
+    } failure:^(NSError *error) {
+
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+    }];
+}
+
+
+//发布话题内容
+- (void)uploadContent:(NSString *)data
+{
+    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:content,@"content", nil];
+    if (data.length !=0) {
+        [param setObject:data forKey:@"image"];
+    }
+    [httpTool postWithPath:@"addTopic" params:param success:^(id JSON) {
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic =[result objectForKey:@"response"];
+        int code = [[dic objectForKey:@"code"]intValue];
+        if (code == 100) {
+            [RemindView showViewWithTitle:@"发布成功" location:MIDDLE];
+        }else{
+            NSString *msg = [dic objectForKey:@"msg"];
+            [RemindView showViewWithTitle:msg location:MIDDLE];
+        }
+    } failure:^(NSError *error) {
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+    }];
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
@@ -110,6 +178,7 @@
     if (textView.text.length > MaxCount) {
         textView.text = [textView.text substringToIndex:MaxCount];
     }
+    content = textView.text;
     [self performSelectorOnMainThread:@selector(changeUI) withObject:self waitUntilDone:NO];
 }
 
@@ -169,6 +238,7 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     UIImage *portraitImg = [info objectForKey:@"UIImagePickerControllerEditedImage"];
     _publishImg.image = portraitImg;
+    image = portraitImg;
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 

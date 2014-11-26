@@ -10,4 +10,16 @@
 
 @implementation DemandItem
 
+
+- (id)initWithDic:(NSDictionary *)dic
+{
+    if (self = [super init]) {
+        self.uid = dic[@"id"];
+        self.title = dic[@"title"];
+        self.type = dic[@"type"];
+    }
+    return self;
+}
+
+
 @end

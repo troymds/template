@@ -340,13 +340,13 @@
                 FavoriteItem *item = [_dataArray objectAtIndex:indexPath.row];
                 [arr addObject:item];
             }
-            NSString *collection_ids = @"";
+            NSMutableString *collection_ids = [NSMutableString stringWithString:@""];
             for (int i = 0 ; i < arr.count;i++) {
                 FavoriteItem *item = [arr objectAtIndex:i];
                 if (i<deleteArray.count-1) {
-                    [collection_ids stringByAppendingString:[NSString stringWithFormat:@"%@,",item.vid]];
+                    [collection_ids appendString:[NSString stringWithFormat:@"%@,",item.vid]];
                 }else{
-                    [collection_ids stringByAppendingString:item.vid];
+                    [collection_ids appendString:item.vid];
                 }
             }
             NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:collection_ids,@"collection_ids", nil];

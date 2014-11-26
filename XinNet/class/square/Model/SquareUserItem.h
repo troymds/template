@@ -13,7 +13,12 @@
 @property (nonatomic,copy) NSString *iconImg;   //用户头像
 @property (nonatomic,copy) NSString *userName;   //用户名
 @property (nonatomic,copy) NSString *content;    //文字内容
-@property (nonatomic,copy) NSString *date;       //发布日期
-@property (nonatomic,copy) NSString *publishImg; //用户发布图片
+@property (nonatomic,copy) NSString *create_time;       //发布日期
+@property (nonatomic,copy) NSString *image; //用户发布图片
+@property (nonatomic,copy) NSString *uid;
+
+
+- (id)initWithDic:(NSDictionary *)dic;
+
 
 @end

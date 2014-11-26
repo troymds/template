@@ -9,7 +9,6 @@
 #import "LoginController.h"
 #import "RegisterController.h"
 #import "RemindView.h"
-#import "GlobalInstance.h"
 #import "LoginController.h"
 #import "SystemConfig.h"
 
@@ -226,8 +225,8 @@
     NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:_userNameField.text,@"email",_secretField.text,@"password", nil];
     [httpTool postWithPath:@"login" params:param success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"%@",result);
         NSDictionary *dic = [result objectForKey:@"response"];
+        NSLog(@"%@",result);
         int code = [[dic objectForKey:@"code"] intValue];
         if (code == 100) {
             [SystemConfig sharedInstance].isUserLogin = YES;
