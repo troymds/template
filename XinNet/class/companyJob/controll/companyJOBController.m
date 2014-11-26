@@ -28,7 +28,7 @@
     self.title = @ "企业招聘";
     _companyJobArray =[NSMutableArray array];
     
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(collectClick:)];
+    
     [self addLoadStatus];
     
 }
@@ -37,13 +37,11 @@
     [companyJobTool statusesWithSuccess:^(NSArray *statues) {
         [_companyJobArray addObjectsFromArray:statues];
         [self addTableView];
-    } page_Num:(0)? 0:[NSString stringWithFormat:@"%lu",[_companyJobArray count]-0] company_Id:nil keywords_Str:nil failure:^(NSError *error) {
+    } company_Id:nil keywords_Str:nil failure:^(NSError *error) {
         
     }];
 }
--(void)collectClick:(UIButton *)collect{
-    
-}
+
 -(void)addTableView{
     _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-64) style:UITableViewStylePlain];
     _tableView.delegate =self;

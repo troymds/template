@@ -18,7 +18,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor =[UIColor whiteColor];
-self.title =@"企业简介";}
+    self.title =@"企业简介";
+    
+    UIWebView *marketWebView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+    [self.view addSubview:marketWebView];
+    [marketWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_companyIndex]] ];
+    
+    [self.view addSubview:marketWebView];
+    marketWebView.backgroundColor =[UIColor clearColor];
+
+
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

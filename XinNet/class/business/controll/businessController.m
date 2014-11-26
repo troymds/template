@@ -56,17 +56,10 @@
 }
 #pragma mark ____加载数据
 -(void)addLoadStatus{
-//    [businessTool statusesWithSuccess:^(NSArray *statues) {
-//        [_allBusinessArray addObjectsFromArray:statues];
-//        
-//        [self addBusinessAllTableview];
-//    } page_Num:0 type_ID:0 failure:^(NSError *error) {
-//        
-//    }];
     [businessTool statusesWithSuccess:^(NSArray *statues) {
         [_allBusinessArray addObjectsFromArray:statues];
         [self addBusinessAllTableview];
-    } page_num:(0)? 0:[NSString stringWithFormat:@"%lu",[_allBusinessArray count]-0] keywords_Id:nil type_ID:nil category_Id:nil failure:^(NSError *error) {
+    }  keywords_Id:nil type_ID:nil category_Id:nil failure:^(NSError *error) {
         
     }];
    }
@@ -75,8 +68,8 @@
 {
     _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 96, kWidth, kHeight-32-62)];
     _BigCompanyScrollView.contentSize = CGSizeMake(kWidth*3, _BigCompanyScrollView.frame.size.height);
-    _BigCompanyScrollView.showsHorizontalScrollIndicator = YES;
-    _BigCompanyScrollView.showsVerticalScrollIndicator = YES;
+    _BigCompanyScrollView.showsHorizontalScrollIndicator = NO;
+    _BigCompanyScrollView.showsVerticalScrollIndicator = NO;
     _BigCompanyScrollView.pagingEnabled = YES;
     _BigCompanyScrollView.bounces = NO;
     _BigCompanyScrollView.tag = 9999;
@@ -224,8 +217,6 @@
     cellLine.backgroundColor =HexRGB(0xe6e3e4);
     businessModel *busineModel =[_allBusinessArray objectAtIndex:indexPath.row];
     cell.textLabel.text =busineModel.title;
-
-    //    cell.textLabel.text = @"标题";
     cell.imageView.image = [UIImage imageNamed:@"business_img.png"];
     return cell;
 }

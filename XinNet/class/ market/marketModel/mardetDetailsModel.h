@@ -14,6 +14,5 @@
 @property (nonatomic, strong)NSString *collection_id;//收藏
 
 
-//- (instancetype)initWithDictionaryForMarket:(NSDictionary *)dict;
 
 @end

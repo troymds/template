@@ -45,7 +45,7 @@
     [marketTOOL statusesWithSuccess:^(NSArray *statues) {
         [_marketArray addObjectsFromArray:statues];
         [self addTableView];
-    } page_num:(0)? 0:[NSString stringWithFormat:@"%lu",[_marketArray count]-0] keywords_Id:nil category_Id:nil failure:^(NSError *error) {
+    }  keywords_Id:nil category_Id:nil failure:^(NSError *error) {
         
     }];
 }
@@ -78,7 +78,6 @@
         [moreBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [moreBtn setTitle:categoryModel.categoryNmae forState:UIControlStateNormal];
         [_moreView addSubview:moreBtn];
-//        [moreBtn setImage:[UIImage imageNamed:@"nav_code.png"] forState:UIControlStateNormal];
         [moreBtn addTarget:self action:@selector(moreBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         moreBtn.selected = _moreSelectedBtn.selected;
 

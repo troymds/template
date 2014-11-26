@@ -9,11 +9,11 @@
 #import "productTool.h"
 #import "productModel.h"
 @implementation productTool
-+ (void)statusesWithSuccess:(StatusSuccessBlock)success page_num:(NSString * )page keywords_Id:(NSString *)keywords category_Id:(NSString *)category_id failure:(StatusFailureBlock)failure
++ (void)statusesWithSuccess:(StatusSuccessBlock)success keywords_Id:(NSString *)keywords category_Id:(NSString *)category_id failure:(StatusFailureBlock)failure
 
 {
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",page,@"page",keywords,@"keywords",category_id,@"category_id", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",@"page",@"page",keywords,@"keywords",category_id,@"category_id", nil];
     [httpTool postWithPath:@"getProductList" params:dic success:^(id JSON) {
         NSDictionary *dict =[NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];

@@ -1,8 +1,8 @@
 //
-//  companyListTool.h
+//  aboutTool.h
 //  XinNet
 //
-//  Created by YY on 14-11-24.
+//  Created by YY on 14-11-26.
 //  Copyright (c) 2014年 tianj. All rights reserved.
 //
 
@@ -10,8 +10,8 @@
 
 typedef void (^StatusSuccessBlock)(NSArray *statues);
 typedef void (^StatusFailureBlock)(NSError *error);
-@interface companyListTool : NSObject
+@interface aboutTool : NSObject
 
 
-+ (void)statusesWithSuccess:(StatusSuccessBlock)success keywords_Id:(NSString *)keywords failure:(StatusFailureBlock)failure;
++(void)AboutStatusesWithSuccesscategory:(StatusSuccessBlock)success AboutFailure:(StatusFailureBlock)failure;
 @end
