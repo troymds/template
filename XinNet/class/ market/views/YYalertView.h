@@ -8,15 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "YYSearchButton.h"
-#define FIND_TYPE 2001
-#define REGIST_TYPE 2002
+#define cancleType 2001
+#define comformType 2002
 #define USERNAME_TYPE 5000
 
 @protocol YYalertViewDelegate <NSObject>
 
 @optional
 
-- (void)btnDown:(UIButton *)btn;
+- (void)btnDown:(UIButton *)btn conent:(NSString *) content;
 
 - (void)tapDown;
 
