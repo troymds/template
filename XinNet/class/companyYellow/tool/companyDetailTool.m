@@ -10,12 +10,11 @@
 #import "companyDetailsModel.h"
 @implementation companyDetailTool
 +(void)CompanyStatusesWithSuccesscategory:(StatusSuccessBlock)success company_id:(NSString *)companyid CompanyFailure:(StatusFailureBlock)failure{
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:companyid,@"company_id", nil];
+       NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:companyid,@"company_id", nil];
     [httpTool postWithPath:@"getCompanyDetail" params:dic success:^(id JSON) {
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
-       
         if (![array isKindOfClass:[NSNull class]]) {
             [statuses addObject:[array objectForKey:@"data"]];
         }

@@ -8,6 +8,9 @@
 
 #import "PublishController.h"
 #import "AdaptationSize.h"
+#import "httpTool.h"
+#import "RemindView.h"
+#import "DemandDetailItem.h"
 
 #define topDistance 11
 #define leftDistance 10
@@ -40,8 +43,6 @@
     }
     // Do any additional setup after loading the view.
     
-    NSLog(@"%f,%f,%f,%f",self.view.frame.origin.x,self.view.frame.origin.y,self.view.frame.size.width,self.view.frame.size.height);
-    
     [self addView];
 
     //键盘隐藏通知
@@ -58,7 +59,31 @@
 //编辑页面加载数据
 - (void)loadData
 {
-    
+    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:self.uid,@"id", nil];
+    [httpTool postWithPath:@"getDemandDetail" params:param success:^(id JSON) {
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        int code = [[dic objectForKey:@"code"]intValue];
+        if (code ==100) {
+            NSDictionary *data = [dic objectForKey:@"data"];
+            DemandDetailItem *item = [[DemandDetailItem alloc] initWithDic:data];
+            [self addDataToInterface:item];
+        }else{
+            NSString *msg =[dic objectForKey:@"msg"];
+            [RemindView showViewWithTitle:msg location:MIDDLE];
+        }
+    } failure:^(NSError *error) {
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+    }];
+}
+
+//添加要编辑的数据
+- (void)addDataToInterface:(DemandDetailItem *)item
+{
+    titleField.text = item.title;
+    numField.text = item.num;
+    contentView.text = item.content;
+    contentView.textColor = [UIColor blackColor];
 }
 
 - (void)keyboardWillHiden
@@ -117,7 +142,6 @@
     
     numField = [[UITextField alloc] initWithFrame:CGRectMake(60,height,width-60,height)];
     numField.delegate = self;
-    numField.secureTextEntry = YES;
     [bgView addSubview:numField];
     
     
@@ -152,17 +176,71 @@
 //发布按钮点击事件
 - (void)btnDown
 {
-    
+    if ([self checkData]) {
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:titleField.text,@"title",numField.text,@"num",contentView.text,@"content", nil];
+        NSString *path = @"addDemand";
+        if (!_isPublish) {
+            [param setObject:self.uid forKey:@"id"];
+            path = @"updateDemand";
+        }
+        [httpTool postWithPath:path params:param success:^(id JSON) {
+            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+            NSDictionary *dic = [result objectForKey:@"response"];
+            int code = [[dic objectForKey:@"code"]intValue];
+            if (code == 100) {
+                NSString *data;
+                if (_isPublish) {
+                    data = @"发布成功";
+                }else{
+                    data = @"修改成功";
+                }
+                [RemindView showViewWithTitle:data location:MIDDLE];
+                [self.navigationController popViewControllerAnimated:YES];
+            }else{
+                NSString *msg = [dic objectForKey:@"msg"];
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+            }
+        } failure:^(NSError *error) {
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
+    }
+}
+
+- (BOOL)checkData
+{
+    if (titleField.text.length == 0) {
+        [RemindView showViewWithTitle:@"请填写标题" location:MIDDLE];
+        return NO;
+    }
+    if (numField.text.length == 0) {
+        [RemindView showViewWithTitle:@"请填写求购数量" location:MIDDLE];
+        return NO;
+    }
+    if (contentView.text.length == 0) {
+        [RemindView showViewWithTitle:@"请输入求购详情" location:MIDDLE];
+        return NO;
+    }
+    return YES;
+}
+
+
+- (void)clearData
+{
+    titleField.text = @"";
+    numField.text = @"";
+    contentView.text = @"";
 }
 
 #pragma mark textView_delegate
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
     activeText = textView;
-    if (!isFisrtEdit) {
-        isFisrtEdit = YES;
-        textView.text = @"";
-        textView.textColor = HexRGB(0x3a3a3a);
+    if (self.isPublish) {
+        if (!isFisrtEdit) {
+            isFisrtEdit = YES;
+            textView.text = @"";
+            textView.textColor = [UIColor blackColor];
+        }
     }
     if (bottomView.frame.origin.y>=0) {
         [UIView animateWithDuration:0.5 animations:^{

@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface companyProfilesView : UIViewController
-
+@property(nonatomic,strong )NSString *companyIndex;
 @end

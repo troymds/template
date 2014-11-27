@@ -12,11 +12,18 @@
 #import "PublishTopicController.h"
 #import "SquareHeadView.h"
 #import "PersonalController.h"
+#import "httpTool.h"
+#import "RemindView.h"
+#import "SystemConfig.h"
+#import "UIImageView+WebCache.h"
 
 @interface squareController ()<UITableViewDataSource,UITableViewDelegate,TJImageViewDelegate>
 {
     UITableView *_tableView;
     NSMutableArray *_dataArray;
+    int _page;
+    BOOL isRefresh;
+    BOOL isLoad;
 }
 @end
 
@@ -40,7 +47,7 @@
     [self.view addSubview:_tableView];
     
     [self addRightNavButton];
-    
+    _page = 0;
     [self loadData];
     [self addHeadView];
 }
@@ -74,6 +81,17 @@
     line.backgroundColor = HexRGB(0xd5d5d5);
     [headView addSubview:line];
     _tableView.tableHeaderView = headView;
+    
+    if ([SystemConfig sharedInstance].userItem) {
+        NSString *iconImg = [SystemConfig sharedInstance].userItem.avatar;
+        NSString *userName = [SystemConfig sharedInstance].userItem.user_name;
+        if (iconImg.length!=0) {
+            [headView.iconImg setImageWithURL:[NSURL URLWithString:iconImg] placeholderImage:[UIImage imageNamed:@""]];
+        }
+        if (userName.length!=0) {
+            headView.nameLabel.text = userName;
+        }
+    }
 }
 
 
@@ -87,47 +105,32 @@
 
 - (void)loadData
 {
-    SquareUserItem *item1 = [[SquareUserItem alloc] init];
-    item1.userName = @"张三";
-    item1.content =  @"岁月难得沉默,秋风厌倦漂泊,夕阳赖着不走挂在墙头舍不得我,昔日伊人耳边话已和潮声向东流,再回首往事也随枫叶一片片落,爱已走到尽头恨也放弃承诺,命运自认幽默想法太多由不得我,壮志凌云几分愁知己难逢几人留";
-    item1.iconImg = @"xxxxx";
-    item1.publishImg = @"";
-    item1.date = @"2014-11-19";
-    [_dataArray addObject:item1];
-    
-    SquareUserItem *item2 = [[SquareUserItem alloc] init];
-    item2.userName = @"李四";
-    item2.content =  @"一片春愁待酒浇,江上舟摇,楼上帘招；秋娘渡与泰娘桥,风又飘飘，雨又萧萧.何日归家洗客袍？银字笙调,心字香烧.流光容易把人抛,红了樱桃,绿了芭蕉.";
-    item2.iconImg = @"xxxx";
-    item2.publishImg = @"xxxxxx";
-    item2.date = @"2014-11-19";
-    [_dataArray addObject:item2];
-    
-    SquareUserItem *item3 = [[SquareUserItem alloc] init];
-    item3.userName = @"王二";
-    item3.content =  @"岁月难得沉默秋风厌倦漂泊，夕阳赖着不走挂在墙头舍不得我";
-    item3.iconImg = @"";
-    item3.publishImg = @"";
-    item3.date = @"2014-11-19";
-    [_dataArray addObject:item3];
-    
-    SquareUserItem *item4 = [[SquareUserItem alloc] init];
-    item4.userName = @"麻子";
-    item4.content =  @"岁月难得沉默秋风厌倦漂泊，夕阳赖着不走挂在墙头舍不得我";
-    item4.iconImg = @"";
-    item4.publishImg = @"xxxxxxx";
-    item4.date = @"2014-11-19";
-    [_dataArray addObject:item4];
-    
-    SquareUserItem *item5 = [[SquareUserItem alloc] init];
-    item5.userName = @"我是鱼干";
-    item5.content =  @"岁月难得沉默秋风厌倦漂泊，夕阳赖着不走挂在墙头舍不得我，昔日伊人耳边话已和潮声向东流，再回首往事也随枫叶一片片落，爱已走到尽头恨也放弃承诺，命运自认幽默想法太多由不得我，壮志凌云几分愁知己难逢几人留";
-    item5.iconImg = @"";
-    item5.publishImg = @"xxxxxxx";
-    item5.date = @"2014-11-19";
-    [_dataArray addObject:item5];
-    
-    [_tableView reloadData];
+    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize", nil];
+    if (isRefresh) {
+        _page = 0;
+    }
+    if (isLoad) {
+        _page++;
+    }
+    NSString *page = [NSString stringWithFormat:@"%d",_page];
+    [param setObject:page forKey:@"page"];
+    [httpTool postWithPath:@"getTopicList" params:param success:^(id JSON) {
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        int code = [[dic objectForKey:@"code"]intValue];
+        if (code ==100) {
+            NSArray *data = [dic objectForKey:@"data"];
+            if (![data isKindOfClass:[NSNull class]]) {
+                for (NSDictionary *subDic in data) {
+                    SquareUserItem *item = [[SquareUserItem alloc] initWithDic:subDic];
+                    [_dataArray addObject:item];
+                }
+            }
+            [_tableView reloadData];
+        }
+    } failure:^(NSError *error) {
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+    }];
 }
 
 
@@ -163,7 +166,7 @@
     CGSize size = [AdaptationSize getSizeFromString:item.content Font:[UIFont systemFontOfSize:ContentFont] withHight:CGFLOAT_MAX withWidth:ContentWidth];
     cellHeight += size.height;
     cellHeight += MiddleSpace;
-    if (item.publishImg&&item.publishImg.length!=0) {
+    if (item.image&&item.image.length!=0) {
         cellHeight += PublishImgHeiht;
     }
     cellHeight += 15;

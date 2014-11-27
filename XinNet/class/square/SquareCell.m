@@ -7,6 +7,8 @@
 //
 
 #import "SquareCell.h"
+#import "UIImageView+WebCache.h"
+
 
 
 @implementation SquareCell
@@ -58,7 +60,7 @@
     self.iconImg.layer.masksToBounds = YES;
     self.iconImg.layer.cornerRadius = IconImgWidth/2;
     if (item.iconImg&&item.iconImg.length!=0) {
-        self.iconImg.image = [UIImage imageNamed:@"l"];
+        [self.iconImg setImageWithURL:[NSURL URLWithString:item.iconImg] placeholderImage:[UIImage imageNamed:@"l.png"]];
     }else{
         //没头像  加载默认图片
         self.iconImg.image = [UIImage imageNamed:@"l"];
@@ -68,7 +70,7 @@
     self.userNameLabel.text = item.userName;
     
     self.dateLabel.frame = CGRectMake(kWidth-10-120,TopSapce+5,120,15);
-    self.dateLabel.text = item.date;
+    self.dateLabel.text = item.create_time;
     
     
     y +=  UserNameHeight + MiddleSpace;
@@ -82,11 +84,12 @@
     self.contentLabel.text = item.content;
     y += MiddleSpace;
     //用户是否发布了图片
-    if (item.publishImg&&item.publishImg.length!=0){
+    if (item.image&&item.image.length!=0){
         self.publishImg.hidden = NO;
         self.publishImg.frame = CGRectMake((kWidth-PublishImgWidth)/2,y, PublishImgWidth,PublishImgHeiht);
         //此处应设置图片
-        self.publishImg.image = [UIImage imageNamed:@"l"];
+        [self.publishImg setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"l.png"]];
+        
     }else{
         self.publishImg.hidden = YES;
     }

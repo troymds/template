@@ -8,62 +8,40 @@
 
 #import "DemandDetailController.h"
 #import "PublishController.h"
+#import "businessDetailsTool.h"
+#import "businessDetailsModel.h"
 
-@interface DemandDetailController ()
+#define YYBODERW 16
+@interface DemandDetailController ()<UIWebViewDelegate>
 {
-    UILabel *titleLabel;//标题
-    UILabel *dateLabel;//日期
-    UILabel *numLabel;//数量
-    UIView *detailView;//求购详情
+    businessDetailsModel *businessModel;
+    UIWebView *marketWebView;
+    UIScrollView *_backScrollView;
 }
 @end
 
 @implementation DemandDetailController
 
+
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self addLoadStatus];
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = HexRGB(0xededed);
-    if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
-        self.edgesForExtendedLayout  = UIRectEdgeNone;
-    }
-    self.title = @"求购详情";
-
-    // Do any additional setup after loading the view.
+    self.view.backgroundColor =HexRGB(0xe9f1f6);
+    self.title =@"求购详情";
     
-    [self addRightNavButton];
-    
-    [self addView];
-    
-    [self loadData];
+    [self addRightBarButton];
 }
 
-- (void)addView
-{
-    CGFloat y = 0;
-    //标题
-    titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,y, kWidth,30)];
-    titleLabel.textColor = HexRGB(0x3a3a3a);
-    titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    [self.view addSubview:titleLabel];
-    
-    //时间
-    y+=titleLabel.frame.size.height+10;
-    dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(40,y, kWidth/2-40,15)];
-    dateLabel.backgroundColor = [UIColor clearColor];
-    dateLabel.font = [UIFont systemFontOfSize:11];
-    dateLabel.textColor = HexRGB(0x808080);
-    [self.view addSubview:dateLabel];
-    
-    numLabel = [[UILabel alloc] initWithFrame:CGRectMake(kWidth/2+40,y, kWidth/2-40,15)];
-    numLabel.backgroundColor = [UIColor clearColor];
-    numLabel.font = [UIFont systemFontOfSize:11];
-    numLabel.textColor = HexRGB(0x808080);
-    [self.view addSubview:numLabel];
-}
 
-//添加右导航按钮
-- (void)addRightNavButton
+//添加导航栏右侧按钮
+- (void)addRightBarButton
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame = CGRectMake(0, 0,53, 25);
@@ -73,21 +51,99 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
 }
 
-//右导航按钮点击
 - (void)rightBarButtonDown
 {
     PublishController *pc = [[PublishController alloc] init];
     pc.title = @"编辑";
-    pc.isPublish =NO;
+    pc.isPublish = NO;
+    pc.uid = self.businessDetailIndex;
     [self.navigationController pushViewController:pc animated:YES];
 }
 
-//加载数据
-- (void)loadData
+
+-(void)addLoadStatus{
+    [businessDetailsTool statusesWithSuccess:^(NSArray *statues) {
+        NSDictionary *dict =[statues objectAtIndex:0];
+        businessModel =[[businessDetailsModel alloc]init];
+        businessModel.wapUrl =[dict objectForKey:@"wapUrl"];
+        businessModel.title =[dict objectForKey:@"title"];
+        businessModel.read_num =[dict objectForKey:@"read_num"];
+        businessModel.create_time =[dict objectForKey:@"create_time"];
+        
+        
+        
+        [self addLabel];
+        
+    } opportunity_Id:_businessDetailIndex failure:^(NSError *error) {
+        
+    }];
+}
+//收藏
+-(void)collectClick:(UIButton *)collect{
+    
+}
+#pragma mark webViewDelegate
+-(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    titleLabel.text = @"标题";
-    dateLabel.text = @"时间 2014-11-24";
-    numLabel.text = @"数量 2000";
+    
+    return YES;
+}
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    
+    float  webheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
+    
+    marketWebView.frame = CGRectMake(1, 80, kWidth, webheight);
+    
+    _backScrollView.contentSize = CGSizeMake(kWidth,webheight+350);
+    
+    
+}
+-(void)addLabel{
+    
+    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-64)];
+    _backScrollView.userInteractionEnabled=YES;
+    _backScrollView.backgroundColor=HexRGB(0xededed);
+    [self.view addSubview:_backScrollView];
+    _backScrollView.bounces = NO;
+    _backScrollView.showsVerticalScrollIndicator = NO;
+    _backScrollView.showsHorizontalScrollIndicator = NO;
+    
+    UILabel *titleLabel =[[UILabel alloc]initWithFrame:CGRectMake(0, 10, kWidth, 20)];
+    titleLabel.text =businessModel.title;
+    titleLabel.font =[UIFont systemFontOfSize:PxFont(23)];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.textColor =HexRGB(0x3a3a3a);
+    [_backScrollView addSubview:titleLabel];
+    
+    
+    for (int i=0; i<2; i++) {
+        NSArray *titleArr =@[[NSString stringWithFormat:@"时间:%@",businessModel.create_time],[NSString stringWithFormat:@"数量:%@",businessModel.read_num]];
+        UILabel *titleLabel =[[UILabel alloc]initWithFrame:CGRectMake(20+i%3*(kWidth/2), 50, kWidth/2-40, 20)];
+        titleLabel.text =titleArr[i];
+        titleLabel.textAlignment = NSTextAlignmentLeft;
+        titleLabel.backgroundColor =[UIColor clearColor];
+        if (i==1) {
+            titleLabel.textAlignment = NSTextAlignmentRight;
+            
+        }
+        titleLabel.textColor=HexRGB(0x808080);
+        titleLabel.font =[UIFont systemFontOfSize:PxFont(16)];
+        [_backScrollView addSubview:titleLabel];
+        
+    }
+    
+    
+    marketWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 80, kWidth, kHeight-120)];
+    
+    [marketWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:businessModel.wapUrl]]];
+    marketWebView.userInteractionEnabled = NO;
+    marketWebView.delegate =self;
+    marketWebView.backgroundColor =[UIColor redColor];
+    [_backScrollView addSubview:marketWebView];
+    
+    
+    
 }
 
 

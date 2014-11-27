@@ -54,7 +54,7 @@
     [productTool statusesWithSuccess:^(NSArray *statues) {
         [_productArray addObjectsFromArray:statues];
         [self addBigCompanyScrollView];
-    } page_num:(0)? 0:[NSString stringWithFormat:@"%lu",[_productArray count]-0] keywords_Id:nil category_Id:nil failure:^(NSError *error) {
+    } keywords_Id:nil category_Id:nil failure:^(NSError *error) {
         
     }];
 }
@@ -63,8 +63,8 @@
 {
     _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 96, kWidth, kHeight-32-62)];
     _BigCompanyScrollView.contentSize = CGSizeMake(kWidth*3, _BigCompanyScrollView.frame.size.height);
-    _BigCompanyScrollView.showsHorizontalScrollIndicator = YES;
-    _BigCompanyScrollView.showsVerticalScrollIndicator = YES;
+    _BigCompanyScrollView.showsHorizontalScrollIndicator = NO;
+    _BigCompanyScrollView.showsVerticalScrollIndicator = NO;
     _BigCompanyScrollView.pagingEnabled = YES;
     _BigCompanyScrollView.bounces = NO;
     _BigCompanyScrollView.tag = 9999;
@@ -210,7 +210,6 @@
     [cell.hearderImage setImageWithURL:[NSURL URLWithString:proModel.cover] placeholderImage:placeHoderImage];
     cell.nameLabel.text= proModel.name;
     cell.old_priceLabel.text =[NSString stringWithFormat:@"产品价格:                %@",proModel.old_price];
-//    cell.companyLabel.text = proModel.company_name;
     cell.priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.price ];
     
     return cell;

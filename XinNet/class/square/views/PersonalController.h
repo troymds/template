@@ -10,4 +10,6 @@
 
 @interface PersonalController : UIViewController
 
+@property (nonatomic,copy) NSString *email;
+
 @end

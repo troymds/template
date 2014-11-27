@@ -10,4 +10,13 @@
 
 @implementation SystemMsgItem
 
+- (id)initWithDic:(NSDictionary *)dic
+{
+    if (self = [super init]) {
+        self.content = dic[@"content"];
+        self.create_time = dic[@"create_time"];
+    }
+    return self;
+}
+
 @end

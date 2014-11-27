@@ -35,7 +35,7 @@
     [companyListTool statusesWithSuccess:^(NSArray *statues) {
         [_companyArray addObjectsFromArray:statues];
         [self addTableView];
-    } page_num:(0)? 0:[NSString stringWithFormat:@"%u",[_companyArray count]-0] keywords_Id:nil failure:^(NSError *error) {
+    }  keywords_Id:nil failure:^(NSError *error) {
         
     }];
 }

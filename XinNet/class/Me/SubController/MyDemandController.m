@@ -11,11 +11,16 @@
 #import "DemandCell.h"
 #import "DemandDetailController.h"
 #import "PublishController.h"
+#import "httpTool.h"
+#import "RemindView.h"
 
 @interface MyDemandController ()<UITableViewDataSource,UITableViewDelegate>
 {
     UITableView *_tableView;
     NSMutableArray *_dataArray;
+    int _page;
+    BOOL isReflesh;
+    BOOL isLoad;
 }
 @end
 
@@ -40,6 +45,8 @@
     [self.view addSubview:_tableView];
     
     [self addRightNavButton];
+    
+    _page = 0;
     
     [self loadData];
 }
@@ -67,12 +74,31 @@
 
 - (void)loadData
 {
-    for (int i =0 ; i < 5; i ++) {
-        DemandItem *item = [[DemandItem alloc] init];
-        item.title = @"求购产品标题";
-        [_dataArray addObject:item];
+    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",@"1",@"type", nil];
+    if (isLoad) {
+        _page++;
     }
-    [_tableView reloadData];
+    if (isReflesh) {
+        _page = 0;
+    }
+    NSString *page= [NSString stringWithFormat:@"%d",_page];
+    [param setObject:page forKey:@"page"];
+
+    [httpTool postWithPath:@"getMyDemandList" params:param success:^(id JSON) {
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        int code = [[dic objectForKey:@"code"] intValue];
+        if (code == 100) {
+            NSArray *array  = [dic objectForKey:@"data"];
+            for (NSDictionary *subDict in array) {
+                DemandItem *item = [[DemandItem alloc] initWithDic:subDict];
+                [_dataArray addObject:item];
+            }
+            [_tableView reloadData];
+        }
+    } failure:^(NSError *error) {
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+    }];
 }
 
 
@@ -102,8 +128,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    DemandItem *item = [_dataArray objectAtIndex:indexPath.row];
     DemandDetailController *detail = [[DemandDetailController alloc] init];
     detail.title = @"发布";
+    detail.businessDetailIndex = item.uid;
     [self.navigationController pushViewController:detail animated:YES];
 }
 

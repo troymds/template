@@ -36,7 +36,7 @@
     [super viewDidLoad];
     self.view.backgroundColor =[UIColor whiteColor];
     self.title =@"展会信息";
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(collectItem)];
+   
     _interfaceArray =[NSMutableArray array];
 
     _orangLin =[[UIView alloc]init];
@@ -47,16 +47,14 @@
     [self addbusinessBtn];
     [self addLoadStatus];
 }
--(void)collectItem{
-    
-}
+
 #pragma mark---加载数据
 -(void)addLoadStatus{
     [interfaceTool statusesWithSuccess:^(NSArray *statues) {
         [_interfaceArray addObjectsFromArray:statues];
         [self addBigCompanyScrollView];
 
-    } page_Num:(0)? 0:[NSString stringWithFormat:@"%u",[_interfaceArray count]-0] company_Id:nil keywords_Str:nil category_Id:nil failure:^(NSError *error) {
+    } company_Id:nil keywords_Str:nil category_Id:nil failure:^(NSError *error) {
         
     }];
 }
@@ -65,8 +63,8 @@
 {
     _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 96, kWidth, kHeight-32-62)];
     _BigCompanyScrollView.contentSize = CGSizeMake(kWidth*3, _BigCompanyScrollView.frame.size.height);
-    _BigCompanyScrollView.showsHorizontalScrollIndicator = YES;
-    _BigCompanyScrollView.showsVerticalScrollIndicator = YES;
+    _BigCompanyScrollView.showsHorizontalScrollIndicator = NO;
+    _BigCompanyScrollView.showsVerticalScrollIndicator = NO;
     _BigCompanyScrollView.pagingEnabled = YES;
     _BigCompanyScrollView.bounces = NO;
     _BigCompanyScrollView.tag = 9999;

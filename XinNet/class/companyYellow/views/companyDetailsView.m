@@ -32,7 +32,7 @@
 
     self.view.backgroundColor =HexRGB(0xe9f1f6);
     
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(sharSdk:)];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"shar_sdk_img.png" highlightedSearch:@"shar_sdk_img.png" target:(self) action:@selector(sharSdk:)];
     
     [self addLoadStatus];
     
@@ -44,7 +44,20 @@
         companyModel =[[companyDetailsModel alloc]init];
         NSDictionary *dict =[statues objectAtIndex:0];
         companyModel.wapUrl =[dict objectForKey:@"wapUrl"];
+        companyModel.address =[dict objectForKey:@"address"];
+        companyModel.province =[dict objectForKey:@"province"];
+        companyModel.tel =[dict objectForKey:@"tel"];
+        companyModel.name =[dict objectForKey:@"name"];
+        companyModel.logo =[dict objectForKey:@"logo"];
+        companyModel.contact =[dict objectForKey:@"contact"];
+        companyModel.position =[dict objectForKey:@"position"];
+        companyModel.city =[dict objectForKey:@"city"];
+        companyModel.is_delete =[dict objectForKey:@"is_delete"];
+
+        
+        
         [self addImageView];
+       
           } company_id:_companyDetailIndex CompanyFailure:^(NSError *error) {
         
     }];
@@ -53,12 +66,79 @@
     
 }
 -(void)addImageView{
-    UIWebView *marketWebView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-120)];
-    [self.view addSubview:marketWebView];
-    [marketWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:companyModel.wapUrl]] ];
-    NSLog(@"%@",companyModel.wapUrl);
-    [self.view addSubview:marketWebView];
-    marketWebView.backgroundColor =[UIColor redColor];
+    
+    UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(YYBODER, 70, kWidth-YYBODER*2, 100)];
+    [headerImage setImageWithURL:[NSURL URLWithString:companyModel.logo] placeholderImage:placeHoderImage];
+    [self.view addSubview:headerImage];
+    
+    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(YYBODER-1, 179, kWidth-YYBODER*2, 165)];
+    line.backgroundColor =HexRGB(0xe6e3e4);
+    [self.view addSubview:line];
+    
+    
+    for (int i=0; i<4; i++) {
+        NSArray *titleArr= @[[NSString stringWithFormat:@"  公司名称:%@",companyModel.name],[NSString stringWithFormat:@"   联系人:%@",companyModel.contact],[NSString stringWithFormat:@"   联系方式:%@",companyModel.tel],[NSString stringWithFormat:@"   公司地址:%@",companyModel.address]];
+        
+        
+        
+        UILabel *contentLable=[[UILabel alloc]initWithFrame:CGRectMake(1, 1+i%4*41, kWidth-YYBODER*2-2, 40)];
+        [line addSubview:contentLable];
+        contentLable.text =titleArr[i];
+        contentLable.backgroundColor =[UIColor whiteColor];
+        contentLable.numberOfLines = 0;
+        contentLable.font =[UIFont systemFontOfSize:PxFont(18)];
+        
+        
+        
+    }
+    for (int t=0; t<2; t++) {
+        NSArray *titleArr =@[@"收藏",@"订阅"];
+        UIButton * collectionBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+        collectionBtn.frame =CGRectMake((kWidth-130)+t%3*50, 10,40, 50);
+        [collectionBtn setTitle:titleArr[t] forState:UIControlStateNormal];
+        [collectionBtn addTarget:self action:@selector(redingBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        collectionBtn.imageEdgeInsets =UIEdgeInsetsMake(-10, 0, 30, 0);
+        [collectionBtn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"collect%d",t]] forState:UIControlStateNormal];
+        [collectionBtn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"collect_selected%d.png",t]] forState:UIControlStateSelected];
+        [line addSubview:collectionBtn];
+        collectionBtn.backgroundColor =[UIColor clearColor];
+        [collectionBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        collectionBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(13)];
+        collectionBtn.titleEdgeInsets=UIEdgeInsetsMake(0, -35, 0, 5);
+        
+        UIImageView *failImg =[[UIImageView alloc]initWithFrame:CGRectMake((kWidth-130)+t%3*50, 43,40, 30 )];
+        [line addSubview:failImg];
+        failImg.backgroundColor =[UIColor whiteColor];
+        failImg.userInteractionEnabled = YES;
+        
+        
+        
+    }
+    
+    
+    UIView *line1 =[[UIView alloc]initWithFrame:CGRectMake(YYBODER-1, 350, kWidth-YYBODER*2, 165)];
+    line1.backgroundColor =HexRGB(0xe6e3e4);
+    [self.view addSubview:line1];
+    
+    for (int l=0; l<4; l++) {
+        NSArray *titleArr1 =@[@"企业简介:",@"产品管理:",@"供求商机:",@"企业招聘:"];
+        UIButton *contentLable1=[UIButton buttonWithType:UIButtonTypeCustom];
+        contentLable1.frame = CGRectMake(1, 1+l%4*41, kWidth-YYBODER*2-2, 40);
+        [line1 addSubview:contentLable1];
+        [contentLable1 setImage:[UIImage imageNamed:@"reture_left.png"] forState:UIControlStateNormal];
+        contentLable1.imageEdgeInsets = UIEdgeInsetsMake(0, 250, 0, 10);
+        contentLable1.titleEdgeInsets =UIEdgeInsetsMake(0, -20, 0, 215);
+        [contentLable1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [contentLable1 setTitle:titleArr1[l] forState:UIControlStateNormal];
+        contentLable1.backgroundColor =[UIColor whiteColor];
+        contentLable1.titleLabel.font =[UIFont systemFontOfSize:18];
+        [contentLable1 addTarget:self action:@selector(contentBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        contentLable1.titleLabel.font =[UIFont systemFontOfSize:PxFont(18)];
+        
+        contentLable1.tag = 100+l;
+    }
+    
+    
 
     
     
@@ -78,7 +158,7 @@
    
     if (content.tag ==100) {
         companyProfilesView *profileVc =[[companyProfilesView alloc]init];
-        
+        profileVc.companyIndex =companyModel.wapUrl;
         [self.navigationController pushViewController:profileVc animated:YES];
     }else if (content.tag ==101) {
         productController *productVc =[[productController alloc]init];
@@ -96,6 +176,7 @@
 
 }
 -(void)redingBtnClick:(UIButton *)red{
+    red.selected=!red.selected;
     [RemindView showViewWithTitle:@"订阅成功!" location:MIDDLE];
 }
 -(void)wirteBtnClick:(UIButton *)write{

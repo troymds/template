@@ -10,7 +10,12 @@
 
 @interface DemandItem : NSObject
 
-@property (nonatomic,strong) NSString *imgStr;
-@property (nonatomic,strong) NSString *title;
+@property (nonatomic,copy) NSString *uid;
+@property (nonatomic,copy) NSString *title;
+@property (nonatomic,copy) NSString *type;
+
+
+
+- (id)initWithDic:(NSDictionary *)dic;
 
 @end

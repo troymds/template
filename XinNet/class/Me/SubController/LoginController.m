@@ -9,9 +9,10 @@
 #import "LoginController.h"
 #import "RegisterController.h"
 #import "RemindView.h"
-#import "GlobalInstance.h"
 #import "LoginController.h"
 #import "SystemConfig.h"
+#import "UserItem.h"
+#import "XWDataModelSingleton.h"
 
 #define topDistance  20
 #define leftDistance 10
@@ -50,6 +51,15 @@
     
     [self addView];
     
+    if (_userNameField.text.length!=0&&_secretField.text.length!=0) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        if ([defaults objectForKey:@"autoLogin"]) {
+            NSString *str = [defaults objectForKey:@"autoLogin"];
+            if ([str isEqualToString:@"1"]) {
+                [self login];
+            }
+        }
+    }
 }
 
 
@@ -101,7 +111,6 @@
     [playButton addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
     playButton.tag = playBtn;
     [bgView addSubview:playButton];
-    
     
     y+=bgView.frame.size.height+5;
     autoLonginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -164,6 +173,14 @@
     
     [self.view addSubview:loginButton];
     
+    //显示用户账号密码
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults objectForKey:@"account"]) {
+        _userNameField.text = [defaults objectForKey:@"account"];
+        if ([defaults objectForKey:@"password"]) {
+            _secretField.text = [defaults objectForKey:@"password"];
+        }
+    }
 }
 
 - (void)btnDown:(UIButton *)btn
@@ -226,11 +243,24 @@
     NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:_userNameField.text,@"email",_secretField.text,@"password", nil];
     [httpTool postWithPath:@"login" params:param success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"%@",result);
         NSDictionary *dic = [result objectForKey:@"response"];
         int code = [[dic objectForKey:@"code"] intValue];
         if (code == 100) {
+            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+            [user setObject:_userNameField.text forKey:@"account"];
+            [user setObject:_secretField.text forKey:@"password"];
+            [user synchronize];
+            
+            
+            UserItem *item = [[UserItem alloc] initWithDic:[dic objectForKey:@"data"]];            
+            XWDataModelSingleton *dm = [XWDataModelSingleton shareInstance];
+            dm.userItem = item;
+            [dm archive];
+            
             [SystemConfig sharedInstance].isUserLogin = YES;
+            [SystemConfig sharedInstance].uid = item.uid;
+            [SystemConfig sharedInstance].userItem = item;
+            
             [self.navigationController popViewControllerAnimated:YES];
         }else{
             NSString *msg = [dic objectForKey:@"msg"];

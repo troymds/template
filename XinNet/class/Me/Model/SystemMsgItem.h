@@ -11,6 +11,9 @@
 @interface SystemMsgItem : NSObject
 
 @property (nonatomic,copy) NSString *content;
-@property (nonatomic,copy) NSString *date;
+@property (nonatomic,copy) NSString *create_time;
+
+- (id)initWithDic:(NSDictionary *)dic;
+
 
 @end
