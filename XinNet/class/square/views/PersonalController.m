@@ -15,6 +15,10 @@
 #import "GTMBase64.h"
 #import "AuthencateTool.h"
 #import "LoginController.h"
+#import "SystemConfig.h"
+#import "UIImageView+WebCache.h"
+#import "UserItem.h"
+#import "XWDataModelSingleton.h"
 
 
 #define leftDinstance 11
@@ -42,6 +46,24 @@
     self.title = @"个人资料";
     [self addRightNavButton];
     [self addView];
+    
+    
+    if ([SystemConfig sharedInstance].userItem) {
+        UserItem *item = [SystemConfig sharedInstance].userItem;
+        if (item.avatar.length!=0) {
+            [_iconImageView setImageWithURL:[NSURL URLWithString:item.avatar] placeholderImage:[UIImage imageNamed:@""]];
+        }
+        if (item.user_name.length!=0) {
+            _nickNameView.textField.text = item.user_name;
+        }
+        if (item.mobile.length!=0) {
+            _phoneView.textField.text = item.mobile;
+        }
+        if (item.email.length!=0) {
+            _emailView.detailLabel.text = item.email;
+        }
+    }
+    
 }
 
 //添加右导航按钮
@@ -118,6 +140,8 @@
     if ([self checkData]) {
         if (_iconImg) {
             [self uploadImage:_iconImg];
+        }else{
+            [self uploadUserInfo:@""];
         }
     }
 }
@@ -195,6 +219,24 @@
                     return ;
                 }
             }
+            //更新内存和本地用户信息（登陆状态下）
+            if ([SystemConfig sharedInstance].isUserLogin) {
+                UserItem *item = [SystemConfig sharedInstance].userItem;
+                UserItem *newItem = [[UserItem alloc] init];
+                newItem.user_name = _nickNameView.textField.text;
+                newItem.email = item.email;
+                newItem.mobile = _phoneView.textField.text;
+                newItem.uid = item.uid;
+                if (data.length!=0) {
+                    newItem.avatar = data;
+                }else{
+                    newItem.avatar = item.avatar;
+                }
+                [SystemConfig sharedInstance].userItem = newItem;
+                XWDataModelSingleton *dm = [XWDataModelSingleton shareInstance];
+                dm.userItem = newItem;
+                [dm archive];
+            }
             [RemindView showViewWithTitle:@"更新成功" location:MIDDLE];
             
         }else{
@@ -206,12 +248,15 @@
     }];
 }
 
+//点击头像
 - (void)imageViewClick:(TJImageView *)view
 {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"选取图片" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"相机",@"相簿", nil];
     [alertView show];
 }
 
+
+#pragma mark alertView_delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1){

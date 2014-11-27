@@ -43,8 +43,6 @@
     }
     // Do any additional setup after loading the view.
     
-    NSLog(@"%f,%f,%f,%f",self.view.frame.origin.x,self.view.frame.origin.y,self.view.frame.size.width,self.view.frame.size.height);
-    
     [self addView];
 
     //键盘隐藏通知
@@ -65,7 +63,6 @@
     [httpTool postWithPath:@"getDemandDetail" params:param success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
-        NSLog(@"%@",result);
         int code = [[dic objectForKey:@"code"]intValue];
         if (code ==100) {
             NSDictionary *data = [dic objectForKey:@"data"];

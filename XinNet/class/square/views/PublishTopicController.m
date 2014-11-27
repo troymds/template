@@ -122,11 +122,9 @@
     }
     NSString *s = [GTMBase64 stringByEncodingData:data];
     NSString *string = [NSString stringWithFormat:@"data:image/%@;base64,%@",str,s];
-    NSLog(@"----%@",string);
     NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:string,@"image", nil];
     [httpTool postWithPath:@"uploadImage" params:param success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"-----%@",result);
         NSDictionary *dic = [result objectForKey:@"response"];
         int code = [[dic objectForKey:@"code"]intValue];
         if (code == 100) {

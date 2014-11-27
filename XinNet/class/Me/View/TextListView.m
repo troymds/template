@@ -23,6 +23,7 @@
         [self addSubview:_nameLabel];
         
         _textField = [[UITextField alloc] init];
+        _textField.textColor = [UIColor blackColor];
         [self addSubview:_textField];
     }
     return self;
@@ -34,7 +35,7 @@
     CGSize size = [AdaptationSize getSizeFromString:title Font:NameFontSize withHight:_nameLabel.frame.size.height withWidth:CGFLOAT_MAX];
     _nameLabel.frame = CGRectMake(5, 0,size.width,_nameLabel.frame.size.height);
     
-    CGFloat x = _nameLabel.frame.origin.x+_nameLabel.frame.size.width+5;
+    CGFloat x = _nameLabel.frame.origin.x+_nameLabel.frame.size.width+10;
     _textField.frame = CGRectMake(x,0,self.frame.size.width-x,self.frame.size.height);
 }
 

@@ -14,6 +14,8 @@
 #import "PersonalController.h"
 #import "httpTool.h"
 #import "RemindView.h"
+#import "SystemConfig.h"
+#import "UIImageView+WebCache.h"
 
 @interface squareController ()<UITableViewDataSource,UITableViewDelegate,TJImageViewDelegate>
 {
@@ -79,6 +81,17 @@
     line.backgroundColor = HexRGB(0xd5d5d5);
     [headView addSubview:line];
     _tableView.tableHeaderView = headView;
+    
+    if ([SystemConfig sharedInstance].userItem) {
+        NSString *iconImg = [SystemConfig sharedInstance].userItem.avatar;
+        NSString *userName = [SystemConfig sharedInstance].userItem.user_name;
+        if (iconImg.length!=0) {
+            [headView.iconImg setImageWithURL:[NSURL URLWithString:iconImg] placeholderImage:[UIImage imageNamed:@""]];
+        }
+        if (userName.length!=0) {
+            headView.nameLabel.text = userName;
+        }
+    }
 }
 
 

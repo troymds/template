@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface UserItem : NSObject
+@interface UserItem : NSObject<NSCoding>
 
 @property (nonatomic,copy) NSString *avatar;
 @property (nonatomic,copy) NSString *email;

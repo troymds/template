@@ -24,6 +24,7 @@
         
         _detailLabel = [[UILabel alloc] init];
         _detailLabel.backgroundColor = [UIColor clearColor];
+        _detailLabel.textColor = [UIColor blackColor];
         [self addSubview:_detailLabel];
     }
     return self;
@@ -35,7 +36,7 @@
     CGSize size = [AdaptationSize getSizeFromString:title Font:NameFontSize withHight:_nameLabel.frame.size.height withWidth:CGFLOAT_MAX];
     _nameLabel.frame = CGRectMake(5, 0,size.width,_nameLabel.frame.size.height);
     
-    CGFloat x = _nameLabel.frame.origin.x+_nameLabel.frame.size.width+5;
+    CGFloat x = _nameLabel.frame.origin.x+_nameLabel.frame.size.width+10;
     _detailLabel.frame = CGRectMake(x,0,self.frame.size.width-x,self.frame.size.height);
 }
 

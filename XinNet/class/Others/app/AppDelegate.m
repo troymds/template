@@ -18,6 +18,8 @@
 #import "WXApi.h"
 #import "SystemConfig.h"
 #import "SSKeychain.h"
+#import "XWDataModelSingleton.h"
+
 @interface AppDelegate ()
 
 @end
@@ -82,6 +84,13 @@
     self.window.rootViewController =navVc;
     
     [self shareRegister];
+    
+    XWDataModelSingleton *dm = [XWDataModelSingleton shareInstance];
+    if (dm.userItem) {
+        [SystemConfig sharedInstance].userItem =dm.userItem;
+        [SystemConfig sharedInstance].uid = dm.userItem.uid;
+        [SystemConfig sharedInstance].isUserLogin = YES;
+    }
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];    return YES;

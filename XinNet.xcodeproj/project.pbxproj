@@ -73,6 +73,7 @@
 		04F8CE541A25A6AE005A7FDE /* UserItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F8CE531A25A6AE005A7FDE /* UserItem.m */; };
 		04F8CE571A25A9CF005A7FDE /* TextListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F8CE561A25A9CF005A7FDE /* TextListView.m */; };
 		04F8CE5A1A25B47F005A7FDE /* AuthencateTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F8CE591A25B47F005A7FDE /* AuthencateTool.m */; };
+		04F8CE5D1A25F79B005A7FDE /* XWDataModelSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F8CE5C1A25F79B005A7FDE /* XWDataModelSingleton.m */; };
 		556EB0EC1A1B598F006D5E0F /* MainController.m in Sources */ = {isa = PBXBuildFile; fileRef = 556EB0AE1A1B598F006D5E0F /* MainController.m */; };
 		556EB0EF1A1B598F006D5E0F /* moreController.m in Sources */ = {isa = PBXBuildFile; fileRef = 556EB0BE1A1B598F006D5E0F /* moreController.m */; };
 		556EB0F11A1B598F006D5E0F /* UIBarButtonItem+MJ.m in Sources */ = {isa = PBXBuildFile; fileRef = 556EB0C81A1B598F006D5E0F /* UIBarButtonItem+MJ.m */; };
@@ -359,6 +360,8 @@
 		04F8CE561A25A9CF005A7FDE /* TextListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextListView.m; sourceTree = "<group>"; };
 		04F8CE581A25B47F005A7FDE /* AuthencateTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthencateTool.h; sourceTree = "<group>"; };
 		04F8CE591A25B47F005A7FDE /* AuthencateTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthencateTool.m; sourceTree = "<group>"; };
+		04F8CE5B1A25F79B005A7FDE /* XWDataModelSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWDataModelSingleton.h; sourceTree = "<group>"; };
+		04F8CE5C1A25F79B005A7FDE /* XWDataModelSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWDataModelSingleton.m; sourceTree = "<group>"; };
 		556EB0AD1A1B598F006D5E0F /* MainController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainController.h; sourceTree = "<group>"; };
 		556EB0AE1A1B598F006D5E0F /* MainController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainController.m; sourceTree = "<group>"; };
 		556EB0BD1A1B598F006D5E0F /* moreController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = moreController.h; sourceTree = "<group>"; };
@@ -846,6 +849,8 @@
 				04AEC47B1A242BF60030E3E9 /* ProAlertView.m */,
 				04F8CE581A25B47F005A7FDE /* AuthencateTool.h */,
 				04F8CE591A25B47F005A7FDE /* AuthencateTool.m */,
+				04F8CE5B1A25F79B005A7FDE /* XWDataModelSingleton.h */,
+				04F8CE5C1A25F79B005A7FDE /* XWDataModelSingleton.m */,
 			);
 			path = share;
 			sourceTree = "<group>";
@@ -2066,6 +2071,7 @@
 				55B617A31A240CDA00088E39 /* SubscripMsgItem.m in Sources */,
 				04AEC4691A2425980030E3E9 /* UIScrollView+UITouch.m in Sources */,
 				5595EC5F1A25E248000D4AB1 /* YYalertView.m in Sources */,
+				04F8CE5D1A25F79B005A7FDE /* XWDataModelSingleton.m in Sources */,
 				55B617A51A240CDA00088E39 /* PersonCenterController.m in Sources */,
 				556EB0F21A1B598F006D5E0F /* WBNavigationController.m in Sources */,
 				55D015E71A22D69D00F9D475 /* SDWebImageDecoder.m in Sources */,
