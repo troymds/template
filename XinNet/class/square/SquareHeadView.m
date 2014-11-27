@@ -22,11 +22,22 @@
         [self addSubview:_iconImg];
         
         //用户名
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,_iconImg.frame.origin.y+_iconImg.frame.size.height, kWidth,30)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,_iconImg.frame.origin.y+_iconImg.frame.size.height+10, kWidth,20)];
         _nameLabel.backgroundColor = [UIColor clearColor];
         _nameLabel.textColor = [UIColor blackColor];
         _nameLabel.textAlignment = NSTextAlignmentCenter;
+        _nameLabel.hidden = YES;
         [self addSubview:_nameLabel];
+        
+        
+        
+        _loginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_loginBtn setTitle:@"登 陆" forState:UIControlStateNormal];
+        _loginBtn.frame = CGRectMake(kWidth/2-80/2,_iconImg.frame.origin.y+_iconImg.frame.size.height+10,80,30);
+        _loginBtn.layer.borderColor = HexRGB(0xd5d5d5).CGColor;
+        _loginBtn.layer.borderWidth = 1.0f;
+        [_loginBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [self addSubview:_loginBtn];
         
     }
     return self;

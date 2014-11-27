@@ -44,6 +44,8 @@
 		04AAED0F1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 04AAECFC1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.bundle */; };
 		04AAED101A1EE0E300B5254B /* ShareSDKFlatShareViewUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AAECFD1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.framework */; };
 		04AAED111A1EE0E300B5254B /* ShareSDKShareActionSheet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AAECFE1A1EE0E300B5254B /* ShareSDKShareActionSheet.framework */; };
+		04AC927E1A27088900FDEFDD /* user_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AC927D1A27088900FDEFDD /* user_default@2x.png */; };
+		04AC92821A272BDA00FDEFDD /* FindPasswordController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AC92811A272BDA00FDEFDD /* FindPasswordController.m */; };
 		04AEC45C1A2423340030E3E9 /* SubscribController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AEC45B1A2423340030E3E9 /* SubscribController.m */; };
 		04AEC45F1A2423610030E3E9 /* SubscribCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AEC45E1A2423610030E3E9 /* SubscribCell.m */; };
 		04AEC4621A2423830030E3E9 /* SubscribItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AEC4611A2423830030E3E9 /* SubscribItem.m */; };
@@ -326,6 +328,10 @@
 		04AAECFC1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ShareSDKFlatShareViewUI.bundle; sourceTree = "<group>"; };
 		04AAECFD1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKFlatShareViewUI.framework; sourceTree = "<group>"; };
 		04AAECFE1A1EE0E300B5254B /* ShareSDKShareActionSheet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKShareActionSheet.framework; sourceTree = "<group>"; };
+		04AC927D1A27088900FDEFDD /* user_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user_default@2x.png"; sourceTree = "<group>"; };
+		04AC927F1A2708C600FDEFDD /* ReloadViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReloadViewDelegate.h; sourceTree = "<group>"; };
+		04AC92801A272BDA00FDEFDD /* FindPasswordController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindPasswordController.h; sourceTree = "<group>"; };
+		04AC92811A272BDA00FDEFDD /* FindPasswordController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindPasswordController.m; sourceTree = "<group>"; };
 		04AEC45A1A2423340030E3E9 /* SubscribController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubscribController.h; sourceTree = "<group>"; };
 		04AEC45B1A2423340030E3E9 /* SubscribController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubscribController.m; sourceTree = "<group>"; };
 		04AEC45D1A2423610030E3E9 /* SubscribCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubscribCell.h; sourceTree = "<group>"; };
@@ -915,6 +921,7 @@
 		04AEC4771A242AED0030E3E9 /* squre */ = {
 			isa = PBXGroup;
 			children = (
+				04AC927D1A27088900FDEFDD /* user_default@2x.png */,
 				04AEC4781A242AF30030E3E9 /* addImg@2x.png */,
 			);
 			path = squre;
@@ -1128,6 +1135,7 @@
 		556EB0DB1A1B598F006D5E0F /* square */ = {
 			isa = PBXGroup;
 			children = (
+				04AC927F1A2708C600FDEFDD /* ReloadViewDelegate.h */,
 				04AAECB51A1ED09300B5254B /* Cell */,
 				04AAECAE1A1ED07D00B5254B /* View */,
 				556EB0DC1A1B598F006D5E0F /* controll */,
@@ -1667,6 +1675,8 @@
 				04AEC4641A2424B30030E3E9 /* PublishController.m */,
 				04AEC46A1A2425BD0030E3E9 /* DemandDetailController.h */,
 				04AEC46B1A2425BD0030E3E9 /* DemandDetailController.m */,
+				04AC92801A272BDA00FDEFDD /* FindPasswordController.h */,
+				04AC92811A272BDA00FDEFDD /* FindPasswordController.m */,
 			);
 			path = SubController;
 			sourceTree = "<group>";
@@ -2074,6 +2084,7 @@
 				5595EC9A1A25E2CC000D4AB1 /* reture_left@2x.png in Resources */,
 				04AEC4961A247D470030E3E9 /* cateplay@2x.png in Resources */,
 				55C76F911A1C8C5A0074640C /* SHSJT_up@2x.png in Resources */,
+				04AC927E1A27088900FDEFDD /* user_default@2x.png in Resources */,
 				04AEC4921A247D470030E3E9 /* catebusiness@2x.png in Resources */,
 				04AEC4871A244E5B0030E3E9 /* protocol.html in Resources */,
 				55D539301A22C15A007400F6 /* home_img8.png in Resources */,
@@ -2194,6 +2205,7 @@
 				55B4DF2A1A27012600F7AB54 /* productDetailsView.m in Sources */,
 				04F8CE5A1A25B47F005A7FDE /* AuthencateTool.m in Sources */,
 				55B4DF1E1A27012600F7AB54 /* interfaceController.m in Sources */,
+				04AC92821A272BDA00FDEFDD /* FindPasswordController.m in Sources */,
 				55B617A61A240CDA00088E39 /* LoginController.m in Sources */,
 				55B4DF451A27125200F7AB54 /* homeModel.m in Sources */,
 				55B617D31A240FF300088E39 /* AppDelegate.m in Sources */,

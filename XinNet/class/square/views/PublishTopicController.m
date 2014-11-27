@@ -55,6 +55,7 @@
     _textView.layer.borderColor = HexRGB(0xd5d5d5).CGColor;
     _textView.layer.borderWidth = 0.5;
     
+    
     //图片
     _publishImg = [[TJImageView alloc] initWithFrame:CGRectMake(leftDistance,_textView.frame.origin.y+_textView.frame.size.height+15,75,75)];
     _publishImg.backgroundColor = [UIColor redColor];
@@ -66,6 +67,7 @@
     [addImgBtn addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
     [addImgBtn setBackgroundImage:[UIImage imageNamed:@"addImg.png"] forState:UIControlStateNormal];
     [self.view addSubview:addImgBtn];
+    
     
     
     CGFloat width = 100;        //显示输入字体label的宽度
@@ -153,6 +155,11 @@
         int code = [[dic objectForKey:@"code"]intValue];
         if (code == 100) {
             [RemindView showViewWithTitle:@"发布成功" location:MIDDLE];
+            //刷新话题广场内容
+            if ([self.delegate respondsToSelector:@selector(reloadView)]) {
+                [self.delegate reloadView];
+                [self.navigationController popViewControllerAnimated:YES];
+            }
         }else{
             NSString *msg = [dic objectForKey:@"msg"];
             [RemindView showViewWithTitle:msg location:MIDDLE];

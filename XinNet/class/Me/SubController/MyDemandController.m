@@ -13,14 +13,16 @@
 #import "PublishController.h"
 #import "httpTool.h"
 #import "RemindView.h"
+#import "MJRefresh.h"
 
-@interface MyDemandController ()<UITableViewDataSource,UITableViewDelegate>
+@interface MyDemandController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     UITableView *_tableView;
     NSMutableArray *_dataArray;
     int _page;
     BOOL isReflesh;
     BOOL isLoad;
+    MJRefreshFooterView *footView;
 }
 @end
 
@@ -49,6 +51,25 @@
     _page = 0;
     
     [self loadData];
+    
+    [self addRefreshView];
+}
+
+//添加上拉加载
+- (void)addRefreshView
+{
+    footView =[[MJRefreshFooterView alloc] init];
+    footView.delegate = self;
+    footView.scrollView = _tableView;
+}
+
+
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        isLoad = YES;
+        [self loadData];
+    }
 }
 
 //添加右导航按钮
@@ -90,11 +111,28 @@
         int code = [[dic objectForKey:@"code"] intValue];
         if (code == 100) {
             NSArray *array  = [dic objectForKey:@"data"];
-            for (NSDictionary *subDict in array) {
-                DemandItem *item = [[DemandItem alloc] initWithDic:subDict];
-                [_dataArray addObject:item];
+            if (![array isKindOfClass:[NSNull class]]) {
+                for (NSDictionary *subDict in array) {
+                    DemandItem *item = [[DemandItem alloc] initWithDic:subDict];
+                    [_dataArray addObject:item];
+                }
+            }else{
+                if (isLoad) {
+                    [RemindView showViewWithTitle:@"数据已全部加载完毕" location:MIDDLE];
+                }
+            }
+            if (isLoad) {
+                isLoad = NO;
+                [footView endRefreshing];
             }
             [_tableView reloadData];
+        }else{
+            if (isLoad) {
+                isLoad = NO;
+                [footView endRefreshing];
+            }
+            NSString *msg = [dic objectForKey:@"msg"];
+            [RemindView showViewWithTitle:msg location:MIDDLE];
         }
     } failure:^(NSError *error) {
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
