@@ -11,16 +11,26 @@
 #import "CommentItem.h"
 #import "httpTool.h"
 #import "RemindView.h"
+#import "MJRefresh.h"
+#import "markertDetailsView.h"
+#import "companyDetailsView.h"
+#import "businessDetailsView.h"
+#import "productDetailsView.h"
+#import "jobDetailsView.h"
+#import "interfaceDetailsView.h"
 
-@interface MyCommentController ()<UITableViewDataSource,UITableViewDelegate>
+
+@interface MyCommentController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     UITableView *_tableView;
     NSMutableArray *_dataArray;
     int _page;
     BOOL isRefresh;  //刷新
     BOOL isLoad;  //加载
+    MJRefreshFooterView *footView;
 }
 @end
+
 
 @implementation MyCommentController
 
@@ -45,6 +55,24 @@
     
     _page = 0;
     [self loadData];
+    
+    [self addRefreshView];
+}
+
+//添加加载
+- (void)addRefreshView
+{
+    footView = [[MJRefreshFooterView alloc] init];
+    footView.scrollView = _tableView;
+    footView.delegate = self;
+}
+
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        isLoad = YES;
+        [self loadData];
+    }
 }
 
 - (void)loadData
@@ -69,7 +97,23 @@
                     CommentItem *item = [[CommentItem alloc] initWithDic:subDic];
                     [_dataArray addObject:item];
                 }
+            }else{
+                if (isLoad) {
+                    [RemindView showViewWithTitle:@"数据已全部加载完毕" location:MIDDLE];
+                }
             }
+            if (isLoad) {
+                isLoad = NO;
+                [footView endRefreshing];
+            }
+            [_tableView reloadData];
+        }else{
+            if (isLoad) {
+                isLoad = NO;
+                [footView endRefreshing];
+            }
+            NSString *msg = [dic objectForKey:@"msg"];
+            [RemindView showViewWithTitle:msg location:MIDDLE];
         }
     } failure:^(NSError *error) {
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
@@ -90,8 +134,67 @@
         cell = [[CommentCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
     }
     CommentItem *item = [_dataArray objectAtIndex:indexPath.row];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.titileLabel.text = item.title;
+    cell.commentLabel.text = item.content;
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CommentItem *item = [_dataArray objectAtIndex:indexPath.row];
+    int type = [item.type intValue];
+    switch (type) {
+        case 1:
+        {
+            markertDetailsView *detail = [[markertDetailsView alloc] init];
+            detail.markIndex = item.vid;
+            [self.navigationController pushViewController:detail animated:YES];
+        }
+            break;
+        case 2:
+        {
+            companyDetailsView *detail = [[companyDetailsView alloc] init];
+            detail.companyDetailIndex = item.vid;
+            [self.navigationController pushViewController:detail animated:YES];
+        }
+            break;
+        case 3:
+        {
+            businessDetailsView *detail = [[businessDetailsView alloc] init];
+            detail.businessDetailIndex = item.vid;
+            [self.navigationController pushViewController:detail animated:YES];
+        }
+            break;
+        case 4:
+        {
+            productDetailsView *detail = [[productDetailsView alloc] init];
+            detail.productIndex = item.vid;
+            [self.navigationController pushViewController:detail animated:YES];
+        }
+            break;
+        case 5:
+        {
+            
+        }
+            break;
+        case 6:
+        {
+            jobDetailsView *detail = [[jobDetailsView alloc] init];
+            detail.jobDetailsIndex = item.vid;
+            [self.navigationController pushViewController:detail animated:YES];
+        }
+            break;
+        case 7:
+        {
+            interfaceDetailsView *detail = [[interfaceDetailsView alloc] init];
+            [self.navigationController pushViewController:detail animated:YES];
+        }
+            break;
+
+    
+        default:
+            break;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

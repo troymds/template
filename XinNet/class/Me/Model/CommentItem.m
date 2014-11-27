@@ -19,6 +19,13 @@
         self.content = dic[@"content"];
         self.user_name =dic[@"user_name"];
         self.user_avatar = dic[@"user_avatar"];
+        self.entity_id = dic[@"entity_id"];
+        if (![dic[@"title"] isKindOfClass:[NSNull class]]) {
+            self.title = dic[@"title"];
+        }else{
+            self.title = @"无标题";
+        }
+        self.type = dic[@"type"];
     }
     return self;
 }

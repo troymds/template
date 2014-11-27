@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ReloadViewDelegate.h"
 
 @interface PublishTopicController : UIViewController
+
+@property (nonatomic,assign) id <ReloadViewDelegate> delegate;
 
 @end

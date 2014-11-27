@@ -13,5 +13,6 @@
 
 @property (nonatomic,strong) TJImageView *iconImg;
 @property (nonatomic,strong) UILabel *nameLabel;
+@property (nonatomic,strong) UIButton *loginBtn;
 
 @end

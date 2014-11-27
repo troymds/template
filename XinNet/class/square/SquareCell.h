@@ -20,8 +20,8 @@
 #define DateFont 12
 #define UserNameHeight 20
 #define MiddleSpace 5
-#define PublishImgWidth 200
-#define PublishImgHeiht 100
+#define PublishImgWidth 83
+#define PublishImgHeiht 83
 #define DateHeight 15
 #define ContentWidth (kWidth - IconImgWidth-LeftSpace - 5*2)
 
