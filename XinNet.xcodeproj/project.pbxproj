@@ -155,6 +155,8 @@
 		55B4DF341A2702D500F7AB54 /* interfaceDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B4DF331A2702D500F7AB54 /* interfaceDetailModel.m */; };
 		55B4DF3D1A270B0F00F7AB54 /* jobDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B4DF3C1A270B0F00F7AB54 /* jobDetailModel.m */; };
 		55B4DF401A270B1D00F7AB54 /* jobDetailTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B4DF3F1A270B1D00F7AB54 /* jobDetailTool.m */; };
+		55B4DF451A27125200F7AB54 /* homeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B4DF441A27125200F7AB54 /* homeModel.m */; };
+		55B4DF491A27126F00F7AB54 /* homeTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B4DF481A27126F00F7AB54 /* homeTool.m */; };
 		55B6179A1A240CDA00088E39 /* CommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B617721A240CDA00088E39 /* CommentCell.m */; };
 		55B6179B1A240CDA00088E39 /* DemandCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B617741A240CDA00088E39 /* DemandCell.m */; };
 		55B6179C1A240CDA00088E39 /* FavoriteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B617761A240CDA00088E39 /* FavoriteCell.m */; };
@@ -519,6 +521,10 @@
 		55B4DF3C1A270B0F00F7AB54 /* jobDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = jobDetailModel.m; sourceTree = "<group>"; };
 		55B4DF3E1A270B1D00F7AB54 /* jobDetailTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jobDetailTool.h; sourceTree = "<group>"; };
 		55B4DF3F1A270B1D00F7AB54 /* jobDetailTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = jobDetailTool.m; sourceTree = "<group>"; };
+		55B4DF431A27125200F7AB54 /* homeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = homeModel.h; sourceTree = "<group>"; };
+		55B4DF441A27125200F7AB54 /* homeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = homeModel.m; sourceTree = "<group>"; };
+		55B4DF471A27126F00F7AB54 /* homeTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = homeTool.h; sourceTree = "<group>"; };
+		55B4DF481A27126F00F7AB54 /* homeTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = homeTool.m; sourceTree = "<group>"; };
 		55B617711A240CDA00088E39 /* CommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentCell.h; sourceTree = "<group>"; };
 		55B617721A240CDA00088E39 /* CommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentCell.m; sourceTree = "<group>"; };
 		55B617731A240CDA00088E39 /* DemandCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemandCell.h; sourceTree = "<group>"; };
@@ -997,10 +1003,9 @@
 		556EB0AB1A1B598F006D5E0F /* home */ = {
 			isa = PBXGroup;
 			children = (
+				55B4DF461A27125F00F7AB54 /* Tool */,
+				55B4DF411A27114400F7AB54 /* Model */,
 				556EB0AC1A1B598F006D5E0F /* controll */,
-				556EB0AF1A1B598F006D5E0F /* Model */,
-				556EB0B01A1B598F006D5E0F /* Tool */,
-				556EB0B11A1B598F006D5E0F /* views */,
 			);
 			path = home;
 			sourceTree = "<group>";
@@ -1012,27 +1017,6 @@
 				556EB0AE1A1B598F006D5E0F /* MainController.m */,
 			);
 			path = controll;
-			sourceTree = "<group>";
-		};
-		556EB0AF1A1B598F006D5E0F /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		556EB0B01A1B598F006D5E0F /* Tool */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Tool;
-			sourceTree = "<group>";
-		};
-		556EB0B11A1B598F006D5E0F /* views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = views;
 			sourceTree = "<group>";
 		};
 		556EB0BB1A1B598F006D5E0F /* more */ = {
@@ -1579,6 +1563,24 @@
 				55B4DEF91A27012600F7AB54 /* SearchViewController.m */,
 			);
 			path = controller;
+			sourceTree = "<group>";
+		};
+		55B4DF411A27114400F7AB54 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				55B4DF431A27125200F7AB54 /* homeModel.h */,
+				55B4DF441A27125200F7AB54 /* homeModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		55B4DF461A27125F00F7AB54 /* Tool */ = {
+			isa = PBXGroup;
+			children = (
+				55B4DF471A27126F00F7AB54 /* homeTool.h */,
+				55B4DF481A27126F00F7AB54 /* homeTool.m */,
+			);
+			path = Tool;
 			sourceTree = "<group>";
 		};
 		55B6176F1A240CDA00088E39 /* Me */ = {
@@ -2193,6 +2195,7 @@
 				04F8CE5A1A25B47F005A7FDE /* AuthencateTool.m in Sources */,
 				55B4DF1E1A27012600F7AB54 /* interfaceController.m in Sources */,
 				55B617A61A240CDA00088E39 /* LoginController.m in Sources */,
+				55B4DF451A27125200F7AB54 /* homeModel.m in Sources */,
 				55B617D31A240FF300088E39 /* AppDelegate.m in Sources */,
 				55B617A41A240CDA00088E39 /* SystemMsgItem.m in Sources */,
 				55B4DEFA1A27012600F7AB54 /* marketController.m in Sources */,
@@ -2295,6 +2298,7 @@
 				55B4DF271A27012600F7AB54 /* productDetailTool.m in Sources */,
 				55B4DEFB1A27012600F7AB54 /* categoryLestModel.m in Sources */,
 				04AEC4621A2423830030E3E9 /* SubscribItem.m in Sources */,
+				55B4DF491A27126F00F7AB54 /* homeTool.m in Sources */,
 				04AEC46C1A2425BD0030E3E9 /* DemandDetailController.m in Sources */,
 				55B4DF051A27012600F7AB54 /* YYSearchButton.m in Sources */,
 				55B4DF161A27012600F7AB54 /* companyListModel.m in Sources */,

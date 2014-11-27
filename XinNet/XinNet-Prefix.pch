@@ -22,6 +22,7 @@
 #import "MJRefreshBaseView.h"
 #import "MBProgressHUD.h"
 #import "MJRefreshFooterView.h"
+#import "RemindView.h"
 
 #ifdef DEBUG
 #define MYNSLog(...) NSLog(__VA_ARGS__)
