@@ -33,6 +33,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     self.view.backgroundColor =HexRGB(0xe9f1f6);
     self.title =@"求购详情";
     

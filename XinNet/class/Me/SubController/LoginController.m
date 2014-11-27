@@ -15,6 +15,7 @@
 #import "XWDataModelSingleton.h"
 #import "squareController.h"
 #import "ReloadViewDelegate.h"
+#import "FindPasswordController.h"
 
 #define topDistance  20
 #define leftDistance 10
@@ -52,18 +53,15 @@
     }
     self.title = @"登陆";
     // Do any additional setup after loading the view.
-    
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_home_img.png" highlightedSearch:@"nav_home_img.png" target:(self) action:@selector(back)];
+
     [self addView];
-    
-//    if (_userNameField.text.length!=0&&_secretField.text.length!=0) {
-//        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//        if ([defaults objectForKey:@"autoLogin"]) {
-//            NSString *str = [defaults objectForKey:@"autoLogin"];
-//            if ([str isEqualToString:@"1"]) {
-//                [self login];
-//            }
-//        }
-//    }
+}
+
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
@@ -190,21 +188,22 @@
 - (void)btnDown:(UIButton *)btn
 {
     switch (btn.tag) {
-        case autoBtn:
-        {
-            btn.selected = !btn.selected;
-            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-            if (btn.selected) {
-                [user setObject:@"1" forKey:@"autoLogin"];  //1表示自动登录
-            }else{
-                [user setObject:@"0" forKey:@"autoLogin"];
-            }
-            
-        }
-            break;
+//        case autoBtn:
+//        {
+//            btn.selected = !btn.selected;
+//            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+//            if (btn.selected) {
+//                [user setObject:@"1" forKey:@"autoLogin"];  //1表示自动登录
+//            }else{
+//                [user setObject:@"0" forKey:@"autoLogin"];
+//            }
+//            
+//        }
+//            break;
         case loseBtn:
         {
-            
+            FindPasswordController *fc = [[FindPasswordController alloc] init];
+            [self.navigationController pushViewController:fc animated:YES];
         }
             break;
         case registerBtn:

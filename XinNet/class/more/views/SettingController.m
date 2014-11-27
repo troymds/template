@@ -9,14 +9,17 @@
 #import "SettingController.h"
 #import "MoreListView.h"
 #import "RemindView.h"
+#import "LoginController.h"
 
 #define UpdateType 2000
 #define ClearType 2001
+#define ExitType 2002
 
-@interface SettingController ()<MoreListViewDelegate>
+@interface SettingController ()<MoreListViewDelegate,UIAlertViewDelegate>
 {
     MoreListView *_updateView;
     MoreListView *_clearView;
+    MoreListView *_exitView;
     UILabel *versionLabel;
     UILabel *cachesLabel;
 }
@@ -37,7 +40,7 @@
 
 - (void)addView
 {
-    CGFloat height = 60;      //列表高度
+    CGFloat height = 50;      //列表高度
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth,height*2)];
     [self.view addSubview:bgView];
     for (int i = 0 ; i < 2; i++) {
@@ -92,6 +95,17 @@
     NSString *filePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory,NSUserDomainMask, YES) objectAtIndex:0];
     CGFloat chcheSize = [self folderSizeAtPath:filePath];
     cachesLabel.text = [NSString stringWithFormat:@"%.2fM",chcheSize];
+    
+    _exitView = [[MoreListView alloc] initWithFrame:CGRectMake(0,bgView.frame.size.height+15,kWidth,height)];
+    _exitView.titleLabel.text = @"退出登陆";
+    _exitView.imgView.hidden = YES;
+    _exitView.titleLabel.frame = CGRectMake(20,0,120,height);
+    _exitView.delegate  = self;
+    _exitView.tag = ExitType;
+    _exitView.layer.borderColor = HexRGB(0xd5d5d5).CGColor;
+    _exitView.layer.borderWidth = 1.0f;
+    [self.view addSubview:_exitView];
+
 }
 
 //遍历文件夹获得文件夹大小，返回多少M
@@ -145,6 +159,16 @@
                            );
         }
             break;
+        case ExitType:
+        {
+            if (![SystemConfig sharedInstance].isUserLogin) {
+                [RemindView showViewWithTitle:@"您还未登陆" location:MIDDLE];
+            }else{
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"退出当前账号?" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+                [alertView show];
+            }
+        }
+            break;
         default:
             break;
     }
@@ -158,6 +182,29 @@
     cachesLabel.text = [NSString stringWithFormat:@"%.2fM",chcheSize];
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        [self exit];
+    }
+}
+
+//退出登陆
+- (void)exit
+{
+    //清空登陆数据
+    [SystemConfig sharedInstance].isUserLogin = NO;
+    [SystemConfig sharedInstance].userItem = nil;
+    [SystemConfig sharedInstance].uid = nil;
+        
+    //将登陆界面插入到栈中
+    NSArray *array = self.navigationController.viewControllers;
+    LoginController *login = [[LoginController alloc] init];
+    NSMutableArray *controllers = [[NSMutableArray alloc] initWithArray:array];
+    [controllers insertObject:login atIndex:1];
+    self.navigationController.viewControllers = controllers;
+    [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:1] animated:YES];
+}
 
 //检查版本
 - (void)checkVersion

@@ -89,6 +89,7 @@
     [httpTool postWithPath:@"getCommentList" params:param success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
+        NSLog(@"%@",result);
         int code = [[dic objectForKey:@"code"] intValue];
         if (code == 100) {
             NSArray *data = [dic objectForKey:@"data"];
@@ -147,28 +148,28 @@
         case 1:
         {
             markertDetailsView *detail = [[markertDetailsView alloc] init];
-            detail.markIndex = item.vid;
+            detail.markIndex = item.entity_id;
             [self.navigationController pushViewController:detail animated:YES];
         }
             break;
         case 2:
         {
             companyDetailsView *detail = [[companyDetailsView alloc] init];
-            detail.companyDetailIndex = item.vid;
+            detail.companyDetailIndex = item.entity_id;
             [self.navigationController pushViewController:detail animated:YES];
         }
             break;
         case 3:
         {
             businessDetailsView *detail = [[businessDetailsView alloc] init];
-            detail.businessDetailIndex = item.vid;
+            detail.businessDetailIndex = item.entity_id;
             [self.navigationController pushViewController:detail animated:YES];
         }
             break;
         case 4:
         {
             productDetailsView *detail = [[productDetailsView alloc] init];
-            detail.productIndex = item.vid;
+            detail.productIndex = item.entity_id;
             [self.navigationController pushViewController:detail animated:YES];
         }
             break;
@@ -180,13 +181,14 @@
         case 6:
         {
             jobDetailsView *detail = [[jobDetailsView alloc] init];
-            detail.jobDetailsIndex = item.vid;
+            detail.jobDetailsIndex = item.entity_id;
             [self.navigationController pushViewController:detail animated:YES];
         }
             break;
         case 7:
         {
             interfaceDetailsView *detail = [[interfaceDetailsView alloc] init];
+            detail.interfaceIndex = item.entity_id;
             [self.navigationController pushViewController:detail animated:YES];
         }
             break;

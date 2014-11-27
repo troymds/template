@@ -38,7 +38,7 @@
 
 - (void)addView
 {
-    CGFloat height = 40;      //列表高度
+    CGFloat height = 50;      //列表高度
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth,height*3)];
     [self.view addSubview:bgView];
     for (int i = 0 ; i < 3; i++) {
@@ -49,6 +49,8 @@
     
     _setView = [[MoreListView alloc] initWithFrame:CGRectMake(0, 0, kWidth,height)];
     _setView.titleLabel.text = @"设置";
+    _setView.titleLabel.frame = CGRectMake(20,0,120,height);
+    _setView.imgView.hidden = YES;
     _setView.delegate = self;
     _setView.tag = Set_Type;
     [bgView addSubview:_setView];
@@ -61,6 +63,8 @@
     
     _adviceView = [[MoreListView alloc] initWithFrame:CGRectMake(0,height, kWidth,height)];
     _adviceView.titleLabel.text = @"意见反馈";
+    _adviceView.titleLabel.frame = CGRectMake(20,0,120,height);
+    _adviceView.imgView.hidden = YES;
     _adviceView.delegate  = self;
     _adviceView.tag = Advice_Type;
     [bgView addSubview:_adviceView];
@@ -73,6 +77,8 @@
     
     _shareView = [[MoreListView alloc] initWithFrame:CGRectMake(0,height*2, kWidth,height)];
     _shareView.titleLabel.text = @"分享软件";
+    _shareView.titleLabel.frame = CGRectMake(20,0,120,height);
+    _shareView.imgView.hidden = YES;
     _shareView.delegate = self;
     _shareView.tag = Share_Type;
     [bgView addSubview:_shareView];
