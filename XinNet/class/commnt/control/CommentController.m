@@ -17,7 +17,7 @@
 #import "commentPublished.h"
 #import "morecell.h"
 
-#define RowH 70.0 // cell高度
+#define RowH 80.0 // cell高度
 #define commentBtnBackH 44 //下面评论按钮背景高度
 
 @interface CommentController ()<UITableViewDataSource,UITableViewDelegate,YYalertViewDelegate,UITextFieldDelegate>
