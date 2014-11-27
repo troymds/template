@@ -9,6 +9,9 @@
 #import "jobDetailsView.h"
 #import "YYSearchButton.h"
 #import "YYalertView.h"
+
+#import "jobDetailTool.h"
+#import "jobDetailModel.h"
 #define YYBODER 16
 @interface jobDetailsView ()<UIScrollViewDelegate,YYalertViewDelegate>
 {
@@ -16,6 +19,7 @@
     UIView *_jobScrollView;
     UIScrollView *_companyScrollView;
     UIButton *_selectedBtn;
+    jobDetailModel *jobModel;
 }
 @end
 
@@ -28,13 +32,28 @@
      self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"colloct_img.png" highlightedSearch:@"colloct_img.png" target:(self) action:@selector(collectClick:)];
     _selectedBtn =[[UIButton alloc]init];
     [self addChooseBtn];
-    [self addScrollview];
     [self addWriteBtn];
+    [self addLoadStatus];
 
 }
 -(void)collectClick:(UIButton *)collect{
     
 }
+#pragma mark ---加载数据
+-(void)addLoadStatus{
+    [jobDetailTool CompanyStatusesWithSuccesscategory:^(NSArray *statues) {
+        NSDictionary *dict =[statues objectAtIndex:0];
+        jobModel =[[jobDetailModel alloc]init];
+        jobModel.company_url=[dict objectForKey:@"company_url"];
+        jobModel.job_url=[dict objectForKey:@"job_url"];
+        jobModel.indexId=[dict objectForKey:@"id"];
+
+        [self addScrollview];
+    } company_id:_jobDetailsIndex CompanyFailure:^(NSError *error) {
+        
+    }];
+}
+#pragma mark ---添加UI
 -(void)addScrollview{
     
     _bigScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 116, kWidth, kHeight-94)];
@@ -55,7 +74,7 @@
     jobWebView.scrollView.bounces = NO;
     jobWebView.scrollView.showsHorizontalScrollIndicator = NO;
     jobWebView.scrollView.showsVerticalScrollIndicator =NO;
-    [jobWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_job_urlWeb]] ];
+    [jobWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:jobModel.job_url]] ];
     
     
     UIWebView *companyWebView =[[UIWebView alloc]initWithFrame:CGRectMake(kWidth, 10, kWidth, kHeight-140)];
@@ -63,7 +82,7 @@
     companyWebView.scrollView.bounces = NO;
     companyWebView.scrollView.showsHorizontalScrollIndicator = NO;
     companyWebView.scrollView.showsVerticalScrollIndicator =NO;
-    [companyWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_company_urlWeb]] ];
+    [companyWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:jobModel.company_url]] ];
 
 }
 

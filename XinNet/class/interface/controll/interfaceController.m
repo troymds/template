@@ -242,6 +242,7 @@
 
     interfaceDetailsView *productVC =[[interfaceDetailsView alloc]init];
     productVC.interface_Url=interModel.wapUrl;
+    productVC.interfaceIndex =interModel.indexId;
     [self.navigationController pushViewController:productVC animated:YES];
     
 }
