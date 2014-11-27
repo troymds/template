@@ -108,14 +108,14 @@
 -(void)addclassMenu{
     
     
-     backMenuView =[[UIView alloc]initWithFrame:CGRectMake(YYBODERW, YYBODERY+110, kWidth-YYBODERW*2, 181)];
+     backMenuView =[[UIView alloc]initWithFrame:CGRectMake(YYBODERW, YYBODERY+110, kWidth-YYBODERW*2, 91)];
     [self.view addSubview:backMenuView];
     backMenuView.backgroundColor =[UIColor lightGrayColor];
     
-    for (int i=0; i<6; i++) {
-        NSArray *titleArr=@[@"市场行情",@"企业黄页",@"供求商机",@"产品管理",@"企业招聘",@"展会信息"];
+    for (int i=0; i<3; i++) {
+        NSArray *titleArr=@[@"产品管理",@"供求商机",@"企业招聘"];
         UIButton *classMenuBtn =[UIButton buttonWithType:UIButtonTypeCustom];
-        classMenuBtn.frame =CGRectMake(1, 1+i%6*30, kWidth-YYBODERW*2-2, 29);
+        classMenuBtn.frame =CGRectMake(1, 1+i%3*30, kWidth-YYBODERW*2-2, 29);
         classMenuBtn .backgroundColor =[UIColor whiteColor];
         [classMenuBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [classMenuBtn setTitle:titleArr[i] forState:UIControlStateNormal];

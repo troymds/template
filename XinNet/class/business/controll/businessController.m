@@ -11,7 +11,7 @@
 #import "businessDetailsView.h"
 #import "businessTool.h"
 #import "businessModel.h"
-@interface businessController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface businessController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     
     UIButton *_selectedBtn;
@@ -49,20 +49,134 @@
     [self.view addSubview:_orangLin];
     _orangLin.frame =CGRectMake(0, 93, 107, 2);
     _orangLin.backgroundColor =HexRGB(0x38c166);
+
     [self addBigCompanyScrollView];
+    [self addMBprogressView];
 
     [self addbusinessBtn];
     [self addLoadStatus];
+    [self addRefreshViews];
+}
+
+#pragma  mark ------显示指示器
+-(void)addMBprogressView{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
+//    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    
+}
+
+#pragma mark 集成刷新控件
+- (void)addRefreshViews
+{
+    
+    // 2.上拉加载更多
+    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
+    footer.scrollView = _allTableView;
+    footer.scrollView = _supplyTablView;
+
+    footer.scrollView = _demandTablView;
+
+    footer.delegate = self;
+}
+
+#pragma mark 刷新代理方法
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    // 下拉刷新
+    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        // 上拉加载更多
+        [self addLoadStatus:refreshView];
+    } else {
+        
+    }
+    
+    
 }
 #pragma mark ____加载数据
 -(void)addLoadStatus{
-    [businessTool statusesWithSuccess:^(NSArray *statues) {
-        [_allBusinessArray addObjectsFromArray:statues];
-        [self addBusinessAllTableview];
-    }  keywords_Id:nil type_ID:nil category_Id:nil failure:^(NSError *error) {
-        
-    }];
-   }
+    if (_selectedBtn.tag ==20) {
+        [businessTool statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+            
+            [_allBusinessArray removeAllObjects];
+            [_allBusinessArray addObjectsFromArray:statues];
+            [self addLoadTableView];
+        }  keywords_Id:nil type_ID:nil company_Id:nil failure:^(NSError *error) {
+            
+            
+            
+        }];
+    }else if (_selectedBtn.tag==21)
+        [businessTool statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+            [_supplyBusinessArray removeAllObjects];
+            [_supplyBusinessArray addObjectsFromArray:statues];
+            [self addLoadTableView];
+            
+        }  keywords_Id:nil type_ID:@"2" company_Id:nil failure:^(NSError *error) {
+            
+            
+        }];
+    else{
+        [businessTool statusesWithSuccess:^(NSArray *statues) {
+            
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+            [_demandBusinessArray removeAllObjects];
+            [_demandBusinessArray addObjectsFromArray:statues];
+            [self addLoadTableView];
+            
+        }  keywords_Id:nil type_ID:@"1" company_Id:nil failure:^(NSError *error) {
+            
+            
+        }];
+    }
+
+}
+-(void)addLoadStatus:(MJRefreshBaseView *)refreshView{
+        if (_selectedBtn.tag ==20) {
+        [businessTool statusesWithSuccess:^(NSArray *statues) {
+            
+
+            [_allBusinessArray removeAllObjects];
+            [_allBusinessArray addObjectsFromArray:statues];
+            [self addLoadTableView];
+            [refreshView endRefreshing];
+        }  keywords_Id:nil type_ID:nil company_Id:nil failure:^(NSError *error) {
+            
+
+            
+        }];
+    }else if (_selectedBtn.tag==21)
+        [businessTool statusesWithSuccess:^(NSArray *statues) {
+          
+            [_supplyBusinessArray removeAllObjects];
+            [_supplyBusinessArray addObjectsFromArray:statues];
+            [self addLoadTableView];
+            [refreshView endRefreshing];
+
+        }  keywords_Id:nil type_ID:@"2" company_Id:nil failure:^(NSError *error) {
+           
+            
+        }];
+    else{
+        [businessTool statusesWithSuccess:^(NSArray *statues) {
+           
+
+            [_demandBusinessArray removeAllObjects];
+            [_demandBusinessArray addObjectsFromArray:statues];
+            [self addLoadTableView];
+            [refreshView endRefreshing];
+
+        }  keywords_Id:nil type_ID:@"1" company_Id:nil failure:^(NSError *error) {
+            
+            
+        }];
+    }
+}
 #pragma mark背景scrollview
 -(void)addBigCompanyScrollView
 {
@@ -86,7 +200,7 @@
 #pragma mark 全部
 -(void)addBusinessAllTableview
 {
-    _allTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-32-44) style:UITableViewStylePlain];
+    _allTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-32-64) style:UITableViewStylePlain];
     _allTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_BigCompanyScrollView addSubview:_allTableView];
     _allTableView.backgroundColor =[UIColor whiteColor];
@@ -99,7 +213,7 @@
 #pragma mark 供应
 -(void)addBusinessSuplyTableview
 {
-    _supplyTablView =[[UITableView alloc]initWithFrame:CGRectMake(kWidth, 0, kWidth, kHeight-32-44) style:UITableViewStylePlain];
+    _supplyTablView =[[UITableView alloc]initWithFrame:CGRectMake(kWidth, 0, kWidth, kHeight-32-64) style:UITableViewStylePlain];
     _supplyTablView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_BigCompanyScrollView addSubview:_supplyTablView];
     _supplyTablView.backgroundColor =[UIColor whiteColor];
@@ -110,10 +224,16 @@
     
     
 }
+#pragma mark ---刷新表
+-(void)addLoadTableView{
+    [_allTableView reloadData];
+    [_supplyTablView reloadData];
+    [_demandTablView reloadData];
+}
 #pragma mark 求购
 -(void)addBusinessDemandTableview
 {
-    _demandTablView =[[UITableView alloc]initWithFrame:CGRectMake(kWidth*2, 0, kWidth, kHeight-32-44) style:UITableViewStylePlain];
+    _demandTablView =[[UITableView alloc]initWithFrame:CGRectMake(kWidth*2, 0, kWidth, kHeight-32-64) style:UITableViewStylePlain];
     _demandTablView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_BigCompanyScrollView addSubview:_demandTablView];
     _demandTablView.backgroundColor =[UIColor whiteColor];
@@ -138,7 +258,7 @@
             _orangLin.frame = CGRectMake(scrollView.contentOffset.x/3,93, kWidth/3, 2);
         }];
         
-        
+       
         if (scrollView.contentOffset.x==0) {
             for (UIView *subView in companyBackView.subviews) {
                 if ([subView isKindOfClass:[UIButton class]]) {
@@ -180,6 +300,7 @@
             }
         }
     }
+        [self addLoadStatus];
 
     }
     
@@ -194,7 +315,14 @@
     // Dispose of any resources that can be recreated.
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return _allBusinessArray.count  ;
+    if (_selectedBtn.tag ==20) {
+        return _allBusinessArray.count  ;
+
+    }else if(_selectedBtn.tag ==21){
+        return _supplyBusinessArray.count;
+    }else{
+        return _demandBusinessArray.count;
+    }
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -206,19 +334,54 @@
 }
 -(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIndexfider =@"cell";
-    UITableViewCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
-    if (!cell) {
-        cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
-        cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
+    
+    
+    if (_selectedBtn.tag==20) {
+        static NSString *cellIndexfider =@"cell";
+        UITableViewCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
+        if (!cell) {
+            cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
+            cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
+        }
+        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
+        [cell.contentView addSubview:cellLine];
+        cellLine.backgroundColor =HexRGB(0xe6e3e4);
+        businessModel *busineModel =[_allBusinessArray objectAtIndex:indexPath.row];
+        cell.textLabel.text =busineModel.title;
+        cell.imageView.image = [UIImage imageNamed:@"business_img.png"];
+        return cell;
+    }else if (_selectedBtn.tag ==21){
+        static NSString *cellIndexfider =@"cell1";
+        UITableViewCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
+        if (!cell) {
+            cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
+            cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
+        }
+        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
+        [cell.contentView addSubview:cellLine];
+        cellLine.backgroundColor =HexRGB(0xe6e3e4);
+        businessModel *busineModel =[_supplyBusinessArray objectAtIndex:indexPath.row];
+        cell.textLabel.text =busineModel.title;
+        cell.imageView.image = [UIImage imageNamed:@"business_imge.png"];
+        return cell;
+
+    }else{
+        static NSString *cellIndexfider =@"cell2";
+        UITableViewCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
+        if (!cell) {
+            cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
+            cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
+        }
+        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
+        [cell.contentView addSubview:cellLine];
+        cellLine.backgroundColor =HexRGB(0xe6e3e4);
+        businessModel *busineModel =[_demandBusinessArray objectAtIndex:indexPath.row];
+        cell.textLabel.text =busineModel.title;
+        cell.imageView.image = [UIImage imageNamed:@"business_img.png"];
+        return cell;
+
     }
-    UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
-    [cell.contentView addSubview:cellLine];
-    cellLine.backgroundColor =HexRGB(0xe6e3e4);
-    businessModel *busineModel =[_allBusinessArray objectAtIndex:indexPath.row];
-    cell.textLabel.text =busineModel.title;
-    cell.imageView.image = [UIImage imageNamed:@"business_img.png"];
-    return cell;
+    return nil;
 }
 
 -(void)addbusinessBtn{
@@ -263,9 +426,7 @@
 -(void)companyBtnClick:(UIButton *)company
 {
    
-    _selectedBtn.selected = NO;
     _selectedBtn = company;
-    _selectedBtn.selected = YES;
     
     if (company.tag == 20)
     {
@@ -281,7 +442,8 @@
         [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth*2, 0) animated:YES];
            }
 
-    
+    [self addLoadStatus];
+
 }
 
 
