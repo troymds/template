@@ -15,7 +15,7 @@
 #import "UIImageView+WebCache.h"
 #import "categoryLestTool.h"
 #import "categoryLestModel.h"
-@interface marketController ()<UITableViewDataSource,UITableViewDelegate>
+@interface marketController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     UITableView *_tableView;
     UIView *_moreView;
@@ -23,6 +23,7 @@
     UIButton *_moreSelectedBtn;
     NSMutableArray *_marketArray;
     NSMutableArray *_cagegoryArray;
+    NSString *_category_Index;
 }
 @end
 
@@ -36,21 +37,108 @@
     _moreSelectedBtn =[[UIButton alloc]init];
     _marketArray =[[NSMutableArray alloc]init];
     _cagegoryArray=[[NSMutableArray alloc]init];
-
-    
-    [self addloadStatus];
+    _category_Index = [[NSString alloc]init];
+    [self addTableView];
+    [self addRefreshViews];
+    [self addLoadStatus];
 }
--(void)addloadStatus{
+#pragma  mark ------显示指示器
+-(void)addMBprogressView{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
+    
+}
 
+#pragma mark 集成刷新控件
+- (void)addRefreshViews
+{
+       
+    // 2.上拉加载更多
+    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
+    footer.scrollView = _tableView;
+    footer.delegate = self;
+}
+
+#pragma mark 刷新代理方法
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    // 下拉刷新
+    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        // 上拉加载更多
+        [self addloadStatus:refreshView];
+    } else {
+       
+    }
+    
+    
+}
+-(void)addLoadStatus{
+    [self addMBprogressView];
     [marketTOOL statusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        [_marketArray removeAllObjects];
+        
         [_marketArray addObjectsFromArray:statues];
-        [self addTableView];
+        
+        [_tableView reloadData];
     }  keywords_Id:nil category_Id:nil failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
         
     }];
+
+}
+#pragma mark---加载全部数据
+-(void)addloadStatus:(MJRefreshBaseView *)refreshView{
+     [self addMBprogressView];
+    if (_moreSelectedBtn.tag ==30) {
+        [marketTOOL statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+            [_marketArray removeAllObjects];
+            [_marketArray addObjectsFromArray:statues];
+            
+            [_tableView reloadData];
+            [refreshView endRefreshing];
+        }  keywords_Id:nil category_Id:_category_Index failure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+        }];
+    }else if (_moreSelectedBtn.tag==31){
+        [marketTOOL statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+            [_marketArray removeAllObjects];
+
+            [_marketArray addObjectsFromArray:statues];
+            [_tableView reloadData];
+            [refreshView endRefreshing];
+            
+        }  keywords_Id:nil category_Id:@"4" failure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+            
+        }];
+    }else{
+    [marketTOOL statusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+        [_marketArray removeAllObjects];
+
+        [_marketArray addObjectsFromArray:statues];
+        [_tableView reloadData];
+        [refreshView endRefreshing];
+        
+    }  keywords_Id:nil category_Id:nil failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+        
+    }];
+    }
 }
 -(void)addTableView{
-    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-64) style:UITableViewStylePlain];
+    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight) style:UITableViewStylePlain];
     _tableView.delegate =self;
     _tableView.dataSource =self;
     _tableView.backgroundColor =[UIColor whiteColor];
@@ -61,7 +149,7 @@
     [self.view addSubview:_tableView];
 
 }
-
+#pragma mark---分类
 -(void)addMoreView{
     
     _moreView =[[UIView alloc]initWithFrame:CGRectMake(kWidth-100, 64, 100, _cagegoryArray.count*31)];
@@ -74,12 +162,15 @@
         UIButton *moreBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         moreBtn.frame =CGRectMake(1, i%6*31, 99, 30);
         moreBtn .backgroundColor =[UIColor whiteColor];
-        moreBtn.contentHorizontalAlignment =UIControlContentHorizontalAlignmentLeft;
+        moreBtn.contentHorizontalAlignment =UIControlContentHorizontalAlignmentCenter;
         [moreBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [moreBtn setTitle:categoryModel.categoryNmae forState:UIControlStateNormal];
         [_moreView addSubview:moreBtn];
         [moreBtn addTarget:self action:@selector(moreBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         moreBtn.selected = _moreSelectedBtn.selected;
+       
+        moreBtn.tag = 30+i;
+       
 
     }
     
@@ -97,11 +188,11 @@
     
     [_bigButton addTarget:self action:@selector(bigButtonClick:) forControlEvents:UIControlEventTouchUpInside];
 }
+#pragma mark--分类加载数据
 -(void)categoryBtnClick:(UIButton *)more{
     [categoryLestTool statusesWithSuccess:^(NSArray *statues) {
         [_cagegoryArray removeAllObjects];
         [_cagegoryArray addObjectsFromArray:statues];
-        NSLog(@"%lu",(unsigned long)_cagegoryArray.count);
         
         if (_moreSelectedBtn.selected ==YES) {
             [self addBigButton];
@@ -127,10 +218,15 @@
 }
 //下拉菜单
 -(void)moreBtnClick:(UIButton *)mor{
-    
+    categoryLestModel *categoryModel =[_cagegoryArray objectAtIndex:mor.tag-30];
+    _category_Index = categoryModel.typeID;
+    _moreSelectedBtn.tag = mor.tag;
     _moreSelectedBtn.selected =!_moreSelectedBtn.selected;
     [_bigButton removeFromSuperview];
     [_moreView removeFromSuperview];
+    
+   
+    
     
 }
 #pragma mark---TableViewDelegate

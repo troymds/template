@@ -11,6 +11,8 @@
 #import "interfaceCell.h"
 #import "interfaceModel.h"
 #import "interfaceTool.h"
+#import "categoryLestTool.h"
+#import "categoryLestModel.h"
 @interface interfaceController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
     
@@ -22,6 +24,9 @@
     UITableView *_supplyTablView;
     UITableView *_demandTablView;
     NSMutableArray *_interfaceArray;
+    
+    NSMutableArray *_categoryArray;
+    NSString *_categoryIndex;
     
 }
 @property(nonatomic ,strong)UIScrollView *BigCompanyScrollView;
@@ -38,25 +43,65 @@
     self.title =@"展会信息";
    
     _interfaceArray =[NSMutableArray array];
+    _categoryArray =[NSMutableArray array];
+    _categoryIndex=[[NSString alloc]init];
 
     _orangLin =[[UIView alloc]init];
     [self.view addSubview:_orangLin];
     _orangLin.frame =CGRectMake(0, 93, 107, 2);
     _orangLin.backgroundColor =HexRGB(0x38c166);
 
-    [self addbusinessBtn];
     [self addLoadStatus];
+    [self addLoadcategoryStatus];
 }
 
 #pragma mark---加载数据
 -(void)addLoadStatus{
+    if (_selectedBtn.tag ==21) {
+        [interfaceTool statusesWithSuccess:^(NSArray *statues) {
+            [_interfaceArray removeAllObjects];
+            [_interfaceArray addObjectsFromArray:statues];
+            [self addBigCompanyScrollView];
+            
+            [self addloadTableView];
+        } company_Id:nil keywords_Str:nil category_Id:_categoryIndex failure:^(NSError *error) {
+            
+        }];
+    }else if (_selectedBtn.tag==22){
+        [interfaceTool statusesWithSuccess:^(NSArray *statues) {
+            [_interfaceArray removeAllObjects];
+
+            [_interfaceArray addObjectsFromArray:statues];
+            [self addBigCompanyScrollView];
+            [self addloadTableView];
+
+        } company_Id:nil keywords_Str:nil category_Id:_categoryIndex failure:^(NSError *error) {
+            
+        }];
+    }else{
     [interfaceTool statusesWithSuccess:^(NSArray *statues) {
+        [_interfaceArray removeAllObjects];
+
         [_interfaceArray addObjectsFromArray:statues];
         [self addBigCompanyScrollView];
+        [self addloadTableView];
 
-    } company_Id:nil keywords_Str:nil category_Id:nil failure:^(NSError *error) {
+    } company_Id:nil keywords_Str:nil category_Id:_categoryIndex failure:^(NSError *error) {
         
     }];
+    }
+}
+#pragma mark ____加载分类数据
+-(void)addLoadcategoryStatus{
+    
+    [categoryLestTool statusesWithSuccess:^(NSArray *statues) {
+        [_categoryArray removeAllObjects];
+        [_categoryArray addObjectsFromArray:statues];
+        [self addbusinessBtn];
+    } entity_Type:@"7" failure:^(NSError *error) {
+        
+    }];
+    
 }
 #pragma mark背景scrollview
 -(void)addBigCompanyScrollView
@@ -116,7 +161,11 @@
     _demandTablView.dataSource = self;
     
 }
-
+-(void)addloadTableView{
+    [_demandTablView reloadData];
+    [_supplyTablView reloadData];
+    [_allTableView reloadData];
+}
 #pragma mark  ------scrollview_delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -229,7 +278,8 @@
     
     for (int p=0; p<3; p++)
     {
-        NSArray *companyArr =@[@"全部",@"供应",@"求购"];
+        categoryLestModel *cateModel =[_categoryArray objectAtIndex:p];
+        
         UIButton *companyBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [companyBackView addSubview:companyBtn];
         
@@ -239,7 +289,7 @@
         [companyBtn setBackgroundImage:[UIImage imageNamed:@"deleteBtn _selected.png"] forState:UIControlStateHighlighted];
         companyBtn.frame =CGRectMake(0+p%3*kWidth/3, 0, kWidth/3, 30);
         companyBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
-        [companyBtn setTitle:companyArr[p] forState:UIControlStateNormal];
+        [companyBtn setTitle:cateModel.categoryNmae forState:UIControlStateNormal];
         
         companyBtn.tag =20+p;
         
@@ -256,10 +306,10 @@
 
 -(void)companyBtnClick:(UIButton *)company
 {
-    NSLog(@"ddddd");
-    _selectedBtn.selected = NO;
+    categoryLestModel *cateModel =[_categoryArray objectAtIndex:company.tag-20];
+    _categoryIndex = cateModel.typeID;
+
     _selectedBtn = company;
-    _selectedBtn.selected = YES;
     
     if (company.tag == 20)
     {
@@ -274,7 +324,7 @@
     {
         [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth*2, 0) animated:YES];
     }
-    
+    [self addLoadStatus];
     
 }
 

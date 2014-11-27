@@ -13,7 +13,7 @@
 #import "categoryLestModel.h"
 #import "companyListModel.h"
 #import "companyListTool.h"
-@interface companyYellowController ()<UITableViewDelegate,UITableViewDataSource>
+@interface companyYellowController ()<UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate>
 {
     UITableView *_tableView;
     NSMutableArray *_companyArray;
@@ -27,20 +27,60 @@
     self.title=@"企业黄页";
     self.view.backgroundColor =[UIColor whiteColor];
     _companyArray =[[NSMutableArray alloc]init];
-    [self addLoadStatus];
+    [self addLoadStatus:nil];
+    [self addTableView];
+    [self addMBprogressView];
+    [self addRefreshViews];
 }
+#pragma  mark ------显示指示器
+-(void)addMBprogressView{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
+    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+}
+
+#pragma mark 集成刷新控件
+- (void)addRefreshViews
+{
+    
+    // 2.上拉加载更多
+    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
+    footer.scrollView = _tableView;
+    footer.delegate = self;
+}
+
+#pragma mark 刷新代理方法
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    // 下拉刷新
+    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        // 上拉加载更多
+        [self addLoadStatus:refreshView];
+    } else {
+        
+    }
+    
+    
+}
+
 #pragma mark ----加载数据
--(void)addLoadStatus{
+-(void)addLoadStatus:(MJRefreshBaseView *)refreshView{
 
     [companyListTool statusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [_companyArray removeAllObjects];
         [_companyArray addObjectsFromArray:statues];
-        [self addTableView];
+        [_tableView reloadData];
+        [refreshView endRefreshing];
     }  keywords_Id:nil failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
         
     }];
 }
 -(void)addTableView{
-    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-64) style:UITableViewStylePlain];
+    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight) style:UITableViewStylePlain];
     _tableView.delegate =self;
     _tableView.dataSource =self;
     _tableView.backgroundColor =[UIColor whiteColor];

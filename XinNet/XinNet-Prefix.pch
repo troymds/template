@@ -19,6 +19,9 @@
 
 #import"AppMacro.h"
 #import "UIBarButtonItem+MJ.h"
+#import "MJRefreshBaseView.h"
+#import "MBProgressHUD.h"
+#import "MJRefreshFooterView.h"
 
 #ifdef DEBUG
 #define MYNSLog(...) NSLog(__VA_ARGS__)

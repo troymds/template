@@ -182,6 +182,18 @@
 		55B617CF1A240FA300088E39 /* on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B617C41A240FA300088E39 /* on@2x.png */; };
 		55B617D01A240FA300088E39 /* right_sore@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B617C51A240FA300088E39 /* right_sore@2x.png */; };
 		55B617D31A240FF300088E39 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B617D21A240FF300088E39 /* AppDelegate.m */; };
+		55B617FC1A241DB000088E39 /* businessDetailsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B617F41A241DB000088E39 /* businessDetailsModel.m */; };
+		55B617FD1A241DB000088E39 /* businessModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B617F61A241DB000088E39 /* businessModel.m */; };
+		55B617FE1A241DB000088E39 /* businessDetailsTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B617F91A241DB000088E39 /* businessDetailsTool.m */; };
+		55B617FF1A241DB000088E39 /* businessTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B617FB1A241DB000088E39 /* businessTool.m */; };
+		55B6180C1A244C0300088E39 /* productModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B618081A244C0300088E39 /* productModel.m */; };
+		55B6180D1A244C0300088E39 /* productTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B6180B1A244C0300088E39 /* productTool.m */; };
+		55B618121A244C7600088E39 /* ListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B6180F1A244C7600088E39 /* ListView.m */; };
+		55B618161A24503600088E39 /* productDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B618151A24503600088E39 /* productDetailModel.m */; };
+		55B618191A24504C00088E39 /* productDetailTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B618181A24504C00088E39 /* productDetailTool.m */; };
+		55B6181E1A245EEF00088E39 /* interfaceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B6181D1A245EEF00088E39 /* interfaceModel.m */; };
+		55B618261A24606600088E39 /* companyJobModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B618251A24606600088E39 /* companyJobModel.m */; };
+		55B618291A24607A00088E39 /* companyJobTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B618281A24607A00088E39 /* companyJobTool.m */; };
 		55B96C891A1F12E600876892 /* Loa_img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B96C881A1F12E600876892 /* Loa_img@2x.png */; };
 		55BA01141A1D752400D19D4E /* finish@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55BA01121A1D752400D19D4E /* finish@2x.png */; };
 		55BA01151A1D752400D19D4E /* finish1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55BA01131A1D752400D19D4E /* finish1@2x.png */; };
@@ -246,6 +258,15 @@
 		55D539371A22C15A007400F6 /* search_img.png in Resources */ = {isa = PBXBuildFile; fileRef = 55D5391F1A22C15A007400F6 /* search_img.png */; };
 		55D539381A22C15A007400F6 /* search_kuang.png in Resources */ = {isa = PBXBuildFile; fileRef = 55D539201A22C15A007400F6 /* search_kuang.png */; };
 		55D539391A22C15A007400F6 /* reture_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55D539221A22C15A007400F6 /* reture_right@2x.png */; };
+		F34D525A1A257318001947B0 /* interfaceTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B618201A245EFB00088E39 /* interfaceTool.m */; };
+		F34D52691A257461001947B0 /* myCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F34D525E1A257461001947B0 /* myCommentCell.m */; };
+		F34D526A1A257461001947B0 /* CommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = F34D52611A257461001947B0 /* CommentController.m */; };
+		F34D526B1A257461001947B0 /* commentModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F34D52641A257461001947B0 /* commentModel.m */; };
+		F34D526C1A257461001947B0 /* commentDataTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F34D52671A257461001947B0 /* commentDataTool.m */; };
+		F34D52701A25AF05001947B0 /* commentPublished.m in Sources */ = {isa = PBXBuildFile; fileRef = F34D526F1A25AF05001947B0 /* commentPublished.m */; };
+		F34D52731A25B733001947B0 /* morecell.m in Sources */ = {isa = PBXBuildFile; fileRef = F34D52721A25B733001947B0 /* morecell.m */; };
+		F34D52761A25CB6D001947B0 /* collectionHttpTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F34D52751A25CB6D001947B0 /* collectionHttpTool.m */; };
+		F34D52791A25CC58001947B0 /* collectionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F34D52781A25CC58001947B0 /* collectionModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -654,6 +675,22 @@
 		55D5391F1A22C15A007400F6 /* search_img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search_img.png; sourceTree = "<group>"; };
 		55D539201A22C15A007400F6 /* search_kuang.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search_kuang.png; sourceTree = "<group>"; };
 		55D539221A22C15A007400F6 /* reture_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reture_right@2x.png"; sourceTree = "<group>"; };
+		F34D525D1A257461001947B0 /* myCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myCommentCell.h; sourceTree = "<group>"; };
+		F34D525E1A257461001947B0 /* myCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = myCommentCell.m; sourceTree = "<group>"; };
+		F34D52601A257461001947B0 /* CommentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentController.h; sourceTree = "<group>"; };
+		F34D52611A257461001947B0 /* CommentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentController.m; sourceTree = "<group>"; };
+		F34D52631A257461001947B0 /* commentModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = commentModel.h; sourceTree = "<group>"; };
+		F34D52641A257461001947B0 /* commentModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = commentModel.m; sourceTree = "<group>"; };
+		F34D52661A257461001947B0 /* commentDataTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = commentDataTool.h; sourceTree = "<group>"; };
+		F34D52671A257461001947B0 /* commentDataTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = commentDataTool.m; sourceTree = "<group>"; };
+		F34D526E1A25AF05001947B0 /* commentPublished.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = commentPublished.h; sourceTree = "<group>"; };
+		F34D526F1A25AF05001947B0 /* commentPublished.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = commentPublished.m; sourceTree = "<group>"; };
+		F34D52711A25B733001947B0 /* morecell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = morecell.h; sourceTree = "<group>"; };
+		F34D52721A25B733001947B0 /* morecell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = morecell.m; sourceTree = "<group>"; };
+		F34D52741A25CB6D001947B0 /* collectionHttpTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = collectionHttpTool.h; sourceTree = "<group>"; };
+		F34D52751A25CB6D001947B0 /* collectionHttpTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = collectionHttpTool.m; sourceTree = "<group>"; };
+		F34D52771A25CC58001947B0 /* collectionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = collectionModel.h; sourceTree = "<group>"; };
+		F34D52781A25CC58001947B0 /* collectionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = collectionModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -939,14 +976,7 @@
 		556EB07D1A1B598F006D5E0F /* class */ = {
 			isa = PBXGroup;
 			children = (
-				5595EBCB1A25E248000D4AB1 /*  market */,
-				5595EBE81A25E248000D4AB1 /* about */,
-				5595EBF21A25E248000D4AB1 /* business */,
-				5595EC031A25E248000D4AB1 /* companyJob */,
-				5595EC121A25E248000D4AB1 /* companyYellow */,
-				5595EC2B1A25E248000D4AB1 /* interface */,
-				5595EC3A1A25E248000D4AB1 /* product */,
-				5595EC4F1A25E248000D4AB1 /* search */,
+				F34D525B1A257461001947B0 /* commnt */,
 				55B6176F1A240CDA00088E39 /* Me */,
 				556EB0AB1A1B598F006D5E0F /* home */,
 				556EB0BB1A1B598F006D5E0F /* more */,
@@ -1867,6 +1897,69 @@
 			path = nav_img;
 			sourceTree = "<group>";
 		};
+		F34D525B1A257461001947B0 /* commnt */ = {
+			isa = PBXGroup;
+			children = (
+				F34D525C1A257461001947B0 /* cell */,
+				F34D525F1A257461001947B0 /* control */,
+				F34D52621A257461001947B0 /* model */,
+				F34D52651A257461001947B0 /* tool */,
+				F34D52681A257461001947B0 /* view */,
+			);
+			path = commnt;
+			sourceTree = "<group>";
+		};
+		F34D525C1A257461001947B0 /* cell */ = {
+			isa = PBXGroup;
+			children = (
+				F34D525D1A257461001947B0 /* myCommentCell.h */,
+				F34D525E1A257461001947B0 /* myCommentCell.m */,
+				F34D52711A25B733001947B0 /* morecell.h */,
+				F34D52721A25B733001947B0 /* morecell.m */,
+			);
+			path = cell;
+			sourceTree = "<group>";
+		};
+		F34D525F1A257461001947B0 /* control */ = {
+			isa = PBXGroup;
+			children = (
+				F34D52601A257461001947B0 /* CommentController.h */,
+				F34D52611A257461001947B0 /* CommentController.m */,
+			);
+			path = control;
+			sourceTree = "<group>";
+		};
+		F34D52621A257461001947B0 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				F34D52631A257461001947B0 /* commentModel.h */,
+				F34D52641A257461001947B0 /* commentModel.m */,
+				F34D52771A25CC58001947B0 /* collectionModel.h */,
+				F34D52781A25CC58001947B0 /* collectionModel.m */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		F34D52651A257461001947B0 /* tool */ = {
+			isa = PBXGroup;
+			children = (
+				F34D52661A257461001947B0 /* commentDataTool.h */,
+				F34D52671A257461001947B0 /* commentDataTool.m */,
+				F34D526E1A25AF05001947B0 /* commentPublished.h */,
+				F34D526F1A25AF05001947B0 /* commentPublished.m */,
+				F34D52741A25CB6D001947B0 /* collectionHttpTool.h */,
+				F34D52751A25CB6D001947B0 /* collectionHttpTool.m */,
+			);
+			path = tool;
+			sourceTree = "<group>";
+		};
+		F34D52681A257461001947B0 /* view */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2043,6 +2136,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F34D525A1A257318001947B0 /* interfaceTool.m in Sources */,
 				55B6179E1A240CDA00088E39 /* SubscripMsgCell.m in Sources */,
 				556EB0EF1A1B598F006D5E0F /* moreController.m in Sources */,
 				5595EC5C1A25E248000D4AB1 /* markertDetailsView.m in Sources */,
@@ -2060,6 +2154,8 @@
 				55D015F01A22D69D00F9D475 /* UIImageView+WebCache.m in Sources */,
 				5595EC631A25E248000D4AB1 /* aboutTool.m in Sources */,
 				55D015DB1A22D69D00F9D475 /* AFXMLRequestOperation.m in Sources */,
+				F34D526A1A257461001947B0 /* CommentController.m in Sources */,
+				55D0160D1A22FECD00F9D475 /* marketModel.m in Sources */,
 				55D015E01A22D69D00F9D475 /* MJRefreshBaseView.m in Sources */,
 				55D015ED1A22D69D00F9D475 /* UIImage+GIF.m in Sources */,
 				04AAECBF1A1ED11800B5254B /* MoreListView.m in Sources */,
@@ -2090,7 +2186,9 @@
 				55B617A41A240CDA00088E39 /* SystemMsgItem.m in Sources */,
 				5595EC641A25E248000D4AB1 /* businessController.m in Sources */,
 				55D015E81A22D69D00F9D475 /* SDWebImageDownloader.m in Sources */,
-				5595EC651A25E248000D4AB1 /* businessDetailsModel.m in Sources */,
+				556EB0EA1A1B598F006D5E0F /* companyDetailsView.m in Sources */,
+				F34D52701A25AF05001947B0 /* commentPublished.m in Sources */,
+				556EB0F41A1B598F006D5E0F /* productDetailsView.m in Sources */,
 				55B617AA1A240CDA00088E39 /* MyMsgController.m in Sources */,
 				55D015D51A22D69D00F9D475 /* AFHTTPRequestOperation.m in Sources */,
 				55B617AB1A240CDA00088E39 /* NextRegisterController.m in Sources */,
@@ -2124,12 +2222,20 @@
 				04AEC47C1A242BF60030E3E9 /* ProAlertView.m in Sources */,
 				55D015DA1A22D69D00F9D475 /* AFURLConnectionOperation.m in Sources */,
 				04AAECA71A1ED06500B5254B /* SquareUserItem.m in Sources */,
-				5595EC701A25E248000D4AB1 /* companyDetailsModel.m in Sources */,
-				04F8CE511A25815F005A7FDE /* GTMBase64.m in Sources */,
+				F34D526B1A257461001947B0 /* commentModel.m in Sources */,
+				55B617FC1A241DB000088E39 /* businessDetailsModel.m in Sources */,
+				55B617FE1A241DB000088E39 /* businessDetailsTool.m in Sources */,
 				55D015D71A22D69D00F9D475 /* AFJSONRequestOperation.m in Sources */,
 				55D015FB1A22D8C800F9D475 /* NSString+MD5.m in Sources */,
 				04AEC4651A2424B30030E3E9 /* PublishController.m in Sources */,
+				55B96C931A1F229900876892 /* productCell.m in Sources */,
+				55D016221A23198300F9D475 /* mardetDetailsTool.m in Sources */,
+				556EB0EB1A1B598F006D5E0F /* companyYellowCell.m in Sources */,
+				55D016251A2331D600F9D475 /* categoryLestTool.m in Sources */,
+				F34D52791A25CC58001947B0 /* collectionModel.m in Sources */,
+				04AAEC681A1ECF6F00B5254B /* aboutController.m in Sources */,
 				55D015F41A22D69D00F9D475 /* UIScrollView+SVPullToRefresh.m in Sources */,
+				F34D52761A25CB6D001947B0 /* collectionHttpTool.m in Sources */,
 				04AAECC41A1ED14700B5254B /* SettingController.m in Sources */,
 				55D015D91A22D69D00F9D475 /* AFPropertyListRequestOperation.m in Sources */,
 				5595EC601A25E248000D4AB1 /* YYSearchButton.m in Sources */,
@@ -2153,7 +2259,7 @@
 				04F8CE541A25A6AE005A7FDE /* UserItem.m in Sources */,
 				04AEC48A1A24728A0030E3E9 /* CategoryListView.m in Sources */,
 				55D015E61A22D69D00F9D475 /* SDWebImageCompat.m in Sources */,
-				5595EC5B1A25E248000D4AB1 /* marketTOOL.m in Sources */,
+				F34D52691A257461001947B0 /* myCommentCell.m in Sources */,
 				04AEC45C1A2423340030E3E9 /* SubscribController.m in Sources */,
 				5595EC591A25E248000D4AB1 /* categoryLestTool.m in Sources */,
 				55D015E41A22D69D00F9D475 /* NSData+GIF.m in Sources */,
@@ -2165,7 +2271,10 @@
 				5595EC671A25E248000D4AB1 /* businessDetailsTool.m in Sources */,
 				55B6179A1A240CDA00088E39 /* CommentCell.m in Sources */,
 				55B617B81A240F2800088E39 /* GlobalInstance.m in Sources */,
-				5595EC861A25E248000D4AB1 /* searchTableViewController.m in Sources */,
+				F34D52731A25B733001947B0 /* morecell.m in Sources */,
+				F34D526C1A257461001947B0 /* commentDataTool.m in Sources */,
+				55B617651A240A5700088E39 /* companyDetailTool.m in Sources */,
+				556EB0E91A1B598F006D5E0F /* companyYellowController.m in Sources */,
 				04B68CAE1A1B5851002A35AF /* main.m in Sources */,
 				5595EC821A25E248000D4AB1 /* productDetailTool.m in Sources */,
 				5595EC711A25E248000D4AB1 /* companyListModel.m in Sources */,
@@ -2341,6 +2450,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "XinNet/XinNet-Prefix.pch";
 				INFOPLIST_FILE = XinNet/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2383,6 +2493,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "XinNet/XinNet-Prefix.pch";
 				INFOPLIST_FILE = XinNet/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
