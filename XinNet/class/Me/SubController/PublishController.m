@@ -10,6 +10,7 @@
 #import "AdaptationSize.h"
 #import "httpTool.h"
 #import "RemindView.h"
+#import "DemandDetailItem.h"
 
 #define topDistance 11
 #define leftDistance 10
@@ -42,8 +43,6 @@
     }
     // Do any additional setup after loading the view.
     
-    NSLog(@"%f,%f,%f,%f",self.view.frame.origin.x,self.view.frame.origin.y,self.view.frame.size.width,self.view.frame.size.height);
-    
     [self addView];
 
     //键盘隐藏通知
@@ -60,7 +59,31 @@
 //编辑页面加载数据
 - (void)loadData
 {
-    
+    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:self.uid,@"id", nil];
+    [httpTool postWithPath:@"getDemandDetail" params:param success:^(id JSON) {
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        int code = [[dic objectForKey:@"code"]intValue];
+        if (code ==100) {
+            NSDictionary *data = [dic objectForKey:@"data"];
+            DemandDetailItem *item = [[DemandDetailItem alloc] initWithDic:data];
+            [self addDataToInterface:item];
+        }else{
+            NSString *msg =[dic objectForKey:@"msg"];
+            [RemindView showViewWithTitle:msg location:MIDDLE];
+        }
+    } failure:^(NSError *error) {
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+    }];
+}
+
+//添加要编辑的数据
+- (void)addDataToInterface:(DemandDetailItem *)item
+{
+    titleField.text = item.title;
+    numField.text = item.num;
+    contentView.text = item.content;
+    contentView.textColor = [UIColor blackColor];
 }
 
 - (void)keyboardWillHiden
@@ -154,13 +177,25 @@
 - (void)btnDown
 {
     if ([self checkData]) {
-        NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:titleField.text,@"title",numField.text,@"num",contentView.text,@"content", nil];
-        [httpTool postWithPath:@"addDemand" params:param success:^(id JSON) {
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:titleField.text,@"title",numField.text,@"num",contentView.text,@"content", nil];
+        NSString *path = @"addDemand";
+        if (!_isPublish) {
+            [param setObject:self.uid forKey:@"id"];
+            path = @"updateDemand";
+        }
+        [httpTool postWithPath:path params:param success:^(id JSON) {
             NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
             NSDictionary *dic = [result objectForKey:@"response"];
             int code = [[dic objectForKey:@"code"]intValue];
             if (code == 100) {
-                [RemindView showViewWithTitle:@"发布成功" location:MIDDLE];
+                NSString *data;
+                if (_isPublish) {
+                    data = @"发布成功";
+                }else{
+                    data = @"修改成功";
+                }
+                [RemindView showViewWithTitle:data location:MIDDLE];
+                [self.navigationController popViewControllerAnimated:YES];
             }else{
                 NSString *msg = [dic objectForKey:@"msg"];
                 [RemindView showViewWithTitle:msg location:MIDDLE];
@@ -200,10 +235,12 @@
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
     activeText = textView;
-    if (!isFisrtEdit) {
-        isFisrtEdit = YES;
-        textView.text = @"";
-        textView.textColor = HexRGB(0x3a3a3a);
+    if (self.isPublish) {
+        if (!isFisrtEdit) {
+            isFisrtEdit = YES;
+            textView.text = @"";
+            textView.textColor = [UIColor blackColor];
+        }
     }
     if (bottomView.frame.origin.y>=0) {
         [UIView animateWithDuration:0.5 animations:^{

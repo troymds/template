@@ -48,7 +48,8 @@
 //设备屏幕尺寸
 #define kHeight   [UIScreen mainScreen].bounds.size.height
 #define kWidth    [UIScreen mainScreen].bounds.size.width
-
+//app高度
+#define KAppH    [UIScreen mainScreen].applicationFrame.size.height
 //拨打电话
 #define canTel                 [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel:"]
 #define tel(phoneNumber)      [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",phoneNumber]]]

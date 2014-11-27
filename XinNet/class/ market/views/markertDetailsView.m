@@ -12,10 +12,16 @@
 #import <ShareSDK/ShareSDK.h>
 #import "mardetDetailsModel.h"
 #import "mardetDetailsTool.h"
+#import "CommentController.h"
+#import "collectionModel.h"
+#import "collectionHttpTool.h"
+#import "RemindView.h"
+
 @interface markertDetailsView ()<YYalertViewDelegate>
 {
     mardetDetailsModel *mardetModel;
 }
+@property (nonatomic, strong)NSString *collectionId;
 @end
 
 @implementation markertDetailsView
@@ -78,6 +84,37 @@
 -(void)collectionBtn:(UIButton *)sender{
     if (sender.tag == 2001) {
         [self share];
+    }else
+    {
+        if ([sender.titleLabel.text isEqualToString:@"收藏"]) {//收藏
+            [collectionHttpTool addCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
+                if (code == 100) {
+                    [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
+                    collectionModel *model = [data objectAtIndex:0];
+                    [sender setTitle:@"取消收藏" forState:UIControlStateNormal];
+                    self.collectionId = model.data;
+                }else
+                {
+                    [RemindView showViewWithTitle:msg location:MIDDLE];
+                }
+                
+            } entityId:_markIndex entityType:@"1" withFailure:^(NSError *error) {
+                
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            }];
+        }else//取消收藏
+        {
+            [collectionHttpTool cancleCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
+                
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+                [sender setTitle:@"收藏" forState:UIControlStateNormal];
+                NSLog(@"取消收藏成功");
+            } collectionId:self.collectionId withFailure:^(NSError *error) {
+                
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            }];
+        }
+
     }
 }
 
@@ -192,9 +229,13 @@
     
 }
 -(void)writeBtnClick:(UIButton *)write{
-    YYalertView *aleartView =[[YYalertView alloc]init];
-    aleartView.delegate = self;
-    [aleartView showView ];
+//    YYalertView *aleartView =[[YYalertView alloc]init];
+//    aleartView.delegate = self;
+//    [aleartView showView ];
+    
+    CommentController *ctl = [[CommentController alloc] init];
+    ctl.entityID = _markIndex;
+    [self.navigationController pushViewController:ctl animated:YES];
     
 }
 @end

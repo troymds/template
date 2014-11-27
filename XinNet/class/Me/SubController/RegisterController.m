@@ -206,8 +206,10 @@
                     NSDictionary *dic = [result objectForKey:@"response"];
                     int code = [[dic objectForKey:@"code"] intValue];
                     if (code == 100) {
-                        NSLog(@"%@",result);
+                        NSString *data = [NSString stringWithFormat:@"%d",[dic[@"data"] intValue]];
+                        [SystemConfig sharedInstance].uid = data;
                         PersonalController *PC = [[PersonalController alloc] init];
+                        PC.email = _userNameField.text;
                         [self.navigationController pushViewController:PC animated:YES];
                     }else{
                         NSString *msg= [dic objectForKey:@"msg"];

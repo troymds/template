@@ -11,5 +11,6 @@
 @interface PublishController : UIViewController
 
 @property (nonatomic,assign) BOOL isPublish;  //用于判断是求购发布页面还是编辑页面
+@property (nonatomic,copy) NSString *uid;
 
 @end

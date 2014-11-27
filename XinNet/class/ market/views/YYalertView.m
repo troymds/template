@@ -68,7 +68,7 @@
                 
         findBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
         findBtn.frame = CGRectMake(20, 10,50,20);
-        findBtn.tag = FIND_TYPE;
+        findBtn.tag = cancleType;
         [findBtn addTarget:self action:@selector(buttonDown:) forControlEvents:UIControlEventTouchUpInside];
         [findBtn setTitle:@"取消" forState:UIControlStateNormal];
         findBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
@@ -77,7 +77,7 @@
         
         registerBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
         registerBtn.frame = CGRectMake(kWidth-110, 10, 50, 20);
-        registerBtn.tag = REGIST_TYPE;
+        registerBtn.tag = comformType;
         [registerBtn addTarget:self action:@selector(buttonDown:) forControlEvents:UIControlEventTouchUpInside];
         [registerBtn setTitle:@"确定" forState:UIControlStateNormal];
         registerBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
@@ -140,19 +140,16 @@
 
 - (void)buttonDown:(UIButton *)btn{
     if (self.delegate) {
-//        UIViewController *viewController = (UIViewController *)self.delegate;
-
-        if (btn.tag==FIND_TYPE) {
+        if (btn.tag==cancleType) {
             [self dismissView];
             
         }
-        if (btn.tag == REGIST_TYPE) {
+        if (btn.tag == comformType) {
             [self dismissView];
-//            markertWriteSucess *markertVC=[[markertWriteSucess alloc]init];
-//            [viewController.navigationController pushViewController:markertVC animated:YES];
-            [RemindView showViewWithTitle:@"评论成功！" location:MIDDLE];
-
-                   }
+            if ([self.delegate respondsToSelector:@selector(btnDown:conent:)]) {
+                [self.delegate btnDown:btn conent:_userField.text];
+            }
+        }
         
     }
 }

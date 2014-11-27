@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface DemandDetailController : UIViewController
+@property(nonatomic,retain)NSString *businessDetailIndex;
 
 @end
