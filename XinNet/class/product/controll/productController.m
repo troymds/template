@@ -13,7 +13,7 @@
 #import "productTool.h"
 #import "categoryLestModel.h"
 #import "categoryLestTool.h"
-@interface productController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface productController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     
     UIButton *_selectedBtn;
@@ -25,12 +25,16 @@
     UITableView *_demandTablView;
     
     NSMutableArray *_productArray;
+    NSMutableArray *_productArray2;
+    NSMutableArray *_productArray3;
     NSMutableArray *_categoryArray;
     NSString *_productNstrIndex;
-    
+    MJRefreshFooterView *_footer;
+    BOOL isLoadMore;//判断是否加载更多
 }
 @property(nonatomic ,strong)UIScrollView *BigCompanyScrollView;
-
+@property (nonatomic,assign) NSInteger pageNum;//页数
+@property (nonatomic,strong) NSString *page;//页数
 
 @end
 
@@ -44,10 +48,20 @@
     
     _productArray =[[NSMutableArray alloc]init];
     _categoryArray =[NSMutableArray array];
+    _productArray2 =[[NSMutableArray alloc]init];
+    _productArray3 =[[NSMutableArray alloc]init];
     _productNstrIndex=[[NSString alloc]init];
+    
+    _pageNum = 1;
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+    
     [self addLineView];
-    [self addLoadStatus];
+    [self addMBprogressView];
+    [self addBigCompanyScrollView];
+    [self addRefreshViews];
+
     [self addLoadcategoryStatus];
+    [self addLoadStatus];
 }
 #pragma mark ---滑动线条
 -(void)addLineView{
@@ -56,18 +70,117 @@
     _orangLin.frame =CGRectMake(0, 93, 107, 2);
     _orangLin.backgroundColor =HexRGB(0x38c166);
 }
+
+#pragma  mark ------显示指示器
+-(void)addMBprogressView{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
+    //    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    
+}
+
+#pragma mark 集成刷新控件
+- (void)addRefreshViews
+{
+    // 1.上拉加载更多
+    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
+    footer.scrollView = _allTableView;
+    footer.delegate = self;
+    _footer = footer;
+    isLoadMore = NO;
+}
+
+#pragma mark 刷新代理方法
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        // 上拉加载更多
+        [self addLoadStatus:refreshView];
+    }
+}
+
+
+#pragma mark 加载更多
+-(void)addLoadStatus:(MJRefreshBaseView *)refreshView{
+    //更新page
+    _pageNum++;
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+    
+    if (_selectedBtn.tag ==21) {
+        [productTool statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            if (statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+            }
+            [_productArray2 addObjectsFromArray:statues];
+            [refreshView endRefreshing];
+            [self addLodadTableView];
+            
+        }company_Id:nil keywords_Id:nil category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
+            
+        }];
+    }else if (_selectedBtn.tag==22){
+        [productTool statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            if (statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+            }
+            [_productArray3 addObjectsFromArray:statues];
+            [refreshView endRefreshing];
+            [self addLodadTableView];
+            
+        }company_Id:nil keywords_Id:nil category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
+            
+        }];
+    }else{
+        [productTool statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            if (statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+            }
+            [_productArray addObjectsFromArray:statues];
+            [refreshView endRefreshing];
+            [self addLodadTableView];
+            
+        }company_Id:nil keywords_Id:nil category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
+            
+        }];
+    }
+}
+
+
 #pragma mark ----加载数据
 -(void)addLoadStatus
 {
-    
+    _pageNum = 0;
+    if (!isLoadMore) {
+        isLoadMore = YES;
+        _footer.hidden = NO;
+    }
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
         if (_selectedBtn.tag==21){
         [productTool statusesWithSuccess:^(NSArray *statues) {
             [_productArray removeAllObjects];
             [_productArray addObjectsFromArray:statues];
-            [self addBigCompanyScrollView];
+            _pageNum = _productArray2.count % 10 + 1;
             [self addLodadTableView];
 
-        }company_Id:nil keywords_Id:nil category_Id:_productNstrIndex failure:^(NSError *error) {
+        }company_Id:nil keywords_Id:nil category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
             
         }];
     }else if(_selectedBtn.tag==22){
@@ -75,10 +188,10 @@
             [_productArray removeAllObjects];
 
             [_productArray addObjectsFromArray:statues];
-            [self addBigCompanyScrollView];
+            _pageNum = _productArray3.count % 10 + 1;
             [self addLodadTableView];
 
-        }company_Id:nil keywords_Id:nil category_Id:_productNstrIndex failure:^(NSError *error) {
+        }company_Id:nil keywords_Id:nil category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
             
         }];
     }else {
@@ -87,10 +200,10 @@
         [_productArray removeAllObjects];
 
         [_productArray addObjectsFromArray:statues];
-        [self addBigCompanyScrollView];
+        _pageNum = _productArray.count % 10 + 1;
         [self addLodadTableView];
 
-    }company_Id:nil keywords_Id:nil category_Id:_productNstrIndex failure:^(NSError *error) {
+    }company_Id:nil keywords_Id:nil category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
         
     }];
     }
@@ -156,9 +269,23 @@
 }
 #pragma mark--刷新表
 -(void)addLodadTableView{
-    [_demandTablView reloadData];
-    [_supplyTablView reloadData];
-    [_allTableView reloadData];
+    switch (_selectedBtn.tag) {
+        case 20:
+            [_allTableView reloadData];
+            break;
+            
+        case 21:
+            [_supplyTablView reloadData];
+            break;
+            
+        case 22:
+            [_demandTablView reloadData];
+            break;
+            
+        default:
+            break;
+    }
+    
 }
 #pragma mark  ------scrollview_delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -216,7 +343,7 @@
                 }
             }
         }
-
+        [self addLoadStatus];
     }
     
 }
@@ -227,8 +354,16 @@
 
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return _productArray.count   ;
+    if (_selectedBtn.tag ==20) {
+        return _productArray.count  ;
+        
+    }else if(_selectedBtn.tag ==21){
+        return _productArray2.count;
+    }else{
+        return _productArray3.count;
+    }
 }
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     productModel *prModel =[_productArray objectAtIndex:indexPath.row];
@@ -239,22 +374,59 @@
 }
 -(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIndexfider =@"cell";
-    productCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
-    if (!cell) {
-        cell=[[productCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
-    }
-    UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
-    [cell.contentView addSubview:cellLine];
-    cellLine.backgroundColor =HexRGB(0xe6e3e4);
-
-    productModel *proModel =[_productArray objectAtIndex:indexPath.row];
-    [cell.hearderImage setImageWithURL:[NSURL URLWithString:proModel.cover] placeholderImage:placeHoderImage];
-    cell.nameLabel.text= proModel.name;
-    cell.old_priceLabel.text =[NSString stringWithFormat:@"产品价格:                %@",proModel.old_price];
-    cell.priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.price ];
     
-    return cell;
+    if (_selectedBtn.tag == 20) {
+        static NSString *cellIndexfider =@"cell";
+        productCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
+        if (!cell) {
+            cell=[[productCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
+        }
+        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
+        [cell.contentView addSubview:cellLine];
+        cellLine.backgroundColor =HexRGB(0xe6e3e4);
+        
+        productModel *proModel =[_productArray objectAtIndex:indexPath.row];
+        [cell.hearderImage setImageWithURL:[NSURL URLWithString:proModel.cover] placeholderImage:placeHoderImage];
+        cell.nameLabel.text= proModel.name;
+        cell.old_priceLabel.text =[NSString stringWithFormat:@"产品价格:                %@",proModel.old_price];
+        cell.priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.price ];
+        
+        return cell;
+    }else if (_selectedBtn.tag == 21){
+        static NSString *cellIndexfider =@"cell2";
+        productCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
+        if (!cell) {
+            cell=[[productCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
+        }
+        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
+        [cell.contentView addSubview:cellLine];
+        cellLine.backgroundColor =HexRGB(0xe6e3e4);
+        
+        productModel *proModel =[_productArray2 objectAtIndex:indexPath.row];
+        [cell.hearderImage setImageWithURL:[NSURL URLWithString:proModel.cover] placeholderImage:placeHoderImage];
+        cell.nameLabel.text= proModel.name;
+        cell.old_priceLabel.text =[NSString stringWithFormat:@"产品价格:                %@",proModel.old_price];
+        cell.priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.price ];
+        
+        return cell;
+    }else{
+        static NSString *cellIndexfider =@"cell3";
+        productCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
+        if (!cell) {
+            cell=[[productCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
+        }
+        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
+        [cell.contentView addSubview:cellLine];
+        cellLine.backgroundColor =HexRGB(0xe6e3e4);
+        
+        productModel *proModel =[_productArray3 objectAtIndex:indexPath.row];
+        [cell.hearderImage setImageWithURL:[NSURL URLWithString:proModel.cover] placeholderImage:placeHoderImage];
+        cell.nameLabel.text= proModel.name;
+        cell.old_priceLabel.text =[NSString stringWithFormat:@"产品价格:                %@",proModel.old_price];
+        cell.priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.price ];
+        
+        return cell;
+    }
 }
 
 -(void)addbusinessBtn{
@@ -319,15 +491,17 @@
 
     if (company.tag == 20)
     {
+        _footer.scrollView = _allTableView;
         [_BigCompanyScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
     }
     else if(company.tag ==21)
     {
-        
+        _footer.scrollView = _supplyTablView;
         [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth, 0) animated:YES];
     }
     else if(company.tag ==22)
     {
+        _footer.scrollView = _demandTablView;
         [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth*2, 0) animated:YES];
     }
     

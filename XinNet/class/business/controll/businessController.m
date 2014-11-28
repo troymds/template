@@ -13,7 +13,6 @@
 #import "businessModel.h"
 @interface businessController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
-    
     UIButton *_selectedBtn;
     UIView *companyBackView;
     UIView *_orangLin;
@@ -26,10 +25,12 @@
     NSMutableArray *_supplyBusinessArray;
     NSMutableArray *_demandBusinessArray;
 
-
+    MJRefreshFooterView *_footer;
+    BOOL isLoadMore;//判断是否加载更多
 }
 @property(nonatomic ,strong)UIScrollView *BigCompanyScrollView;
-
+@property (nonatomic,assign) NSInteger pageNum;//页数
+@property (nonatomic,strong) NSString *page;//页数
 @end
 
 @implementation businessController
@@ -43,7 +44,8 @@
     _demandBusinessArray =[NSMutableArray array];
     _supplyBusinessArray =[NSMutableArray array];
 
-    
+    _pageNum = 0;
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
     
     _orangLin =[[UIView alloc]init];
     [self.view addSubview:_orangLin];
@@ -52,10 +54,9 @@
 
     [self addBigCompanyScrollView];
     [self addMBprogressView];
-
+    [self addRefreshViews];
     [self addbusinessBtn];
     [self addLoadStatus];
-    [self addRefreshViews];
 }
 
 #pragma  mark ------显示指示器
@@ -69,114 +70,121 @@
 #pragma mark 集成刷新控件
 - (void)addRefreshViews
 {
-    
-    // 2.上拉加载更多
+    // 1.上拉加载更多
     MJRefreshFooterView *footer = [MJRefreshFooterView footer];
     footer.scrollView = _allTableView;
-    footer.scrollView = _supplyTablView;
-
-    footer.scrollView = _demandTablView;
-
     footer.delegate = self;
+    _footer = footer;
+    isLoadMore = YES;
 }
 
 #pragma mark 刷新代理方法
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
-    // 下拉刷新
     if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
         // 上拉加载更多
         [self addLoadStatus:refreshView];
-    } else {
-        
     }
-    
-    
 }
+
 #pragma mark ____加载数据
 -(void)addLoadStatus{
+    _pageNum = 0;
+    if (!isLoadMore) {
+        isLoadMore = YES;
+        _footer.hidden = NO;
+    }
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
     if (_selectedBtn.tag ==20) {
         [businessTool statusesWithSuccess:^(NSArray *statues) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
-            
             [_allBusinessArray removeAllObjects];
             [_allBusinessArray addObjectsFromArray:statues];
+            _pageNum = _allBusinessArray.count % 10 + 1;
             [self addLoadTableView];
-        }  keywords_Id:nil type_ID:nil company_Id:nil failure:^(NSError *error) {
-            
-            
-            
+        } type_ID:@"" page:self.page failure:^(NSError *error) {
         }];
-    }else if (_selectedBtn.tag==21)
+        
+    }else if (_selectedBtn.tag==21){
         [businessTool statusesWithSuccess:^(NSArray *statues) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
             [_supplyBusinessArray removeAllObjects];
             [_supplyBusinessArray addObjectsFromArray:statues];
+            _pageNum = _supplyBusinessArray.count % 10 + 1;
             [self addLoadTableView];
-            
-        }  keywords_Id:nil type_ID:@"2" company_Id:nil failure:^(NSError *error) {
-            
-            
-        }];
-    else{
-        [businessTool statusesWithSuccess:^(NSArray *statues) {
-            
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
-            [_demandBusinessArray removeAllObjects];
-            [_demandBusinessArray addObjectsFromArray:statues];
-            [self addLoadTableView];
-            
-        }  keywords_Id:nil type_ID:@"1" company_Id:nil failure:^(NSError *error) {
-            
-            
+        } type_ID:@"2" page:self.page  failure:^(NSError *error) {
         }];
     }
-
+    else{
+        [businessTool statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [_demandBusinessArray removeAllObjects];
+            [_demandBusinessArray addObjectsFromArray:statues];
+            _pageNum = _demandBusinessArray.count % 10 + 1;
+            [self addLoadTableView];
+        } type_ID:@"1" page:self.page  failure:^(NSError *error) {
+        }];
+    }
 }
+
+#pragma mark 加载更多
 -(void)addLoadStatus:(MJRefreshBaseView *)refreshView{
+    //更新page
+    _pageNum++;
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+    
         if (_selectedBtn.tag ==20) {
+            [businessTool statusesWithSuccess:^(NSArray *statues) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                if (statues.count < 10) {
+                    isLoadMore = NO;
+                    _footer.hidden = YES;
+                }else
+                {
+                    isLoadMore = YES;
+                    _footer.hidden = NO;
+                }
+                [_allBusinessArray addObjectsFromArray:statues];
+                [self addLoadTableView];
+                [refreshView endRefreshing];
+            } type_ID:@"" page:self.page  failure:^(NSError *error) {
+            }];
+        }else if (_selectedBtn.tag==21){
         [businessTool statusesWithSuccess:^(NSArray *statues) {
-            
-
-            [_allBusinessArray removeAllObjects];
-            [_allBusinessArray addObjectsFromArray:statues];
-            [self addLoadTableView];
-            [refreshView endRefreshing];
-        }  keywords_Id:nil type_ID:nil company_Id:nil failure:^(NSError *error) {
-            
-
-            
-        }];
-    }else if (_selectedBtn.tag==21)
-        [businessTool statusesWithSuccess:^(NSArray *statues) {
-          
-            [_supplyBusinessArray removeAllObjects];
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            if (statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+            }
             [_supplyBusinessArray addObjectsFromArray:statues];
-            [self addLoadTableView];
             [refreshView endRefreshing];
-
-        }  keywords_Id:nil type_ID:@"2" company_Id:nil failure:^(NSError *error) {
-           
-            
+            [self addLoadTableView];
+        } type_ID:@"2" page:self.page failure:^(NSError *error) {
         }];
+    }
     else{
         [businessTool statusesWithSuccess:^(NSArray *statues) {
-           
-
-            [_demandBusinessArray removeAllObjects];
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            if (statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+            }
             [_demandBusinessArray addObjectsFromArray:statues];
-            [self addLoadTableView];
             [refreshView endRefreshing];
-
-        }  keywords_Id:nil type_ID:@"1" company_Id:nil failure:^(NSError *error) {
-            
-            
+            [self addLoadTableView];
+        } type_ID:@"1" page:self.page  failure:^(NSError *error) {
         }];
     }
 }
+
 #pragma mark背景scrollview
 -(void)addBigCompanyScrollView
 {
@@ -197,6 +205,7 @@
     [self addBusinessSuplyTableview];
     
 }
+
 #pragma mark 全部
 -(void)addBusinessAllTableview
 {
@@ -206,9 +215,6 @@
     _allTableView.backgroundColor =[UIColor whiteColor];
     _allTableView.delegate =self;
     _allTableView.dataSource = self;
-   
-    
-    
 }
 #pragma mark 供应
 -(void)addBusinessSuplyTableview
@@ -219,17 +225,28 @@
     _supplyTablView.backgroundColor =[UIColor whiteColor];
     _supplyTablView.delegate =self;
     _supplyTablView.dataSource = self;
-    
-   
-    
-    
 }
+
 #pragma mark ---刷新表
 -(void)addLoadTableView{
-    [_allTableView reloadData];
-    [_supplyTablView reloadData];
-    [_demandTablView reloadData];
+    switch (_selectedBtn.tag) {
+        case 20:
+        [_allTableView reloadData];
+            break;
+            
+        case 21:
+        [_supplyTablView reloadData];
+            break;
+            
+        case 22:
+        [_demandTablView reloadData];
+            break;
+            
+        default:
+            break;
+    }
 }
+
 #pragma mark 求购
 -(void)addBusinessDemandTableview
 {
@@ -239,8 +256,6 @@
     _demandTablView.backgroundColor =[UIColor whiteColor];
     _demandTablView.delegate =self;
     _demandTablView.dataSource = self;
-    
-    
 }
 
 #pragma mark  ------scrollview_delegate
@@ -260,6 +275,7 @@
         
        
         if (scrollView.contentOffset.x==0) {
+            _footer.scrollView = _allTableView;
             for (UIView *subView in companyBackView.subviews) {
                 if ([subView isKindOfClass:[UIButton class]]) {
                 UIButton *btn =(UIButton *)subView;
@@ -273,6 +289,7 @@
         }
 
     }else if(scrollView.contentOffset.x==kWidth){
+        _footer.scrollView = _supplyTablView;
         for (UIView *subView in companyBackView.subviews) {
             if ([subView isKindOfClass:[UIButton class]]) {
                 UIButton *btn =(UIButton *)subView;
@@ -287,6 +304,7 @@
         }
     }
     else if(scrollView.contentOffset.x==kWidth*2){
+        _footer.scrollView = _demandTablView;
         for (UIView *subView in companyBackView.subviews) {
             if ([subView isKindOfClass:[UIButton class]]) {
                 UIButton *btn =(UIButton *)subView;
@@ -310,10 +328,6 @@
     return 70;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (_selectedBtn.tag ==20) {
         return _allBusinessArray.count  ;
@@ -324,6 +338,7 @@
         return _demandBusinessArray.count;
     }
 }
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     businessModel *buModel =[_allBusinessArray objectAtIndex:indexPath.row];
@@ -411,8 +426,7 @@
         [companyBtn setTitle:companyArr[p] forState:UIControlStateNormal];
         
         companyBtn.tag =20+p;
-        
-        if (companyBtn.tag ==20)
+                        if (companyBtn.tag ==20)
         {
             companyBtn.selected = YES;
             _selectedBtn = companyBtn;
@@ -420,7 +434,6 @@
         }
         [companyBtn addTarget:self action:@selector(companyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
-
 }
 
 -(void)companyBtnClick:(UIButton *)company
@@ -430,21 +443,21 @@
     
     if (company.tag == 20)
     {
+        _footer.scrollView = _allTableView;
         [_BigCompanyScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
     }
     else if(company.tag ==21)
     {
-
+        _footer.scrollView = _supplyTablView;
         [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth, 0) animated:YES];
     }
     else if(company.tag ==22)
     {
+        _footer.scrollView = _demandTablView;
         [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth*2, 0) animated:YES];
            }
 
     [self addLoadStatus];
 
 }
-
-
 @end

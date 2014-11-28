@@ -12,38 +12,111 @@
 #import "companyJobModel.h"
 #import "companyJobTool.h"
 
-@interface companyJOBController ()<UITableViewDataSource,UITableViewDelegate>
+@interface companyJOBController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     UITableView *_tableView;
     
     NSMutableArray *_companyJobArray;
+    MJRefreshFooterView *_footer;
+    BOOL isLoadMore;//判断是否加载更多
 }
+
+@property (nonatomic,assign) NSInteger pageNum;//页数
+@property (nonatomic,strong) NSString *page;//页数
 @end
 
 @implementation companyJOBController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if (IsIos7) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     self.view.backgroundColor =[UIColor whiteColor];
     self.title = @ "企业招聘";
     _companyJobArray =[NSMutableArray array];
     
-    
+    _pageNum = 1;
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+    [self addTableView];
+    [self addRefreshViews];
+    [self addMBprogressView];
     [self addLoadStatus];
     
 }
+
+#pragma  mark ------显示指示器
+-(void)addMBprogressView{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
+    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    
+}
+
+#pragma mark 集成刷新控件
+- (void)addRefreshViews
+{
+    
+    // 2.上拉加载更多
+    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
+    footer.scrollView = _tableView;
+    footer.delegate = self;
+    _footer = footer;
+    isLoadMore = NO;
+}
+
+#pragma mark 刷新代理方法
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    // 下拉刷新
+    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        // 上拉加载更多
+        [self addLoadStatus:refreshView];
+    }
+}
+
+#pragma mark ----加载更多数据
+-(void)addLoadStatus:(MJRefreshBaseView *)refreshView{
+    //更新page
+    _pageNum++;
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+    [companyJobTool statusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        if (statues.count < 10) {
+            isLoadMore = NO;
+            _footer.hidden = YES;
+        }else
+        {
+            isLoadMore = YES;
+            _footer.hidden = NO;
+        }
+        [_companyJobArray addObjectsFromArray:statues];
+        [_tableView reloadData];
+        [refreshView endRefreshing];
+    } company_Id:nil keywords_Str:nil page:self.page failure:^(NSError *error) {
+        
+    }];
+}
+
 #pragma mark----加载数据
 -(void)addLoadStatus{
+    _pageNum = 1;
+    if (!isLoadMore) {
+        isLoadMore = YES;
+        _footer.hidden = NO;
+    }
+    
     [companyJobTool statusesWithSuccess:^(NSArray *statues) {
+        [_companyJobArray removeAllObjects];
         [_companyJobArray addObjectsFromArray:statues];
-        [self addTableView];
-    } company_Id:nil keywords_Str:nil failure:^(NSError *error) {
+        [_tableView reloadData];
+    } company_Id:nil keywords_Str:nil page:self.page failure:^(NSError *error) {
         
     }];
 }
 
 -(void)addTableView{
-    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-64) style:UITableViewStylePlain];
+    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, KAppH) style:UITableViewStylePlain];
     _tableView.delegate =self;
     _tableView.dataSource =self;
     _tableView.backgroundColor =[UIColor whiteColor];
@@ -61,10 +134,6 @@
     
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    
-}
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return _companyJobArray.count   ;
 }

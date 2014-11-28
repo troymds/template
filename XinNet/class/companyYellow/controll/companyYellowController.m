@@ -17,7 +17,12 @@
 {
     UITableView *_tableView;
     NSMutableArray *_companyArray;
+    MJRefreshFooterView *_footer;
+    BOOL isLoadMore;//判断是否加载更多
 }
+
+@property (nonatomic,assign) NSInteger pageNum;//页数
+@property (nonatomic,strong) NSString *page;//页数
 @end
 
 @implementation companyYellowController
@@ -27,7 +32,11 @@
     self.title=@"企业黄页";
     self.view.backgroundColor =[UIColor whiteColor];
     _companyArray =[[NSMutableArray alloc]init];
-    [self addLoadStatus:nil];
+    
+    _pageNum = 0;
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+    
+    [self addLoadStatus];
     [self addTableView];
     [self addMBprogressView];
     [self addRefreshViews];
@@ -48,6 +57,8 @@
     MJRefreshFooterView *footer = [MJRefreshFooterView footer];
     footer.scrollView = _tableView;
     footer.delegate = self;
+    _footer = footer;
+    isLoadMore = NO;
 }
 
 #pragma mark 刷新代理方法
@@ -57,25 +68,52 @@
     if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
         // 上拉加载更多
         [self addLoadStatus:refreshView];
-    } else {
-        
     }
-    
-    
 }
 
-#pragma mark ----加载数据
--(void)addLoadStatus:(MJRefreshBaseView *)refreshView{
-
+#pragma mark 加载数据
+-(void)addLoadStatus
+{
+    _pageNum = 0;
+    if (!isLoadMore) {
+        isLoadMore = YES;
+        _footer.hidden = NO;
+    }
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
     [companyListTool statusesWithSuccess:^(NSArray *statues) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [_companyArray removeAllObjects];
+        
         [_companyArray addObjectsFromArray:statues];
+        _pageNum = _companyArray.count % 10 + 1;
+        [_tableView reloadData];
+
+    }  keywords_Id:nil page:self.page failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+    }];
+}
+#pragma mark ----加载更多数据
+-(void)addLoadStatus:(MJRefreshBaseView *)refreshView{
+    //更新page
+    _pageNum++;
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+    
+    [companyListTool statusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        if (statues.count < 10) {
+            isLoadMore = NO;
+            _footer.hidden = YES;
+        }else
+        {
+            isLoadMore = YES;
+            _footer.hidden = NO;
+        }
+        [_companyArray addObjectsFromArray:statues];
+
         [_tableView reloadData];
         [refreshView endRefreshing];
-    }  keywords_Id:nil failure:^(NSError *error) {
+    }  keywords_Id:nil page:self.page failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
         
     }];
 }

@@ -9,8 +9,8 @@
 #import "interfaceTool.h"
 #import "interfaceModel.h"
 @implementation interfaceTool
-+ (void)statusesWithSuccess:(StatusSuccessBlock)success company_Id:(NSString *)company_id keywords_Str:(NSString *)keywords category_Id:(NSString *)category_id failure:(StatusFailureBlock)failure{
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",@"page",@"page",company_id,@"company_id",keywords,@"keywords",category_id,@"category_id" ,nil];
++ (void)statusesWithSuccess:(StatusSuccessBlock)success company_Id:(NSString *)company_id keywords_Str:(NSString *)keywords category_Id:(NSString *)category_id page:(NSString *)page failure:(StatusFailureBlock)failure{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",page,@"page",company_id,@"company_id",keywords,@"keywords",category_id,@"category_id" ,nil];
     
     
     [httpTool postWithPath:@"getShowList" params:dic success:^(id JSON) {

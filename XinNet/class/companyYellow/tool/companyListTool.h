@@ -13,5 +13,5 @@ typedef void (^StatusFailureBlock)(NSError *error);
 @interface companyListTool : NSObject
 
 
-+ (void)statusesWithSuccess:(StatusSuccessBlock)success keywords_Id:(NSString *)keywords failure:(StatusFailureBlock)failure;
++ (void)statusesWithSuccess:(StatusSuccessBlock)success keywords_Id:(NSString *)keywords page:(NSString*)page failure:(StatusFailureBlock)failure;
 @end
