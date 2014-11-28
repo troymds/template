@@ -296,7 +296,7 @@
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
     }
     marketModel *markModel =[_marketArray objectAtIndex:indexPath.row];
-    [cell.marketImage setImageWithURL:[NSURL URLWithString:markModel.coverimage] placeholderImage:placeHoderImage];
+    [cell.marketImage setImageWithURL:[NSURL URLWithString:markModel.coverimage] placeholderImage:placeHoderImage2];
     cell.timeLabel.text = markModel.create_time;
     cell.titleName.text=markModel.nametitle;
     cell.fromLabel.text = markModel.from;

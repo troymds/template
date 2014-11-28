@@ -388,7 +388,7 @@
             cellLine.backgroundColor =HexRGB(0xe6e3e4);
         }
         interfaceModel *interModel =[_interfaceArray objectAtIndex:indexPath.row];
-        [cell.interfaceImage setImageWithURL:[NSURL URLWithString:interModel.cover] placeholderImage:placeHoderImage];
+        [cell.interfaceImage setImageWithURL:[NSURL URLWithString:interModel.cover] placeholderImage:placeHoderImage2];
         cell.nameLabel.text =interModel.title;
         cell.timeLabel.text =interModel.create_time;
         return cell;
@@ -405,7 +405,7 @@
             cellLine.backgroundColor =HexRGB(0xe6e3e4);
         }
         interfaceModel *interModel =[_interfaceArray2 objectAtIndex:indexPath.row];
-        [cell.interfaceImage setImageWithURL:[NSURL URLWithString:interModel.cover] placeholderImage:placeHoderImage];
+        [cell.interfaceImage setImageWithURL:[NSURL URLWithString:interModel.cover] placeholderImage:placeHoderImage2];
         cell.nameLabel.text =interModel.title;
         cell.timeLabel.text =interModel.create_time;
         return cell;
@@ -422,7 +422,7 @@
             cellLine.backgroundColor =HexRGB(0xe6e3e4);
         }
         interfaceModel *interModel =[_interfaceArray3 objectAtIndex:indexPath.row];
-        [cell.interfaceImage setImageWithURL:[NSURL URLWithString:interModel.cover] placeholderImage:placeHoderImage];
+        [cell.interfaceImage setImageWithURL:[NSURL URLWithString:interModel.cover] placeholderImage:placeHoderImage2];
         cell.nameLabel.text =interModel.title;
         cell.timeLabel.text =interModel.create_time;
         return cell;

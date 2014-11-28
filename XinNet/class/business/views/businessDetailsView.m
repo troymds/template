@@ -9,6 +9,9 @@
 #import "businessDetailsView.h"
 #import "businessDetailsTool.h"
 #import "businessDetailsModel.h"
+#import "YYSearchButton.h"
+#import "collectionModel.h"
+#import "collectionHttpTool.h"
 #define YYBODERW 16
 @interface businessDetailsView ()<UIWebViewDelegate>
 {
@@ -16,6 +19,8 @@
     UIWebView *marketWebView;
     UIScrollView *_backScrollView;
 }
+@property (nonatomic, strong)NSString *collectionId;
+
 @end
 
 @implementation businessDetailsView
@@ -24,12 +29,92 @@
     [super viewDidLoad];
     self.view.backgroundColor =HexRGB(0xe9f1f6);
     self.title =@"详情";
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"colloct_img.png" highlightedSearch:@"colloct_img.png" target:(self) action:@selector(collectClick:)];
+   
     [self addLoadStatus];
+    [self addCollection];
+    [self addMBprogressView];
     
 }
+#pragma  mark ------显示指示器
+-(void)addMBprogressView{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
+    
+    
+}
+//收藏
+-(void)addCollection{
+    
+    
+    UIView *backCollectView =[[UIView alloc]init];
+    backCollectView.frame = CGRectMake(0, 20, 300, 44);
+    backCollectView.backgroundColor =[UIColor clearColor];
+    self.navigationItem.titleView = backCollectView;
+    
+    UILabel *titiLabel =[[UILabel alloc]initWithFrame:CGRectMake(60, 0, 100, 44)];
+    titiLabel.text =@"详情";
+    titiLabel.font =[UIFont systemFontOfSize:PxFont(23)];
+    [backCollectView addSubview:titiLabel];
+    titiLabel.backgroundColor =[UIColor clearColor];
+    
+    
+    YYSearchButton * collectionBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
+    collectionBtn.frame =CGRectMake(200, 8, 40, 30);
+    collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
+    [collectionBtn setTitle:@"收藏" forState:UIControlStateNormal];
+    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateNormal];
+    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateHighlighted];
+
+
+    [collectionBtn addTarget:self action:@selector(collectionBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [backCollectView addSubview:collectionBtn];
+}
+
+
+
+
+
+
+
+
+-(void)collectionBtn:(UIButton *)sender{
+    
+    
+    if ([sender.titleLabel.text isEqualToString:@"收藏"]) {//收藏
+        [collectionHttpTool addCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
+            if (code == 100) {
+                [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
+                collectionModel *model = [data objectAtIndex:0];
+                [sender setTitle:@"取消" forState:UIControlStateNormal];
+                self.collectionId = model.data;
+            }else
+            {
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+            }
+            
+        } entityId:_businessDetailIndex entityType:@"1" withFailure:^(NSError *error) {
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
+    }else//取消收藏
+    {
+        [collectionHttpTool cancleCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
+            
+            [RemindView showViewWithTitle:msg location:MIDDLE];
+            [sender setTitle:@"收藏" forState:UIControlStateNormal];
+        } collectionId:self.collectionId withFailure:^(NSError *error) {
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
+    }
+    
+    
+}
+
 -(void)addLoadStatus{
     [businessDetailsTool statusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
         NSDictionary *dict =[statues objectAtIndex:0];
         businessModel =[[businessDetailsModel alloc]init];
         businessModel.wapUrl =[dict objectForKey:@"wapUrl"];
@@ -42,13 +127,12 @@
         [self addLabel];
 
     } opportunity_Id:_businessDetailIndex failure:^(NSError *error) {
-        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+ 
     }];
 }
-//收藏
--(void)collectClick:(UIButton *)collect{
-    
-}
+
+
 #pragma mark webViewDelegate
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {

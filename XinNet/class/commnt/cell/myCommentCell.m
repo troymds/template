@@ -73,6 +73,6 @@
     
     CGSize size = [AdaptationSize getSizeFromString:data.content Font:[UIFont systemFontOfSize:12] withHight:CGFLOAT_MAX withWidth:_detailW];
     _detailContent.frame = CGRectMake(CGRectGetMaxX(_avatar.frame) + nameBwnavata, CGRectGetMaxY(_userName.frame), _detailW, size.height);
-    [_avatar setImageWithURL:[NSURL URLWithString:data.userAvata] placeholderImage:placeHoderImage];
+    [_avatar setImageWithURL:[NSURL URLWithString:data.userAvata] placeholderImage:placeHoderImage2];
 }
 @end

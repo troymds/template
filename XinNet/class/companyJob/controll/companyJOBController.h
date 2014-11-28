@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface companyJOBController : UIViewController
+@property(nonatomic,copy)NSString *company_id;
 
 @end

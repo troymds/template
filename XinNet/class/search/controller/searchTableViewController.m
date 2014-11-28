@@ -190,7 +190,7 @@
         proCell.selectionStyle =UITableViewCellSelectionStyleNone;
         
         productModel *proModel =[_productArray objectAtIndex:indexPath.row];
-        [proCell.hearderImage setImageWithURL:[NSURL URLWithString:proModel.cover] placeholderImage:placeHoderImage];
+        [proCell.hearderImage setImageWithURL:[NSURL URLWithString:proModel.cover] placeholderImage:placeHoderImage3];
         proCell.nameLabel.text= proModel.name;
         proCell.old_priceLabel.text =[NSString stringWithFormat:@"产品价格:                %@",proModel.old_price];
         proCell.priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.price ];

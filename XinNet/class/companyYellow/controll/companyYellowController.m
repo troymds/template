@@ -34,7 +34,7 @@
     _companyArray =[[NSMutableArray alloc]init];
     
     _pageNum = 0;
-    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+    self.page = [NSString stringWithFormat:@"%ld",(long)_pageNum];
     
     [self addLoadStatus];
     [self addTableView];
@@ -160,7 +160,7 @@
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
     }
     companyListModel *comapnyModel =[_companyArray objectAtIndex:indexPath.row];
-    [cell.logoImage setImageWithURL:[NSURL URLWithString:comapnyModel.logo] placeholderImage:placeHoderImage];
+    [cell.logoImage setImageWithURL:[NSURL URLWithString:comapnyModel.logo] placeholderImage:placeHoderImage2];
     cell.nameLabel.text =comapnyModel.name;
     cell.addressLabel.text =comapnyModel.address;
     return cell;
