@@ -19,6 +19,7 @@
     NSMutableArray *_companyJobArray;
     MJRefreshFooterView *_footer;
     BOOL isLoadMore;//判断是否加载更多
+    UILabel *dataLabel;
 }
 
 @property (nonatomic,assign) NSInteger pageNum;//页数
@@ -35,10 +36,11 @@
     self.view.backgroundColor =[UIColor whiteColor];
     self.title = @ "企业招聘";
     _companyJobArray =[NSMutableArray array];
+    [self addShowNoDataView];
     
     _pageNum = 1;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
-    [self addTableView];
+//    [self addTableView];
     [self addRefreshViews];
     [self addMBprogressView];
     [self addLoadStatus];
@@ -90,12 +92,24 @@
             isLoadMore = YES;
             _footer.hidden = NO;
         }
-        [_companyJobArray addObjectsFromArray:statues];
+               [_companyJobArray addObjectsFromArray:statues];
         [_tableView reloadData];
         [refreshView endRefreshing];
     } company_Id:nil keywords_Str:nil page:self.page failure:^(NSError *error) {
         
     }];
+}
+- (void)addShowNoDataView
+{
+    dataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+    dataLabel.textAlignment = NSTextAlignmentCenter;
+    dataLabel.backgroundColor = [UIColor clearColor];
+    dataLabel.text = @"没有数据！";
+    dataLabel.hidden = YES;
+    dataLabel.enabled = NO;
+    [self.view addSubview:dataLabel];
+    
+    
 }
 
 #pragma mark----加载数据
@@ -107,6 +121,14 @@
     }
     
     [companyJobTool statusesWithSuccess:^(NSArray *statues) {
+        if (statues.count==0) {
+            [_tableView removeFromSuperview];
+            dataLabel.hidden = NO;
+        }else{
+            [self addTableView];
+            dataLabel.hidden = YES;
+        }
+        
         [_companyJobArray removeAllObjects];
         [_companyJobArray addObjectsFromArray:statues];
         [_tableView reloadData];
@@ -119,7 +141,7 @@
     _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, KAppH) style:UITableViewStylePlain];
     _tableView.delegate =self;
     _tableView.dataSource =self;
-    _tableView.backgroundColor =[UIColor whiteColor];
+    _tableView.backgroundColor =[UIColor redColor];
     _tableView.showsHorizontalScrollIndicator = NO;
     _tableView.showsVerticalScrollIndicator = NO;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;

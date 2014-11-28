@@ -79,6 +79,7 @@
     keyText.placeholder =@"   请输入关键词";
     keyText.clearButtonMode = UITextFieldViewModeWhileEditing;
     
+    
     YYSearchButton *searchBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
     [searchBtn setTitle:@"搜索" forState:UIControlStateNormal];
     [searchBtn setTitleColor:HexRGB(0xffffff) forState:UIControlStateNormal];

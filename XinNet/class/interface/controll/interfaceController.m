@@ -167,6 +167,7 @@
     
     if (_selectedBtn.tag ==21) {
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
+            NSLog(@"%@",statues);
             [_interfaceArray2 removeAllObjects];
             [_interfaceArray2 addObjectsFromArray:statues];
             _pageNum = _interfaceArray2.count % 10 + 1;

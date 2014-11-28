@@ -93,13 +93,14 @@
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     
     [self addMBprogressView];
+    
     [marketTOOL statusesWithSuccess:^(NSArray *statues) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [_marketArray removeAllObjects];
         [_marketArray addObjectsFromArray:statues];
         _pageNum = _marketArray.count % 10 + 1;
         [_tableView reloadData];
-    }  keywords_Id:nil category_Id:nil page:self.page failure:^(NSError *error) {
+    }  keywords_Id:@"" category_Id:_category_Index page:self.page failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
         
@@ -121,6 +122,7 @@
             if (statues.count < 10) {
                 isLoadMore = NO;
                 _footer.hidden = YES;
+                 [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
             }else
             {
                 isLoadMore = YES;
@@ -130,16 +132,17 @@
             
             [_tableView reloadData];
             [refreshView endRefreshing];
-        }  keywords_Id:nil category_Id:_category_Index page:self.page  failure:^(NSError *error) {
+        }  keywords_Id:@"" category_Id:_category_Index page:self.page  failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
         }];
     }else if (_moreSelectedBtn.tag==31){
         [marketTOOL statusesWithSuccess:^(NSArray *statues) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            if (statues.count > 0 && statues.count < 10) {
+            if (statues.count < 10) {
                 isLoadMore = NO;
                 _footer.hidden = YES;
+                 [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
             }else
             {
                 isLoadMore = YES;
@@ -150,7 +153,7 @@
             [_tableView reloadData];
             [refreshView endRefreshing];
             
-        }  keywords_Id:nil category_Id:@"4" page:self.page  failure:^(NSError *error) {
+        }  keywords_Id:@"" category_Id:@"4" page:self.page  failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
             
@@ -162,6 +165,7 @@
         if (statues.count > 0 && statues.count < 10) {
             isLoadMore = NO;
             _footer.hidden = YES;
+             [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
         }else
         {
             isLoadMore = YES;

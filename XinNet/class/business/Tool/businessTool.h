@@ -11,7 +11,7 @@
 typedef void (^StatusSuccessBlock)(NSArray *statues);
 typedef void (^StatusFailureBlock)(NSError *error);
 @interface businessTool : NSObject
-+ (void)statusesWithSuccess:(StatusSuccessBlock)success keywords_Id:(NSString *)keywords type_ID:(NSString *)type_id company_Id:(NSString *)company_id failure:(StatusFailureBlock)failure;
++ (void)statusesWithSuccess:(StatusSuccessBlock)success keywords_Id:(NSString *)keywords type_ID:(NSString *)type_id company_Id:(NSString *)company_id page:(NSString *)page failure:(StatusFailureBlock)failure;
 
 + (void)statusesWithSuccess:(StatusSuccessBlock)success  type_ID:(NSString *)type_id page:(NSString *)page failure:(StatusFailureBlock)failure;
 

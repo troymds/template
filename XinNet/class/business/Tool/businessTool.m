@@ -39,15 +39,15 @@
     
 }
 
-+ (void)statusesWithSuccess:(StatusSuccessBlock)success keywords_Id:(NSString *)keywords type_ID:(NSString *)type_id company_Id:(NSString *)company_id failure:(StatusFailureBlock)failure
++ (void)statusesWithSuccess:(StatusSuccessBlock)success keywords_Id:(NSString *)keywords type_ID:(NSString *)type_id company_Id:(NSString *)company_id page:(NSString *)page failure:(StatusFailureBlock)failure
 {
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:keywords,@"keywords",company_id,@"company_id", @"10",@"pagesize",@"page",@"page",type_id,@"type", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:keywords,@"keywords",company_id,@"company_id", @"10",@"pagesize",page,@"page",type_id,@"type", nil];
     [httpTool postWithPath:@"getOpportunityList" params:dic success:^(id JSON) {
         NSDictionary *dict =[NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =[dict[@"response"]objectForKey:@"data"];
-        NSLog(@"%@",array);
+        
         if (array) {
             if ([array isKindOfClass:[NSNull class]])
             {

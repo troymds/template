@@ -75,7 +75,7 @@
 -(void)addMBprogressView{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"加载中...";
-    //    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    
     
 }
 
@@ -117,6 +117,7 @@
                 isLoadMore = YES;
                 _footer.hidden = NO;
             }
+            [self addremoveThreeArray];
             [_productArray2 addObjectsFromArray:statues];
             [refreshView endRefreshing];
             [self addLodadTableView];
@@ -135,6 +136,7 @@
                 isLoadMore = YES;
                 _footer.hidden = NO;
             }
+            [self addremoveThreeArray];
             [_productArray3 addObjectsFromArray:statues];
             [refreshView endRefreshing];
             [self addLodadTableView];
@@ -153,6 +155,7 @@
                 isLoadMore = YES;
                 _footer.hidden = NO;
             }
+            [self addremoveThreeArray];
             [_productArray addObjectsFromArray:statues];
             [refreshView endRefreshing];
             [self addLodadTableView];
@@ -163,7 +166,14 @@
     }
 }
 
+-(void)addremoveThreeArray;
+{
+    [_productArray removeAllObjects];
+    [_productArray2 removeAllObjects];
+    [_productArray3 removeAllObjects];
 
+    
+}
 #pragma mark ----加载数据
 -(void)addLoadStatus
 {
@@ -386,14 +396,13 @@
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
         
         productModel *proModel =[_productArray objectAtIndex:indexPath.row];
-        CGFloat  OldWidth =[proModel.old_price sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(80, 20)].width;
-        cell.lineView.frame =CGRectMake(0, 10, OldWidth+15, 1);
-
-        cell.old_priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.old_price];
-        cell.priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.price ];
         [cell.hearderImage setImageWithURL:[NSURL URLWithString:proModel.cover] placeholderImage:placeHoderImage2];
         cell.nameLabel.text= proModel.name;
-        
+        cell.companyLabel.text =proModel.name;
+        cell.old_priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.old_price];
+        cell.priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.price ];
+        CGFloat  OldWidth =[proModel.old_price sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(80, 20)].width;
+        cell.lineView.frame =CGRectMake(0, 10, OldWidth+15, 1);
         
         return cell;
     }else if (_selectedBtn.tag == 21){
@@ -407,37 +416,34 @@
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
         
         productModel *proModel =[_productArray2 objectAtIndex:indexPath.row];
-        CGFloat  OldWidth =[proModel.old_price sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(80, 20)].width;
-        cell.lineView.frame =CGRectMake(0, 10, OldWidth+15, 1);
-
-        cell.old_priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.old_price];
-        cell.priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.price ];
         [cell.hearderImage setImageWithURL:[NSURL URLWithString:proModel.cover] placeholderImage:placeHoderImage2];
         cell.nameLabel.text= proModel.name;
-        
+        cell.companyLabel.text =proModel.name;
+        cell.old_priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.old_price];
+        cell.priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.price ];
+        CGFloat  OldWidth =[proModel.old_price sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(80, 20)].width;
+        cell.lineView.frame =CGRectMake(0, 10, OldWidth+15, 1);
         
         return cell;
     }else{
         static NSString *cellIndexfider =@"cell3";
         productCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
-        
         if (!cell) {
             cell=[[productCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
         }
-        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
+        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];            [_productArray removeAllObjects];
+
         [cell.contentView addSubview:cellLine];
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
         
         productModel *proModel =[_productArray3 objectAtIndex:indexPath.row];
-        CGFloat  OldWidth =[proModel.old_price sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(80, 20)].width;
-        cell.lineView.frame =CGRectMake(0, 10, OldWidth+15, 1);
-
-        cell.old_priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.old_price];
-        cell.priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.price ];
         [cell.hearderImage setImageWithURL:[NSURL URLWithString:proModel.cover] placeholderImage:placeHoderImage2];
         cell.nameLabel.text= proModel.name;
+        CGFloat  OldWidth =[proModel.old_price sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(80, 20)].width;
+        cell.lineView.frame =CGRectMake(0, 10, OldWidth+15, 1);
         cell.companyLabel.text =proModel.name;
-
+        cell.old_priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.old_price];
+        cell.priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.price ];
         return cell;
     }
 }
