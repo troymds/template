@@ -141,8 +141,8 @@
     
     losePassword = [UIButton buttonWithType:UIButtonTypeCustom];
     losePassword.frame = CGRectMake(kWidth-leftDistance-80,y+5,80, 15);
-    [losePassword setTitle:@"忘记密码" forState:UIControlStateNormal];
-    losePassword.titleLabel.font = [UIFont systemFontOfSize:12];
+    [losePassword setTitle:@"忘记密码?" forState:UIControlStateNormal];
+    losePassword.titleLabel.font = [UIFont systemFontOfSize:13];
     [losePassword setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
     losePassword.tag = loseBtn;
     [losePassword addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
@@ -157,8 +157,9 @@
     registerButton.frame = CGRectMake(leftDistance,y, btnWidth,btnHeight);
     [registerButton setTitle:@"注册" forState:UIControlStateNormal];
     [registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [registerButton setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
-    [registerButton setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
+    [registerButton setBackgroundColor:HexRGB(0xbbbaba)];
+//    [registerButton setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
+//    [registerButton setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
     
     registerButton.tag = registerBtn;
     [registerButton addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
@@ -169,8 +170,9 @@
     [loginButton setTitle:@"登陆" forState:UIControlStateNormal];
     [loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     loginButton.tag = loginBtn;
-    [loginButton setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
-    [loginButton setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
+//    [loginButton setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
+//    [loginButton setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
+    [loginButton setBackgroundColor:HexRGB(0x9be4aa)];
     [loginButton addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:loginButton];

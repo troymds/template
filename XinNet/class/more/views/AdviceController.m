@@ -42,11 +42,13 @@
 
 - (void)addView
 {
-    CGFloat leftDistance = 0;//左边距
-    CGFloat topDistance = 0;//顶边距
-    _textView = [[UITextView alloc] initWithFrame:CGRectMake(leftDistance,topDistance,kWidth-leftDistance*2,170)];
+    CGFloat leftDistance = 10;//左边距
+    CGFloat topDistance = 10;//顶边距
+    _textView = [[UITextView alloc] initWithFrame:CGRectMake(leftDistance,topDistance,kWidth-leftDistance*2,150)];
     _textView.layer.borderColor = HexRGB(0xd5d5d5).CGColor;
     _textView.layer.borderWidth = 1.0f;
+    _textView.layer.masksToBounds = YES;
+    _textView.layer.cornerRadius = 4.0f;
     _textView.delegate = self;
     _textView.font = [UIFont systemFontOfSize:14];
     _textView.text = placeHoldeStr;
@@ -56,8 +58,10 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame = CGRectMake(11,topDistance+_textView.frame.size.height+11,kWidth-11*2,35);
     [button setTitle:@"提交反馈" forState:UIControlStateNormal];
-    [button setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
-    [button setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
+    [button setBackgroundColor:HexRGB(0x9be4aa)];
+
+//    [button setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
+//    [button setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(btnDown) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
@@ -78,6 +82,8 @@
             if (code == 100) {
                 NSString *data = [dic objectForKey:@"data"];
                 //弹出提交成功窗口
+                adviceStr = @"";
+                _textView.text = @"";
                 ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:@"提交反馈成功" withMessage:data delegate:self cancleButton:@"完成" otherButton:nil, nil];
                 [alertView show];
             }else{

@@ -98,8 +98,10 @@
                 _oneButton = [UIButton buttonWithType:UIButtonTypeCustom];
                 [_oneButton setTitle:cancelButtonTitle?cancelButtonTitle:otherButtonTitles forState:UIControlStateNormal];
                 [_oneButton setTitleColor:HexRGB(0xffffff) forState:UIControlStateNormal];
-                [_oneButton setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
-                [_oneButton setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
+                [_oneButton setBackgroundColor:HexRGB(0x9be4aa)];
+
+//                [_oneButton setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
+//                [_oneButton setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
                 _oneButton.tag = 0;
                 [_oneButton addTarget:self action:@selector(actionButtonDown:) forControlEvents:UIControlEventTouchUpInside];
                 [self addSubview:_oneButton];

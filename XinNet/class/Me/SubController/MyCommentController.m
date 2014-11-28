@@ -137,6 +137,7 @@
     CommentItem *item = [_dataArray objectAtIndex:indexPath.row];
     cell.titileLabel.text = item.title;
     cell.commentLabel.text = item.content;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
