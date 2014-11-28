@@ -12,6 +12,9 @@ typedef void (^StatusSuccessBlock)(NSArray *statues);
 typedef void (^StatusFailureBlock)(NSError *error);
 @interface companyJobTool : NSObject
 
++ (void)statusesWithSuccess:(StatusSuccessBlock)success company_Id:(NSString *)company_id keywords_Str:(NSString *)keywords page:(NSString *)page failure:(StatusFailureBlock)failure;
+
+
 + (void)statusesWithSuccess:(StatusSuccessBlock)success company_Id:(NSString *)company_id keywords_Str:(NSString *)keywords failure:(StatusFailureBlock)failure;
 
 @end

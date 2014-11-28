@@ -12,6 +12,6 @@ typedef void (^StatusSuccessBlock)(NSArray *statues);
 typedef void (^StatusFailureBlock)(NSError *error);
 @interface marketTOOL : NSObject
 
-+ (void)statusesWithSuccess:(StatusSuccessBlock)success  keywords_Id:(NSString *)keywords category_Id:(NSString *)category_id failure:(StatusFailureBlock)failure;
++ (void)statusesWithSuccess:(StatusSuccessBlock)success  keywords_Id:(NSString *)keywords category_Id:(NSString *)category_id page:(NSString *)page failure:(StatusFailureBlock)failure;
 
 @end

@@ -15,6 +15,7 @@
 #import "UIImageView+WebCache.h"
 #import "categoryLestTool.h"
 #import "categoryLestModel.h"
+
 @interface marketController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     UITableView *_tableView;
@@ -24,7 +25,13 @@
     NSMutableArray *_marketArray;
     NSMutableArray *_cagegoryArray;
     NSString *_category_Index;
+    MJRefreshFooterView *_footer;
+    BOOL isLoadMore;//判断是否加载更多
 }
+
+@property (nonatomic,assign) NSInteger pageNum;//页数
+@property (nonatomic,strong) NSString *page;//页数
+
 @end
 
 @implementation marketController
@@ -38,6 +45,10 @@
     _marketArray =[[NSMutableArray alloc]init];
     _cagegoryArray=[[NSMutableArray alloc]init];
     _category_Index = [[NSString alloc]init];
+    
+    _pageNum = 0;
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+    
     [self addTableView];
     [self addRefreshViews];
     [self addLoadStatus];
@@ -46,6 +57,8 @@
 -(void)addMBprogressView{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"加载中...";
+    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
     
 }
 
@@ -57,6 +70,8 @@
     MJRefreshFooterView *footer = [MJRefreshFooterView footer];
     footer.scrollView = _tableView;
     footer.delegate = self;
+    _footer = footer;
+    isLoadMore = NO;
 }
 
 #pragma mark 刷新代理方法
@@ -66,56 +81,76 @@
     if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
         // 上拉加载更多
         [self addloadStatus:refreshView];
-    } else {
-       
     }
-    
-    
 }
+
 -(void)addLoadStatus{
+    _pageNum = 0;
+    if (!isLoadMore) {
+        isLoadMore = YES;
+        _footer.hidden = NO;
+    }
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+    
     [self addMBprogressView];
     [marketTOOL statusesWithSuccess:^(NSArray *statues) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        
         [_marketArray removeAllObjects];
-        
         [_marketArray addObjectsFromArray:statues];
-        
+        _pageNum = _marketArray.count % 10 + 1;
         [_tableView reloadData];
-    }  keywords_Id:nil category_Id:nil failure:^(NSError *error) {
+    }  keywords_Id:nil category_Id:nil page:self.page failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
         
     }];
 
 }
-#pragma mark---加载全部数据
+#pragma mark---加载更多数据
 -(void)addloadStatus:(MJRefreshBaseView *)refreshView{
+    
+    //更新page
+    _pageNum++;
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+    
      [self addMBprogressView];
     if (_moreSelectedBtn.tag ==30) {
         [marketTOOL statusesWithSuccess:^(NSArray *statues) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
-            [_marketArray removeAllObjects];
+            if (statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+            }
             [_marketArray addObjectsFromArray:statues];
             
             [_tableView reloadData];
             [refreshView endRefreshing];
-        }  keywords_Id:nil category_Id:_category_Index failure:^(NSError *error) {
+        }  keywords_Id:nil category_Id:_category_Index page:self.page  failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
         }];
     }else if (_moreSelectedBtn.tag==31){
         [marketTOOL statusesWithSuccess:^(NSArray *statues) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
-            [_marketArray removeAllObjects];
+            if (statues.count > 0 && statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+            }
 
             [_marketArray addObjectsFromArray:statues];
             [_tableView reloadData];
             [refreshView endRefreshing];
             
-        }  keywords_Id:nil category_Id:@"4" failure:^(NSError *error) {
+        }  keywords_Id:nil category_Id:@"4" page:self.page  failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
             
@@ -124,13 +159,19 @@
     [marketTOOL statusesWithSuccess:^(NSArray *statues) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
-        [_marketArray removeAllObjects];
-
+        if (statues.count > 0 && statues.count < 10) {
+            isLoadMore = NO;
+            _footer.hidden = YES;
+        }else
+        {
+            isLoadMore = YES;
+            _footer.hidden = NO;
+        }
         [_marketArray addObjectsFromArray:statues];
         [_tableView reloadData];
         [refreshView endRefreshing];
         
-    }  keywords_Id:nil category_Id:nil failure:^(NSError *error) {
+    }  keywords_Id:nil category_Id:nil  page:self.page failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
         
@@ -147,7 +188,6 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     [self.view addSubview:_tableView];
-
 }
 #pragma mark---分类
 -(void)addMoreView{
@@ -170,12 +210,7 @@
         moreBtn.selected = _moreSelectedBtn.selected;
        
         moreBtn.tag = 30+i;
-       
-
     }
-    
-    
-    
 }
 
 -(void)addBigButton
@@ -216,6 +251,7 @@
     [_moreView removeFromSuperview];
     [_bigButton removeFromSuperview];
 }
+
 //下拉菜单
 -(void)moreBtnClick:(UIButton *)mor{
     categoryLestModel *categoryModel =[_cagegoryArray objectAtIndex:mor.tag-30];
@@ -224,11 +260,9 @@
     _moreSelectedBtn.selected =!_moreSelectedBtn.selected;
     [_bigButton removeFromSuperview];
     [_moreView removeFromSuperview];
-    
-   
-    
-    
+    [self addLoadStatus];
 }
+
 #pragma mark---TableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -236,13 +270,10 @@
     
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    
-}
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return _marketArray.count   ;
 }
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     marketModel *markModel =[_marketArray objectAtIndex:indexPath.row];
      [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -252,6 +283,7 @@
     [self.navigationController pushViewController:productVC animated:YES];
     
 }
+
 -(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellIndexfider =@"cell";

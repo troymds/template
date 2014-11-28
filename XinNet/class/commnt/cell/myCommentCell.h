@@ -15,4 +15,5 @@
 @property (nonatomic, strong) UILabel *detailContent;//评论内容
 @property (nonatomic, strong) UILabel *date;//评论时间
 @property (nonatomic, strong) commentModel *data;//评论数据
+@property (nonatomic, assign) CGFloat detailW; //详情宽度
 @end

@@ -105,10 +105,14 @@
         }else//取消收藏
         {
             [collectionHttpTool cancleCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
-                
-                [RemindView showViewWithTitle:msg location:MIDDLE];
-                [sender setTitle:@"收藏" forState:UIControlStateNormal];
-                NSLog(@"取消收藏成功");
+                if (code == 100) {
+                    [RemindView showViewWithTitle:msg location:MIDDLE];
+                    [sender setTitle:@"收藏" forState:UIControlStateNormal];
+                }else
+                {
+                    [RemindView showViewWithTitle:msg location:MIDDLE];
+                }
+
             } collectionId:self.collectionId withFailure:^(NSError *error) {
                 
                 [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
