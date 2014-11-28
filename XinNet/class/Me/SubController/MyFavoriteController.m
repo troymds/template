@@ -12,6 +12,16 @@
 #import "CategoryListView.h"
 #import "httpTool.h"
 #import "RemindView.h"
+#import "markertDetailsView.h"
+#import "companyDetailsView.h"
+#import "businessDetailsView.h"
+#import "productDetailsView.h"
+#import "jobDetailsView.h"
+#import "interfaceDetailsView.h"
+#import "MBProgressHUD.h"
+
+
+
 
 #define all @"all"
 #define market @"market"
@@ -34,7 +44,10 @@
     
     //记录下载过的数据
     NSMutableDictionary *downLoadDict;
+    UIView *noDataView;
     
+    UIButton *editBtn;
+    UIButton *moreBtn;
 }
 @end
 
@@ -61,6 +74,16 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
     
+    noDataView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth,kHeight-64)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,kWidth,20)];
+    label.backgroundColor = [UIColor clearColor];
+    label.text = @"没有收藏";
+    label.textColor = [UIColor blackColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.center = noDataView.center;
+    [noDataView addSubview:label];
+    [self.view addSubview:noDataView];
+    noDataView.hidden = YES;
     
     [self addRightNavitems];
     
@@ -72,8 +95,8 @@
 //添加右导航按钮
 - (void)addRightNavitems
 {
-    UIButton *editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    editBtn.frame = CGRectMake(0, 0, 40, 25);
+    editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    editBtn.frame = CGRectMake(0, 0, 40, 19);
     [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
     [editBtn setTitle:@"删除" forState:UIControlStateSelected];
     [editBtn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
@@ -81,13 +104,11 @@
     [editBtn addTarget:self action:@selector(edit:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithCustomView:editBtn];
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(0, 0, 40, 25);
-    [button setTitle:@"分类" forState:UIControlStateNormal];
-    [button setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
-    [button setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateSelected];
-    [button addTarget:self action:@selector(playMore) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithCustomView:button];
+    moreBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    moreBtn.frame = CGRectMake(0, 0, 30, 30);
+    [moreBtn setBackgroundImage:[UIImage imageNamed:@"more.png"] forState:UIControlStateNormal];
+    [moreBtn addTarget:self action:@selector(playMore) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithCustomView:moreBtn];
     
     NSArray *array = [NSArray arrayWithObjects:item1,item2, nil];
     self.navigationItem.rightBarButtonItems = array;
@@ -162,6 +183,16 @@
             }else{
                 [_dataArray removeAllObjects];
                 [_dataArray addObjectsFromArray:[downLoadDict objectForKey:all]];
+                if (_dataArray.count!=0) {
+                    noDataView.hidden = YES;
+                }else{
+                    noDataView.hidden = NO;
+                }
+                if (isEdit) {
+                    isEdit = NO;
+                    editBtn.selected = NO;
+                    [_tableView setEditing:NO];
+                }
                 [_tableView reloadData];
             }
         }
@@ -173,6 +204,16 @@
             }else{
                 [_dataArray removeAllObjects];
                 [_dataArray addObjectsFromArray:[downLoadDict objectForKey:market]];
+                if (_dataArray.count!=0) {
+                    noDataView.hidden = YES;
+                }else{
+                    noDataView.hidden = NO;
+                }
+                if (isEdit) {
+                    isEdit = NO;
+                    editBtn.selected = NO;
+                    [_tableView setEditing:NO];
+                }
                 [_tableView reloadData];
             }
         }
@@ -184,6 +225,16 @@
             }else{
                 [_dataArray removeAllObjects];
                 [_dataArray addObjectsFromArray:[downLoadDict objectForKey:company]];
+                if (_dataArray.count!=0) {
+                    noDataView.hidden = YES;
+                }else{
+                    noDataView.hidden = NO;
+                }
+                if (isEdit) {
+                    isEdit = NO;
+                    editBtn.selected = NO;
+                    [_tableView setEditing:NO];
+                }
                 [_tableView reloadData];
             }
         }
@@ -195,6 +246,16 @@
             }else{
                 [_dataArray removeAllObjects];
                 [_dataArray addObjectsFromArray:[downLoadDict objectForKey:business]];
+                if (_dataArray.count!=0) {
+                    noDataView.hidden = YES;
+                }else{
+                    noDataView.hidden = NO;
+                }
+                if (isEdit) {
+                    isEdit = NO;
+                    editBtn.selected = NO;
+                    [_tableView setEditing:NO];
+                }
                 [_tableView reloadData];
             }
         }
@@ -206,6 +267,16 @@
             }else{
                 [_dataArray removeAllObjects];
                 [_dataArray addObjectsFromArray:[downLoadDict objectForKey:display]];
+                if (_dataArray.count!=0) {
+                    noDataView.hidden = YES;
+                }else{
+                    noDataView.hidden = NO;
+                }
+                if (isEdit) {
+                    isEdit = NO;
+                    editBtn.selected = NO;
+                    [_tableView setEditing:NO];
+                }
                 [_tableView reloadData];
             }
         }
@@ -217,6 +288,16 @@
             }else{
                 [_dataArray removeAllObjects];
                 [_dataArray addObjectsFromArray:[downLoadDict objectForKey:manager]];
+                if (_dataArray.count!=0) {
+                    noDataView.hidden = YES;
+                }else{
+                    noDataView.hidden = NO;
+                }
+                if (isEdit) {
+                    isEdit = NO;
+                    editBtn.selected = NO;
+                    [_tableView setEditing:NO];
+                }
                 [_tableView reloadData];
             }
         }
@@ -228,6 +309,16 @@
             }else{
                 [_dataArray removeAllObjects];
                 [_dataArray addObjectsFromArray:[downLoadDict objectForKey:job]];
+                if (_dataArray.count!=0) {
+                    noDataView.hidden = YES;
+                }else{
+                    noDataView.hidden = NO;
+                }
+                if (isEdit) {
+                    isEdit = NO;
+                    editBtn.selected = NO;
+                    [_tableView setEditing:NO];
+                }
                 [_tableView reloadData];
             }
         }
@@ -253,7 +344,12 @@
        NSString *typeStr = [NSString stringWithFormat:@"%d",type];
         [param setValue:typeStr forKey:@"type"];
     }
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.dimBackground = NO;
     [httpTool postWithPath:@"getCollectionList" params:param success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+        
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
         int code = [[dic objectForKey:@"code"] intValue];
@@ -264,7 +360,9 @@
                 if (categoryClick) {
                     [_dataArray removeAllObjects];
                 }
+                noDataView.hidden = NO;
             }else{
+                noDataView.hidden = YES;
                 for (NSDictionary *subDic in array) {
                     FavoriteItem  *item = [[FavoriteItem alloc] initWithDic:subDic];
                     [_dataArray addObject:item];
@@ -312,12 +410,18 @@
                 default:
                     break;
             }
+            if (isEdit) {
+                isEdit = NO;
+                editBtn.selected = NO;
+                [_tableView setEditing:NO];
+            }
             [_tableView reloadData];
         }else{
             NSString *msg = [dic objectForKey:@"msg"];
             [RemindView showViewWithTitle:msg location:MIDDLE];
         }
     } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }
@@ -373,6 +477,7 @@
             }];
         }else{
             isEdit = NO;
+            btn.selected = NO;
             [_tableView setEditing:NO animated:YES];
         }
     }
@@ -420,6 +525,63 @@
 {
     if (isEdit) {
         [deleteArray addObject:indexPath];
+    }else{
+        FavoriteItem *item = [_dataArray objectAtIndex:indexPath.row];
+        int type = [item.type intValue];
+        switch (type) {
+            case 1:
+            {
+                markertDetailsView *detail = [[markertDetailsView alloc] init];
+                detail.markIndex = item.entity_id;
+                [self.navigationController pushViewController:detail animated:YES];
+            }
+                break;
+            case 2:
+            {
+                companyDetailsView *detail = [[companyDetailsView alloc] init];
+                detail.companyDetailIndex = item.entity_id;
+                [self.navigationController pushViewController:detail animated:YES];
+            }
+                break;
+            case 3:
+            {
+                businessDetailsView *detail = [[businessDetailsView alloc] init];
+                detail.businessDetailIndex = item.entity_id;
+                [self.navigationController pushViewController:detail animated:YES];
+            }
+                break;
+            case 4:
+            {
+                productDetailsView *detail = [[productDetailsView alloc] init];
+                detail.productIndex = item.entity_id;
+                [self.navigationController pushViewController:detail animated:YES];
+            }
+                break;
+            case 5:
+            {
+                
+            }
+                break;
+            case 6:
+            {
+                jobDetailsView *detail = [[jobDetailsView alloc] init];
+                detail.jobDetailsIndex = item.entity_id;
+                [self.navigationController pushViewController:detail animated:YES];
+            }
+                break;
+            case 7:
+            {
+                interfaceDetailsView *detail = [[interfaceDetailsView alloc] init];
+                detail.interfaceIndex = item.entity_id;
+                [self.navigationController pushViewController:detail animated:YES];
+            }
+                break;
+                
+                
+            default:
+                break;
+        }
+
     }
 }
 

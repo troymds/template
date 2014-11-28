@@ -153,9 +153,11 @@
     nextBtn.frame = CGRectMake(leftDistance,y,kWidth-leftDistance*2, 35);
     [nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
     nextBtn.enabled = NO;
-    [nextBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [nextBtn setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
-    [nextBtn setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
+    [nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [nextBtn setBackgroundColor:HexRGB(0x9be4aa)];
+
+//    [nextBtn setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
+//    [nextBtn setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
     
     nextBtn.tag = nextType;
     [nextBtn addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];

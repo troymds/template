@@ -11,6 +11,9 @@
 #import "ListView.h"
 #import "aboutTool.h"
 #import "aboutModel.h"
+
+#define aboutUsFilePath [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"aboutus.data"]
+
 @interface aboutController ()
 {
 //    ListView *_nameView;  //软件名称
@@ -34,40 +37,47 @@
     self.title = @"关于我们";
     self.view.backgroundColor =[UIColor whiteColor];
   
-    
     [self addLoadStatus];
 }
 -(void)addLoadStatus{
-    [aboutTool AboutStatusesWithSuccesscategory:^(NSArray *statues) {
-        abModel =[[aboutModel alloc]init];
-        NSDictionary *dict =[statues objectAtIndex:0];
-        abModel.name =[dict objectForKey:@"name"];
-        abModel.company_about =[dict objectForKey:@"company_about"];
-        abModel.company_address =[dict objectForKey:@"company_address"];
-        abModel.company_email =[dict objectForKey:@"company_email"];
-        abModel.company_logo =[dict objectForKey:@"company_logo"];
-        abModel.company_tel =[dict objectForKey:@"company_tel"];
-        abModel.company_website =[dict objectForKey:@"company_website"];
-        abModel.company_weixin =[dict objectForKey:@"company_weixin"];
+    if ([NSKeyedUnarchiver unarchiveObjectWithFile:aboutUsFilePath]) {
+        abModel = [NSKeyedUnarchiver unarchiveObjectWithFile:aboutUsFilePath];
+        [self addViewWithModel:abModel];
+    }else{
+        [aboutTool AboutStatusesWithSuccesscategory:^(NSArray *statues) {
+            abModel =[[aboutModel alloc]init];
+            NSDictionary *dict =[statues objectAtIndex:0];
+            abModel.name =[dict objectForKey:@"name"];
+            abModel.company_about =[dict objectForKey:@"company_about"];
+            abModel.company_address =[dict objectForKey:@"company_address"];
+            abModel.company_email =[dict objectForKey:@"company_email"];
+            abModel.company_logo =[dict objectForKey:@"company_logo"];
+            abModel.company_tel =[dict objectForKey:@"company_tel"];
+            abModel.company_website =[dict objectForKey:@"company_website"];
+            abModel.company_weixin =[dict objectForKey:@"company_weixin"];
+            
+            [NSKeyedArchiver archiveRootObject:abModel toFile:aboutUsFilePath];
+            
+            [self addViewWithModel:abModel];
+            
+        } AboutFailure:^(NSError *error) {
+            
+        } ];
 
-        [self addView];
-
-    } AboutFailure:^(NSError *error) {
-        
-    } ];
+    }
 }
 
-- (void)addView
+- (void)addViewWithModel:(aboutModel *)model
 {
-    
-    CGFloat imgWidth = 250;   //图片宽度
-    CGFloat imgHeight= 100;   //图片高度
+        
     CGFloat topDistance = 10;  //图片距离顶部的距离
+    CGFloat imgWidth = kWidth-30;   //图片宽度
+    CGFloat imgHeight= 110;   //图片高度
     
     //顶部图片
     UIImageView *topImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
     topImg.frame = CGRectMake((kWidth-imgWidth)/2,topDistance,imgWidth,imgHeight);
-    [topImg setImageWithURL:[NSURL URLWithString:abModel.company_logo] placeholderImage:placeHoderImage];
+    [topImg setImageWithURL:[NSURL URLWithString:model.company_logo] placeholderImage:placeHoderImage];
     [self.view addSubview:topImg];
     
     CGFloat leftDistance = 10;    //左边距
@@ -75,7 +85,7 @@
     CGFloat height = 35;   //列表高度
     
     NSArray *array = [NSArray arrayWithObjects:@"软件名称:",@"客户地址:",@"客户电话:",@"客户邮箱:",@"客户官方网址:", nil];
-    NSArray *detailArray = [NSArray arrayWithObjects:abModel.name,abModel.company_address,abModel.company_tel,abModel.company_email,abModel.company_website, nil];
+    NSArray *detailArray = [NSArray arrayWithObjects:model.name,model.company_address,model.company_tel,model.company_email,model.company_website, nil];
     
     UIView *bottomBgView = [[UIView alloc] initWithFrame:CGRectMake(leftDistance,topImg.frame.origin.y+topImg.frame.size.height+10,width,array.count*height)];
     bottomBgView.layer.borderColor = HexRGB(0xd5d5d5).CGColor;

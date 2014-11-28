@@ -11,6 +11,7 @@
 #import "httpTool.h"
 #import "RemindView.h"
 #import "DemandDetailItem.h"
+#import "MBProgressHUD.h"
 
 #define topDistance 11
 #define leftDistance 10
@@ -27,9 +28,11 @@
     
     UIScrollView *_scrollView; //键盘弹出时控制整个试图的上移
     
-    UIView *bottomView;    //底部试图，用于控制整个试图的上移
-    
     id activeText;   //当前活动的输入框 titleField、numField、contentView
+    
+    int bottomSpace;       //确认按钮距离屏幕底端的距离  用于控制键盘弹出时整个视图的位置的调整
+    
+    CGFloat keyboardHeight;  //键盘高度
 }
 @end
 
@@ -48,7 +51,7 @@
     //键盘隐藏通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHiden) name:UIKeyboardWillHideNotification object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
     
     //如果是编辑页面  则加载数据显示
     if (!self.isPublish) {
@@ -56,11 +59,31 @@
     }
 }
 
+//获取键盘高度
+- (void)keyboardWillChange:(NSNotification *)notify
+{
+    NSDictionary *info = [notify userInfo];
+    NSValue *value = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect rect = [value CGRectValue];
+    CGFloat height = rect.size.height;
+    keyboardHeight = height;
+    if ([activeText isKindOfClass:[UITextView class]]) {
+        if (bottomSpace<keyboardHeight) {   //216为键盘的高度 此处设置死了
+            _scrollView.contentSize = CGSizeMake(kWidth, kHeight-64+(keyboardHeight-bottomSpace));
+            bottomSpace = _scrollView.contentSize.height-(pubBtn.frame.origin.y+pubBtn.frame.size.height);
+            [_scrollView setContentOffset:CGPointMake(0, _scrollView.contentSize.height-_scrollView.frame.size.height) animated:YES];
+        }
+    }
+}
+
 //编辑页面加载数据
 - (void)loadData
 {
     NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:self.uid,@"id", nil];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.dimBackground = NO;
     [httpTool postWithPath:@"getDemandDetail" params:param success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
         int code = [[dic objectForKey:@"code"]intValue];
@@ -73,6 +96,7 @@
             [RemindView showViewWithTitle:msg location:MIDDLE];
         }
     } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }
@@ -89,19 +113,14 @@
 - (void)keyboardWillHiden
 {
     [_scrollView setContentSize:CGSizeMake(kWidth, kHeight-64)];
+    bottomSpace = _scrollView.contentSize.height-(pubBtn.frame.origin.y+pubBtn.frame.size.height);
 }
-
-- (void)keyboardWillShow
-{
-    
-}
-
 
 - (void)addView
 {
-    
-    _scrollView = [[UIScrollView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    bottomView.backgroundColor = HexRGB(0xe9f0f5);
+    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0,kWidth,kHeight-64)];
+    _scrollView.backgroundColor = HexRGB(0xe9f0f5);
+    [_scrollView setContentSize:CGSizeMake(kWidth, kHeight-64)];
     [self.view addSubview:_scrollView];
     
     CGFloat y = topDistance;
@@ -129,6 +148,7 @@
     
     titleField = [[UITextField alloc] initWithFrame:CGRectMake(60,0,width-60,height)];
     titleField.delegate= self;
+    titleField.tag = 1000;
     titleField.placeholder = @"请填写标题,30字以内";
     [bgView addSubview:titleField];
     
@@ -142,6 +162,8 @@
     
     numField = [[UITextField alloc] initWithFrame:CGRectMake(60,height,width-60,height)];
     numField.delegate = self;
+    numField.tag = 1001;
+    numField.keyboardType = UIKeyboardTypeNumberPad;
     [bgView addSubview:numField];
     
     
@@ -153,6 +175,7 @@
     label.text = @"内容 :";
     [bgView addSubview:label];
     
+    //内容输入框
     contentView = [[UITextView alloc] initWithFrame:CGRectMake(0,label.frame.origin.y+label.frame.size.height,width,bgView.frame.size.height-(label.frame.origin.y+label.frame.size.height))];
     contentView.text = @"请填写内容,500字以内";
     contentView.textColor = HexRGB(0xc3c3c3);
@@ -161,21 +184,25 @@
     contentView.delegate = self;
     [bgView addSubview:contentView];
     
-    
+    //发布按钮
     pubBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     pubBtn.frame = CGRectMake(leftDistance,topDistance+bgView.frame.size.height+22,kWidth-leftDistance*2,35);
-    [pubBtn setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
-    [pubBtn setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
+    [pubBtn setBackgroundColor:HexRGB(0x9be4aa)];
+
+//    [pubBtn setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
+//    [pubBtn setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
     [pubBtn setTitle:@"确认发布" forState:UIControlStateNormal];
     [pubBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [pubBtn addTarget:self action:@selector(btnDown) forControlEvents:UIControlEventTouchUpInside];
     [_scrollView addSubview:pubBtn];
     
+    bottomSpace = _scrollView.contentSize.height-(pubBtn.frame.origin.y+pubBtn.frame.size.height);
 }
 
 //发布按钮点击事件
 - (void)btnDown
 {
+    [activeText resignFirstResponder];
     if ([self checkData]) {
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:titleField.text,@"title",numField.text,@"num",contentView.text,@"content", nil];
         NSString *path = @"addDemand";
@@ -191,11 +218,11 @@
                 NSString *data;
                 if (_isPublish) {
                     data = @"发布成功";
+                    [self clearData];
                 }else{
                     data = @"修改成功";
                 }
                 [RemindView showViewWithTitle:data location:MIDDLE];
-                [self.navigationController popViewControllerAnimated:YES];
             }else{
                 NSString *msg = [dic objectForKey:@"msg"];
                 [RemindView showViewWithTitle:msg location:MIDDLE];
@@ -204,6 +231,13 @@
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         }];
     }
+}
+
+- (void)clearData
+{
+    titleField.text = @"";
+    numField.text = @"";
+    contentView.text = @"";
 }
 
 - (BOOL)checkData
@@ -223,14 +257,6 @@
     return YES;
 }
 
-
-- (void)clearData
-{
-    titleField.text = @"";
-    numField.text = @"";
-    contentView.text = @"";
-}
-
 #pragma mark textView_delegate
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
@@ -242,13 +268,24 @@
             textView.textColor = [UIColor blackColor];
         }
     }
-    if (bottomView.frame.origin.y>=0) {
-        [UIView animateWithDuration:0.5 animations:^{
-            CGRect rect = bottomView.frame;
-            rect.origin.y -= 80;
-            bottomView.frame = rect;
-        }];
+    if (bottomSpace<keyboardHeight) {   //216为键盘的高度 此处设置死了
+        _scrollView.contentSize = CGSizeMake(kWidth, kHeight-64+(keyboardHeight-bottomSpace));
+        bottomSpace = _scrollView.contentSize.height-(pubBtn.frame.origin.y+pubBtn.frame.size.height);
+        [_scrollView setContentOffset:CGPointMake(0, _scrollView.contentSize.height-_scrollView.frame.size.height) animated:YES];
     }
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (textField.tag == 1001) {
+        NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789\n"] invertedSet];
+        NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+        BOOL basic = [string isEqualToString:filtered];
+        if (!basic) {
+            return NO;
+        }
+    }
+    return YES;
 }
 
 
@@ -268,9 +305,7 @@
 #pragma mark -----
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [titleField resignFirstResponder];
-    [numField resignFirstResponder];
-    [contentView resignFirstResponder];
+    [activeText resignFirstResponder];
 }
 
 

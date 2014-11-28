@@ -68,6 +68,7 @@
 		04AEC4941A247D470030E3E9 /* catemanager@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AEC48E1A247D470030E3E9 /* catemanager@2x.png */; };
 		04AEC4951A247D470030E3E9 /* catemarket@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AEC48F1A247D470030E3E9 /* catemarket@2x.png */; };
 		04AEC4961A247D470030E3E9 /* cateplay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AEC4901A247D470030E3E9 /* cateplay@2x.png */; };
+		04B68B7B1A28005800FDD323 /* edit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B68B7A1A28005800FDD323 /* edit@2x.png */; };
 		04B68CAE1A1B5851002A35AF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B68CAD1A1B5851002A35AF /* main.m */; };
 		04B68CB91A1B5852002A35AF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04B68CB81A1B5852002A35AF /* Images.xcassets */; };
 		04B68CC81A1B5852002A35AF /* XinNetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B68CC71A1B5852002A35AF /* XinNetTests.m */; };
@@ -363,6 +364,7 @@
 		04AEC48E1A247D470030E3E9 /* catemanager@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "catemanager@2x.png"; sourceTree = "<group>"; };
 		04AEC48F1A247D470030E3E9 /* catemarket@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "catemarket@2x.png"; sourceTree = "<group>"; };
 		04AEC4901A247D470030E3E9 /* cateplay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cateplay@2x.png"; sourceTree = "<group>"; };
+		04B68B7A1A28005800FDD323 /* edit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit@2x.png"; sourceTree = "<group>"; };
 		04B68CA81A1B5851002A35AF /* XinNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XinNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04B68CAC1A1B5851002A35AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		04B68CAD1A1B5851002A35AF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -1690,6 +1692,7 @@
 		55B617BB1A240FA300088E39 /* me_Images */ = {
 			isa = PBXGroup;
 			children = (
+				04B68B7A1A28005800FDD323 /* edit@2x.png */,
 				04AEC4821A242CDF0030E3E9 /* box@2x.png */,
 				04AEC4831A242CDF0030E3E9 /* boxSelected@2x.png */,
 				04AEC4801A242CA20030E3E9 /* mySubscirp@2x.png */,
@@ -2093,6 +2096,7 @@
 				04AEC4951A247D470030E3E9 /* catemarket@2x.png in Resources */,
 				55D539361A22C15A007400F6 /* pressent_img@2x.png in Resources */,
 				5595ECA41A25E2DE000D4AB1 /* push_img@2x.png in Resources */,
+				04B68B7B1A28005800FDD323 /* edit@2x.png in Resources */,
 				55D5392E1A22C15A007400F6 /* home_img6.png in Resources */,
 				55C76F901A1C8C5A0074640C /* l.png in Resources */,
 				55B617C81A240FA300088E39 /* finish_pre@2x.png in Resources */,

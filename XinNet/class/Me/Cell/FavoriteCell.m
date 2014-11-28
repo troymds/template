@@ -18,10 +18,17 @@
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         CGFloat height = 62;
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(22,0,kWidth-20,height)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10,0,kWidth-10-35,height)];
         _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.font = [UIFont systemFontOfSize:15];
         [self.contentView addSubview:_titleLabel];
+        
+        CGFloat imgWidth = 30;
+        CGFloat imgHeight = 30;
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"right_sore.png"]];
+        imageView.frame = CGRectMake(kWidth-imgWidth-5,(height-imgHeight)/2,imgWidth,imgHeight);
+        [self.contentView addSubview:imageView];
+        
     }
     return self;
 }

@@ -57,8 +57,16 @@
     
     
     //图片
+    UILabel *imgLabel = [[UILabel alloc] initWithFrame:CGRectMake(leftDistance,_textView.frame.origin.y+_textView.frame.size.height+15,75,75)];
+    imgLabel.layer.borderColor = HexRGB(0xd5d5d5).CGColor;
+    imgLabel.layer.borderWidth = 1.0f;
+    imgLabel.text = @"图片";
+    imgLabel.textColor = HexRGB(0xd5d5d5);
+    imgLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:imgLabel];
+    
     _publishImg = [[TJImageView alloc] initWithFrame:CGRectMake(leftDistance,_textView.frame.origin.y+_textView.frame.size.height+15,75,75)];
-    _publishImg.backgroundColor = [UIColor redColor];
+    _publishImg.backgroundColor = [UIColor clearColor];
     [self.view addSubview:_publishImg];
     
     addImgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -83,8 +91,10 @@
     [button setTitle:@"确认发布" forState:UIControlStateNormal];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     button.tag = 1001;
-    [button setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
-    [button setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
+    [button setBackgroundColor:HexRGB(0x9be4aa)];
+
+//    [button setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
+//    [button setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
     button.frame = CGRectMake(10,_publishImg.frame.origin.y+_publishImg.frame.size.height+20,kWidth-10*2,36);
     [button addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
