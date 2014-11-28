@@ -38,9 +38,9 @@
     _companyJobArray =[NSMutableArray array];
     [self addShowNoDataView];
     
-    _pageNum = 1;
+    _pageNum = 0;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
-//    [self addTableView];
+    [self addTableView];
     [self addRefreshViews];
     [self addMBprogressView];
     [self addLoadStatus];
@@ -87,6 +87,7 @@
         if (statues.count < 10) {
             isLoadMore = NO;
             _footer.hidden = YES;
+             [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
         }else
         {
             isLoadMore = YES;
@@ -114,7 +115,9 @@
 
 #pragma mark----加载数据
 -(void)addLoadStatus{
-    _pageNum = 1;
+    _pageNum = 0;
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+
     if (!isLoadMore) {
         isLoadMore = YES;
         _footer.hidden = NO;
@@ -141,7 +144,7 @@
     _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, KAppH) style:UITableViewStylePlain];
     _tableView.delegate =self;
     _tableView.dataSource =self;
-    _tableView.backgroundColor =[UIColor redColor];
+    _tableView.backgroundColor =[UIColor whiteColor];
     _tableView.showsHorizontalScrollIndicator = NO;
     _tableView.showsVerticalScrollIndicator = NO;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;

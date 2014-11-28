@@ -16,11 +16,7 @@
 
 @interface aboutController ()
 {
-//    ListView *_nameView;  //软件名称
-//    ListView *_addressView; //客户地址
-//    ListView *_phoneView;   //客户电话
-//    ListView *_emailView;   //客户邮箱
-//    ListView *_websiteView; //客户官方网址
+
     aboutModel *abModel;
 }
 

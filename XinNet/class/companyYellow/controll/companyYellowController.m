@@ -75,6 +75,8 @@
 -(void)addLoadStatus
 {
     _pageNum = 0;
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+
     if (!isLoadMore) {
         isLoadMore = YES;
         _footer.hidden = NO;
@@ -103,6 +105,7 @@
         if (statues.count < 10) {
             isLoadMore = NO;
             _footer.hidden = YES;
+             [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
         }else
         {
             isLoadMore = YES;

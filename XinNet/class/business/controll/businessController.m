@@ -63,7 +63,6 @@
 -(void)addMBprogressView{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"加载中...";
-//    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     
 }
 

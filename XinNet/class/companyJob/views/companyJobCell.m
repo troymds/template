@@ -38,7 +38,7 @@
         companyLabel.font =[UIFont systemFontOfSize:PxFont(20)];
         
         
-        timeLael = [[UILabel alloc] initWithFrame:CGRectMake(YYBorder, 55, 60, 20)];
+        timeLael = [[UILabel alloc] initWithFrame:CGRectMake(YYBorder, 55, 160, 20)];
         timeLael.text = @"时间";
         [self addSubview:timeLael];
         timeLael.font =[UIFont systemFontOfSize:PxFont(20)];
