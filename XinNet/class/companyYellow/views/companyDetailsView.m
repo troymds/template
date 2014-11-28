@@ -33,7 +33,7 @@
     self.view.backgroundColor =HexRGB(0xe9f1f6);
     
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"shar_sdk_img.png" highlightedSearch:@"shar_sdk_img.png" target:(self) action:@selector(sharSdk:)];
-    
+    NSLog(@"--------%@",_companyDetailIndex);
     [self addLoadStatus];
     
 

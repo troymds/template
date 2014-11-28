@@ -16,14 +16,18 @@
 #import "RemindView.h"
 #import "SystemConfig.h"
 #import "UIImageView+WebCache.h"
+#import "MJRefresh.h"
+#import "LoginController.h"
 
-@interface squareController ()<UITableViewDataSource,UITableViewDelegate,TJImageViewDelegate>
+@interface squareController ()<UITableViewDataSource,UITableViewDelegate,TJImageViewDelegate,MJRefreshBaseViewDelegate,ReloadViewDelegate>
 {
     UITableView *_tableView;
     NSMutableArray *_dataArray;
     int _page;
     BOOL isRefresh;
     BOOL isLoad;
+    MJRefreshFooterView *footView;
+    SquareHeadView *headView;
 }
 @end
 
@@ -48,9 +52,35 @@
     
     [self addRightNavButton];
     _page = 0;
-    [self loadData];
+    
+    
     [self addHeadView];
+    
+    [self loadData];
+    
+    [self addRefreshView];
+    [self loadHeadViewData];
+
 }
+
+
+//添加上拉加载
+- (void)addRefreshView
+{
+    footView =[[MJRefreshFooterView alloc] init];
+    footView.delegate = self;
+    footView.scrollView = _tableView;
+}
+
+
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        isLoad = YES;
+        [self loadData];
+    }
+}
+
 
 //添加右导航按钮
 - (void)addRightNavButton
@@ -66,32 +96,72 @@
 //右导航按钮点击
 - (void)rightBarButtonDown
 {
-    PublishTopicController *ptc = [[PublishTopicController alloc] init];
-    [self.navigationController pushViewController:ptc animated:YES];
+    if ([SystemConfig sharedInstance].isUserLogin) {
+        PublishTopicController *ptc = [[PublishTopicController alloc] init];
+        ptc.delegate = self;
+        [self.navigationController pushViewController:ptc animated:YES];
+    }else{
+        [RemindView showViewWithTitle:@"您还未登录,请先登录" location:MIDDLE];
+    }
+    
+}
+#pragma mark   reloadViewDelegate
+- (void)reloadTableView
+{
+    _page = 0;
+    [self loadData];
 }
 
-//顶部图片
+- (void)reloadView
+{
+    [self loadHeadViewData];
+}
+
+#pragma mark --------
+
+//添加顶部视图
 - (void)addHeadView
 {
-    SquareHeadView *headView = [[SquareHeadView alloc] initWithFrame:CGRectMake(0, 0, kWidth,154)];
-    headView.iconImg.image = [UIImage imageNamed:@"l"];
+    headView = [[SquareHeadView alloc] initWithFrame:CGRectMake(0, 0, kWidth,154)];
+    headView.iconImg.image = [UIImage imageNamed:@"user_default.png"];
     headView.iconImg.delegate = self;
-    headView.nameLabel.text = @"我是雷某某";
+    [headView.loginBtn addTarget:self action:@selector(loginBtnDown) forControlEvents:UIControlEventTouchUpInside];
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,headView.frame.size.height-1,kWidth,1)];
     line.backgroundColor = HexRGB(0xd5d5d5);
     [headView addSubview:line];
     _tableView.tableHeaderView = headView;
-    
-    if ([SystemConfig sharedInstance].userItem) {
-        NSString *iconImg = [SystemConfig sharedInstance].userItem.avatar;
-        NSString *userName = [SystemConfig sharedInstance].userItem.user_name;
-        if (iconImg.length!=0) {
-            [headView.iconImg setImageWithURL:[NSURL URLWithString:iconImg] placeholderImage:[UIImage imageNamed:@""]];
+
+}
+
+//刷新顶部视图数据
+- (void)loadHeadViewData
+{
+    if ([SystemConfig sharedInstance].isUserLogin) {
+        headView.loginBtn.hidden = YES;
+        headView.nameLabel.hidden = NO;
+        if ([SystemConfig sharedInstance].userItem) {
+            NSString *iconImg = [SystemConfig sharedInstance].userItem.avatar;
+            NSString *userName = [SystemConfig sharedInstance].userItem.user_name;
+            if (iconImg.length!=0) {
+                [headView.iconImg setImageWithURL:[NSURL URLWithString:iconImg] placeholderImage:[UIImage imageNamed:@"user_default.png"]];
+            }
+            if (userName.length!=0) {
+                headView.nameLabel.text = userName;
+                headView.nameLabel.hidden = NO;
+                headView.loginBtn.hidden = YES;
+            }
         }
-        if (userName.length!=0) {
-            headView.nameLabel.text = userName;
-        }
+    }else{
+        headView.loginBtn.hidden = NO;
+        headView.nameLabel.hidden = YES;
     }
+}
+
+- (void)loginBtnDown
+{
+    LoginController *login = [[LoginController alloc] init];
+    login.delegate = self;
+    [self.navigationController pushViewController:login animated:YES];
 }
 
 
@@ -119,16 +189,38 @@
         NSDictionary *dic = [result objectForKey:@"response"];
         int code = [[dic objectForKey:@"code"]intValue];
         if (code ==100) {
+            if (_page==0) {
+                [_dataArray removeAllObjects];
+            }
             NSArray *data = [dic objectForKey:@"data"];
             if (![data isKindOfClass:[NSNull class]]) {
                 for (NSDictionary *subDic in data) {
                     SquareUserItem *item = [[SquareUserItem alloc] initWithDic:subDic];
                     [_dataArray addObject:item];
                 }
+            }else{
+                if (isLoad) {
+                    [RemindView showViewWithTitle:@"数据已全部加载完毕" location:MIDDLE];
+                }
+            }
+            if (isLoad) {
+                isLoad = NO;
+                [footView endRefreshing];
             }
             [_tableView reloadData];
+        }else{
+            if (isLoad) {
+                isLoad = NO;
+                [footView endRefreshing];
+            }
+            NSString *msg = [dic objectForKey:@"msg"];
+            [RemindView showViewWithTitle:msg location:MIDDLE];
         }
     } failure:^(NSError *error) {
+        if (isLoad) {
+            isLoad = NO;
+            [footView endRefreshing];
+        }
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }

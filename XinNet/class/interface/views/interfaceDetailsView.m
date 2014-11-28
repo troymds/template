@@ -9,10 +9,14 @@
 #import "interfaceDetailsView.h"
 #import "YYSearchButton.h"
 #import "YYalertView.h"
-#define YYBODER 20
-@interface interfaceDetailsView ()<YYalertViewDelegate>
+#import "interfaecDetailesTool.h"
+#import "interfaceDetailModel.h"
+#define YYBODER 16
+@interface interfaceDetailsView ()<YYalertViewDelegate,UIWebViewDelegate>
 {
     UIScrollView *_backScrollView;
+    UIWebView *interfaceWebView;
+    interfaceDetailModel *interfaceModel;
 }
 @end
 
@@ -24,21 +28,94 @@
     self.title =@"展会详情";
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"colloct_img.png" highlightedSearch:@"colloct_img.png" target:(self) action:@selector(collectItem)];
 
-    [self addheader];
+    
     [self addWriteBtn];
+    [self addLoadStatus];
 }
 -(void)collectItem{
     
 }
--(void)addheader{
+-(void)addLoadStatus{
+    [interfaecDetailesTool CompanyStatusesWithSuccesscategory:^(NSArray *statues) {
+        NSDictionary *dict =[statues objectAtIndex:0];
+        interfaceModel=[[interfaceDetailModel alloc]init];
+        interfaceModel.cover =[dict objectForKey:@"cover"];
+        interfaceModel.title =[dict objectForKey:@"title"];
+        interfaceModel.create_time =[dict objectForKey:@"create_time"];
+        interfaceModel.from =[dict objectForKey:@"from"];
+        interfaceModel.wapUrl =[dict objectForKey:@"wapUrl"];
+        interfaceModel.indexId =[dict objectForKey:@"id"];
+        [self addheaderView];
+        
+    } company_id:_interfaceIndex CompanyFailure:^(NSError *error) {
+        
+    }];
+}
+#pragma mark webViewDelegate
+-(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    
+    return YES;
+}
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    
+    float  webheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
+    
+    interfaceWebView.frame = CGRectMake(0, 100, kWidth, webheight);
+    
+    _backScrollView.contentSize = CGSizeMake(kWidth,webheight+100);
+    NSLog(@"%f",webheight);
+    
+}
+#pragma mark--添加UI
+-(void)addheaderView{
+    
+    
+    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-64)];
+    _backScrollView.userInteractionEnabled=YES;
+    _backScrollView.backgroundColor=HexRGB(0xededed);
+    [self.view addSubview:_backScrollView];
+    _backScrollView.bounces = NO;
+    _backScrollView.showsVerticalScrollIndicator = NO;
+    _backScrollView.showsHorizontalScrollIndicator = NO;
+    
+    UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(YYBODER, 5, 65, 65)];
+    [_backScrollView addSubview:headerImage];
+    [headerImage setImageWithURL:[NSURL URLWithString:interfaceModel.cover] placeholderImage:placeHoderImage];
+    
+    
+    UILabel *headerLabel =[[UILabel alloc]initWithFrame:CGRectMake(YYBODER+80, 5, kWidth-YYBODER*2-80, 30)];
+    headerLabel.text =interfaceModel.title;
+    headerLabel.textAlignment = NSTextAlignmentLeft;
+    headerLabel.backgroundColor =[UIColor clearColor];
+    headerLabel.textColor=HexRGB(0x3a3a3a);
+    headerLabel.font =[UIFont systemFontOfSize:PxFont(23)];
+    [_backScrollView addSubview:headerLabel];
+    
+    for (int i=0; i<2; i++) {
+        NSArray *titleArr =@[[NSString stringWithFormat:@"时间:%@",interfaceModel.create_time],[NSString stringWithFormat:@"来源:%@",interfaceModel.from]];
+        UILabel *titleLabel =[[UILabel alloc]initWithFrame:CGRectMake(YYBODER+80, 35+i%3*(20),kWidth-YYBODER*2-80, 20)];
+        titleLabel.text =titleArr[i];
+        titleLabel.textAlignment = NSTextAlignmentLeft;
+        titleLabel.backgroundColor =[UIColor clearColor];
+        titleLabel.textColor=HexRGB(0x808080);
+        titleLabel.font =[UIFont systemFontOfSize:PxFont(18)];
+        [_backScrollView addSubview:titleLabel];
+        
+    }
+    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(0, 90, kWidth, 1)];
+    [_backScrollView addSubview:line];
+    line.backgroundColor =HexRGB(0xe6e3e4);
 
-    UIWebView *companyWebView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
-    companyWebView.scrollView.bounces = NO;
-    companyWebView.scrollView.showsHorizontalScrollIndicator = NO;
-    companyWebView.scrollView.showsVerticalScrollIndicator =NO;
-    [companyWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_interface_Url]] ];
-    [self.view addSubview:companyWebView];
-    companyWebView.backgroundColor =[UIColor clearColor];
+    interfaceWebView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 100, kWidth, kHeight-100)];
+    interfaceWebView.scrollView.bounces = YES;
+    interfaceWebView.delegate =self;
+    interfaceWebView.scrollView.showsHorizontalScrollIndicator = NO;
+    interfaceWebView.scrollView.showsVerticalScrollIndicator =NO;
+    [interfaceWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_interface_Url]] ];
+    [_backScrollView addSubview:interfaceWebView];
+    interfaceWebView.backgroundColor =[UIColor clearColor];
 
 
 

@@ -15,6 +15,7 @@
 #import "UIImageView+WebCache.h"
 #import "categoryLestTool.h"
 #import "categoryLestModel.h"
+
 @interface marketController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     UITableView *_tableView;
@@ -56,6 +57,8 @@
 -(void)addMBprogressView{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"加载中...";
+    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
     
 }
 

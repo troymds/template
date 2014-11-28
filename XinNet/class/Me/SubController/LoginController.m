@@ -13,6 +13,9 @@
 #import "SystemConfig.h"
 #import "UserItem.h"
 #import "XWDataModelSingleton.h"
+#import "squareController.h"
+#import "ReloadViewDelegate.h"
+#import "FindPasswordController.h"
 
 #define topDistance  20
 #define leftDistance 10
@@ -36,6 +39,8 @@
     UIButton *playButton;//密码显示按钮
     
 }
+
+
 @end
 
 @implementation LoginController
@@ -48,18 +53,15 @@
     }
     self.title = @"登陆";
     // Do any additional setup after loading the view.
-    
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_home_img.png" highlightedSearch:@"nav_home_img.png" target:(self) action:@selector(back)];
+
     [self addView];
-    
-    if (_userNameField.text.length!=0&&_secretField.text.length!=0) {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        if ([defaults objectForKey:@"autoLogin"]) {
-            NSString *str = [defaults objectForKey:@"autoLogin"];
-            if ([str isEqualToString:@"1"]) {
-                [self login];
-            }
-        }
-    }
+}
+
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
@@ -113,29 +115,29 @@
     [bgView addSubview:playButton];
     
     y+=bgView.frame.size.height+5;
-    autoLonginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    autoLonginBtn.frame = CGRectMake(leftDistance,y,30,30);
-    [autoLonginBtn setImage:[UIImage imageNamed:@"box.png"] forState:UIControlStateNormal];
-    [autoLonginBtn setImage:[UIImage imageNamed:@"boxSelected.png"] forState:UIControlStateSelected];
-    
-    //判断用户是否设置了自动登录
-    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-    if ([user objectForKey:@"autoLogin"]) {
-        NSString *str = [user objectForKey:@"autoLogin"];
-        if ([str isEqualToString:@"1"]) {
-            autoLonginBtn.selected = YES;
-        }
-    }
-    [autoLonginBtn addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
-    autoLonginBtn.tag = autoBtn;
-    [self.view addSubview:autoLonginBtn];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(leftDistance+30,y+5, 100,15)];
-    label.backgroundColor = [UIColor clearColor];
-    label.font = [UIFont systemFontOfSize:12];
-    label.text = @"自动登录";
-    label.textColor = HexRGB(0x808080);
-    [self.view addSubview:label];
+//    autoLonginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    autoLonginBtn.frame = CGRectMake(leftDistance,y,30,30);
+//    [autoLonginBtn setImage:[UIImage imageNamed:@"box.png"] forState:UIControlStateNormal];
+//    [autoLonginBtn setImage:[UIImage imageNamed:@"boxSelected.png"] forState:UIControlStateSelected];
+//    
+//    //判断用户是否设置了自动登录
+//    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+//    if ([user objectForKey:@"autoLogin"]) {
+//        NSString *str = [user objectForKey:@"autoLogin"];
+//        if ([str isEqualToString:@"1"]) {
+//            autoLonginBtn.selected = YES;
+//        }
+//    }
+//    [autoLonginBtn addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
+//    autoLonginBtn.tag = autoBtn;
+//    [self.view addSubview:autoLonginBtn];
+//    
+//    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(leftDistance+30,y+5, 100,15)];
+//    label.backgroundColor = [UIColor clearColor];
+//    label.font = [UIFont systemFontOfSize:12];
+//    label.text = @"自动登录";
+//    label.textColor = HexRGB(0x808080);
+//    [self.view addSubview:label];
     
     losePassword = [UIButton buttonWithType:UIButtonTypeCustom];
     losePassword.frame = CGRectMake(kWidth-leftDistance-80,y+5,80, 15);
@@ -186,21 +188,22 @@
 - (void)btnDown:(UIButton *)btn
 {
     switch (btn.tag) {
-        case autoBtn:
-        {
-            btn.selected = !btn.selected;
-            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-            if (btn.selected) {
-                [user setObject:@"1" forKey:@"autoLogin"];  //1表示自动登录
-            }else{
-                [user setObject:@"0" forKey:@"autoLogin"];
-            }
-            
-        }
-            break;
+//        case autoBtn:
+//        {
+//            btn.selected = !btn.selected;
+//            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+//            if (btn.selected) {
+//                [user setObject:@"1" forKey:@"autoLogin"];  //1表示自动登录
+//            }else{
+//                [user setObject:@"0" forKey:@"autoLogin"];
+//            }
+//            
+//        }
+//            break;
         case loseBtn:
         {
-            
+            FindPasswordController *fc = [[FindPasswordController alloc] init];
+            [self.navigationController pushViewController:fc animated:YES];
         }
             break;
         case registerBtn:
@@ -244,6 +247,7 @@
     [httpTool postWithPath:@"login" params:param success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
+        NSLog(@"%@",result);
         int code = [[dic objectForKey:@"code"] intValue];
         if (code == 100) {
             NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
@@ -260,6 +264,22 @@
             [SystemConfig sharedInstance].isUserLogin = YES;
             [SystemConfig sharedInstance].uid = item.uid;
             [SystemConfig sharedInstance].userItem = item;
+            
+            //是否是从话题广场跳转过来登陆的
+            int i = 0;
+            for (UIViewController *controller in self.navigationController.viewControllers) {
+                if ([controller isKindOfClass:[squareController class]]) {
+                    if ([controller respondsToSelector:@selector(reloadView)]) {
+                        break;
+                    }
+                }
+                i++;
+            }
+            if (i<self.navigationController.viewControllers.count) {
+                if ([self.delegate respondsToSelector:@selector(reloadView)]) {
+                    [self.delegate reloadView];
+                }
+            }
             
             [self.navigationController popViewControllerAnimated:YES];
         }else{

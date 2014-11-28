@@ -60,10 +60,10 @@
     self.iconImg.layer.masksToBounds = YES;
     self.iconImg.layer.cornerRadius = IconImgWidth/2;
     if (item.iconImg&&item.iconImg.length!=0) {
-        [self.iconImg setImageWithURL:[NSURL URLWithString:item.iconImg] placeholderImage:[UIImage imageNamed:@"l.png"]];
+        [self.iconImg setImageWithURL:[NSURL URLWithString:item.iconImg] placeholderImage:[UIImage imageNamed:@"user_default.png"]];
     }else{
         //没头像  加载默认图片
-        self.iconImg.image = [UIImage imageNamed:@"l"];
+        self.iconImg.image = [UIImage imageNamed:@"user_default.png"];
     }
     x += IconImgWidth +5;
     self.userNameLabel.frame = CGRectMake(x, TopSapce,150,UserNameHeight);
@@ -86,7 +86,7 @@
     //用户是否发布了图片
     if (item.image&&item.image.length!=0){
         self.publishImg.hidden = NO;
-        self.publishImg.frame = CGRectMake((kWidth-PublishImgWidth)/2,y, PublishImgWidth,PublishImgHeiht);
+        self.publishImg.frame = CGRectMake(x,y, PublishImgWidth,PublishImgHeiht);
         //此处应设置图片
         [self.publishImg setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"l.png"]];
         

@@ -145,6 +145,7 @@
     jobDetailsView *jobVc =[[jobDetailsView alloc]init];
     jobVc.job_urlWeb = jobModel.job_url;
     jobVc.company_urlWeb = jobModel.company_url;
+    jobVc.jobDetailsIndex =jobModel.indexId;
     [self.navigationController pushViewController:jobVc animated:YES];
     
 }

@@ -16,6 +16,11 @@
 @property (nonatomic,copy) NSString *content;
 @property (nonatomic,copy) NSString *user_name;
 @property (nonatomic,copy) NSString *user_avatar;
+@property (nonatomic,copy) NSString *entity_id;
+@property (nonatomic,copy) NSString *title;
+@property (nonatomic,copy) NSString *type;
+
+
 
 - (id)initWithDic:(NSDictionary *)dic;
 

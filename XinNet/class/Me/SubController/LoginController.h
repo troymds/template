@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ReloadViewDelegate.h"
 
-@interface LoginController : UIViewController
+@interface LoginController : UIViewController<ReloadViewDelegate>
+
+@property (nonatomic,assign) id <ReloadViewDelegate> delegate;
 
 @end

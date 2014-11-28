@@ -10,4 +10,6 @@
 
 @interface interfaceDetailsView : UIViewController
 @property(nonatomic,strong)NSString *interface_Url;
+@property(nonatomic,strong)NSString *interfaceIndex;
+
 @end

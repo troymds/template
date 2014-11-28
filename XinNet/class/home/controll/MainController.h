@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface MainController : UIViewController
-
+//离线数据
+@property(nonatomic,strong)NSMutableArray *hotImageArrayOff;
 @end

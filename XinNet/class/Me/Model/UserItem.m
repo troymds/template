@@ -33,11 +33,6 @@
         }else{
             self.mobile = @"";
         }
-        if (![dic[@"user_name"] isKindOfClass:[NSNull class]]) {
-            self.mobile = dic[@"user_name"];
-        }else{
-            self.mobile = @"";
-        }
         if (![dic[@"username"] isKindOfClass:[NSNull class]]) {
             self.user_name = dic[@"username"];
         }else{

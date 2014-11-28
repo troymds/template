@@ -51,7 +51,7 @@
     if ([SystemConfig sharedInstance].userItem) {
         UserItem *item = [SystemConfig sharedInstance].userItem;
         if (item.avatar.length!=0) {
-            [_iconImageView setImageWithURL:[NSURL URLWithString:item.avatar] placeholderImage:[UIImage imageNamed:@""]];
+            [_iconImageView setImageWithURL:[NSURL URLWithString:item.avatar] placeholderImage:[UIImage imageNamed:@"user_default.png"]];
         }
         if (item.user_name.length!=0) {
             _nickNameView.textField.text = item.user_name;
@@ -107,7 +107,7 @@
     [bgView addSubview:_iconView];
     
     _iconImageView = [[TJImageView alloc] initWithFrame:CGRectMake(_iconView.frame.size.width-20-(firstHeight-20),10,(firstHeight-20), (firstHeight-20))];
-    _iconImageView.image = [UIImage imageNamed:@"l"];
+    _iconImageView.image = [UIImage imageNamed:@"user_default.png"];
     _iconImageView.layer.masksToBounds = YES;
     _iconImageView.layer.cornerRadius = 4.0f;
     _iconImageView.delegate = self;
@@ -192,7 +192,6 @@
         
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
-
 }
 
 //上传个人资料
@@ -201,6 +200,13 @@
     NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:_nickNameView.textField.text,@"username", nil];
     if (data.length!=0) {
         [param setObject:data forKey:@"avatar"];
+    }else{
+        if ([SystemConfig sharedInstance].isUserLogin) {
+            UserItem *item = [SystemConfig sharedInstance].userItem;
+            if (item.avatar.length!=0) {
+                [param setObject:item.avatar forKey:@"avatar"];
+            }
+        }
     }
     if (_phoneView.textField.text.length!=0) {
         [param setObject:_phoneView.textField.text forKey:@"mobile"];
@@ -247,6 +253,7 @@
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }
+
 
 //点击头像
 - (void)imageViewClick:(TJImageView *)view
