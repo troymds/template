@@ -16,6 +16,7 @@
     UIButton *_selectedBtn;
     UIView *companyBackView;
     UIView *_orangLin;
+    UILabel *dataLabel;
     
     UITableView *_allTableView;
     UITableView *_supplyTablView;
@@ -27,6 +28,7 @@
 
     MJRefreshFooterView *_footer;
     BOOL isLoadMore;//判断是否加载更多
+    
 }
 @property(nonatomic ,strong)UIScrollView *BigCompanyScrollView;
 @property (nonatomic,assign) NSInteger pageNum;//页数
@@ -57,8 +59,20 @@
     [self addRefreshViews];
     [self addbusinessBtn];
     [self addLoadStatus];
+    [self addShowNoDataView];
 }
-
+- (void)addShowNoDataView
+{
+    dataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+    dataLabel.textAlignment = NSTextAlignmentCenter;
+    dataLabel.backgroundColor = [UIColor clearColor];
+    dataLabel.text = @"没有数据！";
+    dataLabel.hidden = YES;
+    dataLabel.enabled = NO;
+    [_BigCompanyScrollView addSubview:dataLabel];
+    
+    
+}
 #pragma  mark ------显示指示器
 -(void)addMBprogressView{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -106,6 +120,14 @@
         
     }else if (_selectedBtn.tag==21){
         [businessTool statusesWithSuccess:^(NSArray *statues) {
+            if (statues.count ==0) {
+                _supplyTablView .hidden = YES;
+                dataLabel.hidden = NO;
+                dataLabel.frame =CGRectMake(kWidth, 0, kWidth, kHeight-64);
+            }else{
+                _supplyTablView .hidden = NO;
+                dataLabel.hidden = YES;
+            }
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             [_supplyBusinessArray removeAllObjects];
             [_supplyBusinessArray addObjectsFromArray:statues];
@@ -222,6 +244,7 @@
     _supplyTablView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_BigCompanyScrollView addSubview:_supplyTablView];
     _supplyTablView.backgroundColor =[UIColor whiteColor];
+    _supplyTablView.hidden = YES;
     _supplyTablView.delegate =self;
     _supplyTablView.dataSource = self;
 }

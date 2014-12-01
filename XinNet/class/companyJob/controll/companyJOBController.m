@@ -14,7 +14,6 @@
 
 @interface companyJOBController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
-    UITableView *_tableView;
     
     NSMutableArray *_companyJobArray;
     MJRefreshFooterView *_footer;
@@ -27,7 +26,7 @@
 @end
 
 @implementation companyJOBController
-
+@synthesize tableView =_tableView;
 - (void)viewDidLoad {
     [super viewDidLoad];
     if (IsIos7) {
@@ -42,7 +41,6 @@
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     [self addTableView];
     [self addRefreshViews];
-    [self addMBprogressView];
     [self addLoadStatus];
     
 }
@@ -61,7 +59,7 @@
     
     // 2.上拉加载更多
     MJRefreshFooterView *footer = [MJRefreshFooterView footer];
-    footer.scrollView = _tableView;
+    footer.scrollView = self.tableView;
     footer.delegate = self;
     _footer = footer;
     isLoadMore = NO;
@@ -94,7 +92,7 @@
             _footer.hidden = NO;
         }
                [_companyJobArray addObjectsFromArray:statues];
-        [_tableView reloadData];
+        [self.tableView reloadData];
         [refreshView endRefreshing];
     } company_Id:nil keywords_Str:nil page:self.page failure:^(NSError *error) {
         
@@ -115,6 +113,8 @@
 
 #pragma mark----加载数据
 -(void)addLoadStatus{
+    [self addMBprogressView];
+
     _pageNum = 0;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
 
@@ -124,16 +124,12 @@
     }
     
     [companyJobTool statusesWithSuccess:^(NSArray *statues) {
-        if (statues.count==0) {
-            [_tableView removeFromSuperview];
-            dataLabel.hidden = NO;
-        }else{
-            [self addTableView];
-            dataLabel.hidden = YES;
-        }
-        
+
+        [_tableView reloadData];
         [_companyJobArray removeAllObjects];
         [_companyJobArray addObjectsFromArray:statues];
+        _pageNum = _companyJobArray.count % 10 + 1;
+
         [_tableView reloadData];
     } company_Id:nil keywords_Str:nil page:self.page failure:^(NSError *error) {
         

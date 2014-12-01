@@ -103,7 +103,6 @@
 }
 #pragma mark---加载数据
 -(void)addLoadStatus:(MJRefreshBaseView *)refershview {
-    _pageNum = 0;
         //更新page
     _pageNum++;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
@@ -145,7 +144,6 @@
                     {
                         isLoadMore = YES;
                         _footer.hidden = NO;
-                        [_businessArray removeAllObjects];
 
                     }
 
@@ -201,6 +199,7 @@
 }
 #pragma mark---加载数据
 -(void)addLoadStatuss {
+    _pageNum =0;
     if (!isLoadMore) {
         isLoadMore = YES;
         _footer.hidden = NO;
