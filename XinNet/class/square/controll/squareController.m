@@ -171,6 +171,7 @@
 - (void)imageViewClick:(TJImageView *)view
 {
     PersonalController *pc = [[PersonalController alloc] init];
+    pc.delegate = self;
     [self.navigationController pushViewController:pc animated:YES];
 }
 
