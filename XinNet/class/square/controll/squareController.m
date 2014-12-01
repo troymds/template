@@ -170,9 +170,13 @@
 #pragma mark 个人头像点击
 - (void)imageViewClick:(TJImageView *)view
 {
-    PersonalController *pc = [[PersonalController alloc] init];
-    pc.delegate = self;
-    [self.navigationController pushViewController:pc animated:YES];
+    if (![SystemConfig sharedInstance].isUserLogin) {
+        [RemindView showViewWithTitle:@"您还未登陆,请先登录" location:MIDDLE];
+    }else{
+        PersonalController *pc = [[PersonalController alloc] init];
+        pc.delegate = self;
+        [self.navigationController pushViewController:pc animated:YES];
+    }
 }
 
 #pragma mark 请求数据
