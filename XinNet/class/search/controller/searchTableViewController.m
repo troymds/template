@@ -360,8 +360,13 @@
         Cell.selectionStyle =UITableViewCellSelectionStyleNone;
         businessModel *busineModel =[_businessArray objectAtIndex:indexPath.row];
         Cell.textLabel.text =busineModel.title;
-        Cell.imageView.image = [UIImage imageNamed:@"business_img.png"];
-        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
+        if ([busineModel.typeId isEqualToString:@"2"]) {
+            Cell.imageView.image = [UIImage imageNamed:@"business_imge.png"];
+            
+        }else{
+            Cell.imageView.image = [UIImage imageNamed:@"business_img.png"];
+            
+        }        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
         [Cell.contentView addSubview:cellLine];
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
         return Cell;

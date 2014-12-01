@@ -324,8 +324,18 @@
     marketModel *markModel =[_marketArray objectAtIndex:indexPath.row];
     [cell.marketImage setImageWithURL:[NSURL URLWithString:markModel.coverimage] placeholderImage:placeHoderImage2];
     cell.timeLabel.text = markModel.create_time;
-    cell.titleName.text=markModel.nametitle;
-    cell.fromLabel.text = markModel.from;
+    if ([markModel.nametitle isKindOfClass:[NSNull class]]) {
+        
+    }else {
+        cell.titleName.text=markModel.nametitle;
+
+    }
+    if ([markModel.from isKindOfClass:[NSNull class]]) {
+        
+    }else {
+        cell.fromLabel.text = markModel.from;
+        
+    }
     return cell;
 }
 
