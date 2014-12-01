@@ -16,6 +16,7 @@
 #import "MBProgressHUD.h"
 #import "commentPublished.h"
 #import "morecell.h"
+#import "AdaptationSize.h"
 
 #define RowH 80.0 // cell高度
 #define commentBtnBackH 44 //下面评论按钮背景高度
@@ -87,7 +88,10 @@
         
         if (code == 100) {
             int count = data.count;
-            if (count == 10) {
+            if (count < 10) {
+                isLoadMore = NO;
+            }else
+            {
                 isLoadMore = YES;
             }
             if (count > 0) {
@@ -114,13 +118,17 @@
         myCommentCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId];
         if (!cell) {
             cell = [[myCommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-            UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, RowH - 1, kWidth, 1)];
-            [cell.contentView addSubview:cellLine];
-            cellLine.backgroundColor =HexRGB(0xe6e3e4);
+            
+//            UIView* cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, RowH - 1, kWidth, 1)];
+//            [cell.contentView addSubview:cellLine];
+//            cellLine.backgroundColor =HexRGB(0xe6e3e4);
         }
         //设置cell数据并刷新
+        CGFloat cellH = [self getCellHeight:indexPath.row];
+        cell.cellLine.frame  = CGRectMake(0, cellH, kWidth, 1);
         commentModel *comment = [_dataList objectAtIndex:indexPath.row];
         cell.data = comment;
+        
         return cell;
     }else
     {
@@ -140,16 +148,31 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row < _dataList.count) {
-        return RowH;
+        
+        return [self getCellHeight:indexPath.row];
     }else
     {
-        return 40;
+        if (isLoadMore) {
+            return 40;
+        }else
+        {
+            return 0;
+        }
     }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return isLoadMore ? _dataList.count + 1: _dataList.count;
+}
+
+#pragma mark 计算cell的高度
+- (CGFloat)getCellHeight:(NSInteger)index
+{
+    commentModel *comment = [_dataList objectAtIndex:index];
+    CGSize size = [AdaptationSize getSizeFromString:comment.content Font:[UIFont systemFontOfSize:detailFontSize] withHight:CGFLOAT_MAX withWidth:KdetailW];
+    CGFloat h = userNameY + useNameH + size.height + bottomSpace;
+    return h;
 }
 
 #pragma mark 点击评论

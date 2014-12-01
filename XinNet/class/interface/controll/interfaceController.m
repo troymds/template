@@ -13,6 +13,7 @@
 #import "interfaceTool.h"
 #import "categoryLestTool.h"
 #import "categoryLestModel.h"
+#define YYBORDERH 44
 @interface interfaceController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     
@@ -55,14 +56,11 @@
     
     _orangLin =[[UIView alloc]init];
     [self.view addSubview:_orangLin];
-    _orangLin.frame =CGRectMake(0, 93, 107, 2);
+    _orangLin.frame =CGRectMake(0, YYBORDERH+62, kWidth/3, 2);
     _orangLin.backgroundColor =HexRGB(0x38c166);
 
     [self addMBprogressView];
-    [self addBigCompanyScrollView];
-    
     [self addLoadcategoryStatus];
-    [self addLoadStatus];
 }
 
 #pragma  mark ------显示指示器
@@ -100,6 +98,7 @@
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     
     if (_selectedBtn.tag ==21) {
+        
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count < 10) {
@@ -110,15 +109,15 @@
                 isLoadMore = YES;
                 _footer.hidden = NO;
             }
-            [_interfaceArray addObjectsFromArray:statues];
+            [_interfaceArray2 addObjectsFromArray:statues];
             [self addloadTableView];
             [refreshView endRefreshing];
-        } company_Id:nil keywords_Str:nil category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
-            
+        } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
+        
         }];
+        
     }else if (_selectedBtn.tag==22){
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
-
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count < 10) {
                 isLoadMore = NO;
@@ -128,15 +127,14 @@
                 isLoadMore = YES;
                 _footer.hidden = NO;
             }
-            [_interfaceArray addObjectsFromArray:statues];
+            [_interfaceArray3 addObjectsFromArray:statues];
             [self addloadTableView];
             [refreshView endRefreshing];
-        } company_Id:nil keywords_Str:nil category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
+        } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
             
         }];
     }else{
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
-
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count < 10) {
                 isLoadMore = NO;
@@ -149,7 +147,7 @@
             [_interfaceArray addObjectsFromArray:statues];
             [self addloadTableView];
             [refreshView endRefreshing];
-        } company_Id:nil keywords_Str:nil category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
+        } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
             
         }];
     }
@@ -159,41 +157,67 @@
 #pragma mark---加载数据
 -(void)addLoadStatus{
     _pageNum = 0;
-    if (!isLoadMore) {
-        isLoadMore = YES;
-        _footer.hidden = NO;
-    }
+//    if (!isLoadMore) {
+//        isLoadMore = YES;
+//        _footer.hidden = NO;
+//    }
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     
     if (_selectedBtn.tag ==21) {
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
-            NSLog(@"%@",statues);
+            // 判断是否需要显示加载更多
+            if (statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+            }
             [_interfaceArray2 removeAllObjects];
             [_interfaceArray2 addObjectsFromArray:statues];
             _pageNum = _interfaceArray2.count % 10 + 1;
             [self addloadTableView];
-        } company_Id:nil keywords_Str:nil category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
+        } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
             
         }];
     }else if (_selectedBtn.tag==22){
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
+            // 判断是否需要显示加载更多
+            if (statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+            }
             [_interfaceArray3 removeAllObjects];
             [_interfaceArray3 addObjectsFromArray:statues];
             _pageNum = _interfaceArray3.count % 10 + 1;
             [self addloadTableView];
 
-        } company_Id:nil keywords_Str:nil category_Id:_categoryIndex page:self.page  failure:^(NSError *error) {
+        } category_Id:_categoryIndex page:self.page  failure:^(NSError *error) {
             
         }];
     }else{
     [interfaceTool statusesWithSuccess:^(NSArray *statues) {
+        // 判断是否需要显示加载更多
+        if (statues.count < 10) {
+            isLoadMore = NO;
+            _footer.hidden = YES;
+        }else
+        {
+            isLoadMore = YES;
+            _footer.hidden = NO;
+        }
         [_interfaceArray removeAllObjects];
 
         [_interfaceArray addObjectsFromArray:statues];
         _pageNum = _interfaceArray.count % 10 + 1;
         [self addloadTableView];
 
-    } company_Id:nil keywords_Str:nil category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
+    } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
         
     }];
     }
@@ -204,7 +228,10 @@
     [categoryLestTool statusesWithSuccess:^(NSArray *statues) {
         [_categoryArray removeAllObjects];
         [_categoryArray addObjectsFromArray:statues];
+        [self addBigCompanyScrollView];
+        [self addRefreshViews];
         [self addbusinessBtn];
+        
     } entity_Type:@"7" failure:^(NSError *error) {
         
     }];
@@ -213,7 +240,7 @@
 #pragma mark背景scrollview
 -(void)addBigCompanyScrollView
 {
-    _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 96, kWidth, kHeight-32-62)];
+    _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, YYBORDERH+63, kWidth, kHeight-YYBORDERH-64)];
     _BigCompanyScrollView.contentSize = CGSizeMake(kWidth*3, _BigCompanyScrollView.frame.size.height);
     _BigCompanyScrollView.showsHorizontalScrollIndicator = NO;
     _BigCompanyScrollView.showsVerticalScrollIndicator = NO;
@@ -233,7 +260,7 @@
 #pragma mark 全部
 -(void)addBusinessAllTableview
 {
-    _allTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-32-44) style:UITableViewStylePlain];
+    _allTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-YYBORDERH-64) style:UITableViewStylePlain];
     _allTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_BigCompanyScrollView addSubview:_allTableView];
     _allTableView.backgroundColor =[UIColor whiteColor];
@@ -246,7 +273,7 @@
 #pragma mark 供应
 -(void)addBusinessSuplyTableview
 {
-    _supplyTablView =[[UITableView alloc]initWithFrame:CGRectMake(kWidth, 0, kWidth, kHeight-32-44) style:UITableViewStylePlain];
+    _supplyTablView =[[UITableView alloc]initWithFrame:CGRectMake(kWidth, 0, kWidth, kHeight-YYBORDERH-64) style:UITableViewStylePlain];
     _supplyTablView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_BigCompanyScrollView addSubview:_supplyTablView];
     _supplyTablView.backgroundColor =[UIColor whiteColor];
@@ -257,7 +284,7 @@
 #pragma mark 求购
 -(void)addBusinessDemandTableview
 {
-    _demandTablView =[[UITableView alloc]initWithFrame:CGRectMake(kWidth*2, 0, kWidth, kHeight-32-44) style:UITableViewStylePlain];
+    _demandTablView =[[UITableView alloc]initWithFrame:CGRectMake(kWidth*2, 0, kWidth, kHeight-YYBORDERH-64) style:UITableViewStylePlain];
     _demandTablView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_BigCompanyScrollView addSubview:_demandTablView];
     _demandTablView.backgroundColor =[UIColor whiteColor];
@@ -295,7 +322,7 @@
             scrollView.contentOffset = CGPointMake(kWidth*2, 0);
         }
         [UIView animateWithDuration:0.01 animations:^{
-            _orangLin.frame = CGRectMake(scrollView.contentOffset.x/3,93, kWidth/3, 2);
+            _orangLin.frame = CGRectMake(scrollView.contentOffset.x/3,YYBORDERH+62, kWidth/3, 2);
         }];
         
         if (scrollView.contentOffset.x==0) {
@@ -306,6 +333,11 @@
                     if (btn.tag ==20) {
                         _selectedBtn=btn;
                         _selectedBtn.selected = YES;
+                        //拿到当前选中按钮，重新请求数据
+                        categoryLestModel *cateModel =[_categoryArray objectAtIndex:0];
+                        _categoryIndex =cateModel.typeID;
+                        [self addLoadStatus];
+                        
                     }else{
                         btn.selected = NO;
                     }
@@ -320,6 +352,10 @@
                     if (btn.tag ==21) {
                         _selectedBtn=btn;
                         _selectedBtn.selected=YES;
+                        //拿到当前选中按钮，重新请求数据
+                        categoryLestModel *cateModel =[_categoryArray objectAtIndex:1];
+                        _categoryIndex =cateModel.typeID;
+                        [self addLoadStatus];
                     }else{
                         btn.selected = NO;
                     }
@@ -335,6 +371,10 @@
                     if (btn.tag ==22) {
                         _selectedBtn=btn;
                         _selectedBtn.selected=YES;
+                        //拿到当前选中按钮，重新请求数据
+                        categoryLestModel *cateModel =[_categoryArray objectAtIndex:2];
+                        _categoryIndex =cateModel.typeID;
+                        [self addLoadStatus];
                     }else{
                         btn.selected = NO;
                     }
@@ -365,11 +405,20 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    interfaceModel *interModel =[_interfaceArray objectAtIndex:indexPath.row];
-
+    
+    interfaceModel *prModel = nil;
+    if (_selectedBtn.tag ==20) {
+        prModel = [_interfaceArray objectAtIndex:indexPath.row];
+        
+    }else if(_selectedBtn.tag ==21){
+        prModel = [_interfaceArray2 objectAtIndex:indexPath.row];
+    }else{
+        prModel = [_interfaceArray3 objectAtIndex:indexPath.row];
+    }
+    
     interfaceDetailsView *productVC =[[interfaceDetailsView alloc]init];
-    productVC.interface_Url=interModel.wapUrl;
-    productVC.interfaceIndex =interModel.indexId;
+    productVC.interface_Url=prModel.wapUrl;
+    productVC.interfaceIndex =prModel.indexId;
     [self.navigationController pushViewController:productVC animated:YES];
     
 }
@@ -433,11 +482,11 @@
 -(void)addbusinessBtn{
     
     
-    companyBackView =[[UIView alloc]initWithFrame:CGRectMake(0, 64, kWidth, 30)];
+    companyBackView =[[UIView alloc]initWithFrame:CGRectMake(0, 62, kWidth, YYBORDERH)];
     [self.view addSubview:companyBackView];
     companyBackView.backgroundColor =HexRGB(0xe1e9e9);
     
-    UIView *companyBackLine =[[UIView alloc]initWithFrame:CGRectMake(0, 29, kWidth, 1)];
+    UIView *companyBackLine =[[UIView alloc]initWithFrame:CGRectMake(0, YYBORDERH-1, kWidth, 1)];
     companyBackLine.backgroundColor =[UIColor lightGrayColor];
     
     [companyBackView addSubview:companyBackLine];
@@ -453,7 +502,7 @@
         [companyBtn setTitleColor:HexRGB(0x38c166) forState:UIControlStateSelected];
         
         [companyBtn setBackgroundImage:[UIImage imageNamed:@"deleteBtn _selected.png"] forState:UIControlStateHighlighted];
-        companyBtn.frame =CGRectMake(0+p%3*kWidth/3, 0, kWidth/3, 30);
+        companyBtn.frame =CGRectMake(0+p%3*kWidth/3, 0, kWidth/3, YYBORDERH);
         companyBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
         [companyBtn setTitle:cateModel.categoryNmae forState:UIControlStateNormal];
         
@@ -463,7 +512,7 @@
         {
             companyBtn.selected = YES;
             _selectedBtn = companyBtn;
-            
+            [self companyBtnClick:_selectedBtn];
         }
         [companyBtn addTarget:self action:@selector(companyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }

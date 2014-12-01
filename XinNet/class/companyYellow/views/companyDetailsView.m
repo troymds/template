@@ -167,7 +167,8 @@
 -(void)addImageView{
     
     UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(YYBODER, 70, kWidth-YYBODER*2, 100)];
-    [headerImage setImageWithURL:[NSURL URLWithString:companyModel.logo] placeholderImage:placeHoderImage3];
+    [headerImage setImageWithURL:[NSURL URLWithString:_headerImage] placeholderImage:placeHoderImage3];
+    
     [self.view addSubview:headerImage];
     
     UIView *line =[[UIView alloc]initWithFrame:CGRectMake(YYBODER-1, 179, kWidth-YYBODER*2, 165)];

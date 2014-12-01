@@ -17,6 +17,7 @@
 {
     UITableView *_tableView;
     NSMutableArray *_companyArray;
+    UILabel *dataLabel;
     MJRefreshFooterView *_footer;
     BOOL isLoadMore;//判断是否加载更多
 }
@@ -40,6 +41,20 @@
     [self addTableView];
     [self addMBprogressView];
     [self addRefreshViews];
+    [self addShowNoDataView];
+}
+
+- (void)addShowNoDataView
+{
+    dataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+    dataLabel.textAlignment = NSTextAlignmentCenter;
+    dataLabel.backgroundColor = [UIColor clearColor];
+    dataLabel.text = @"没有数据！";
+    dataLabel.hidden = YES;
+    dataLabel.enabled = NO;
+    [self.view addSubview:dataLabel];
+    
+    
 }
 #pragma  mark ------显示指示器
 -(void)addMBprogressView{
@@ -81,8 +96,14 @@
         isLoadMore = YES;
         _footer.hidden = NO;
     }
-    self.page = [NSString stringWithFormat:@"%d",_pageNum];
     [companyListTool statusesWithSuccess:^(NSArray *statues) {
+        if (statues.count ==0) {
+            dataLabel.hidden =NO;
+            _tableView.hidden = YES;
+        }else{
+            dataLabel.hidden = YES;
+            _tableView.hidden =NO;
+        }
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
         [_companyArray addObjectsFromArray:statues];
@@ -125,7 +146,7 @@
     _tableView.delegate =self;
     _tableView.dataSource =self;
     _tableView.backgroundColor =[UIColor whiteColor];
-    
+    _tableView.hidden = NO;
     _tableView.showsHorizontalScrollIndicator = NO;
     _tableView.showsVerticalScrollIndicator = NO;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -146,6 +167,7 @@
     
     companyDetailsView *productVC =[[companyDetailsView alloc]init];
     companyListModel *companyModel =[_companyArray objectAtIndex:indexPath.row];
+    productVC.headerImage=companyModel.logo;
     productVC.companyDetailIndex =companyModel.type_id;
     [self.navigationController pushViewController:productVC animated:YES];
     

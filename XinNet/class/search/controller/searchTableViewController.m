@@ -103,7 +103,6 @@
 }
 #pragma mark---加载数据
 -(void)addLoadStatus:(MJRefreshBaseView *)refershview {
-    _pageNum = 0;
         //更新page
     _pageNum++;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
@@ -145,7 +144,6 @@
                     {
                         isLoadMore = YES;
                         _footer.hidden = NO;
-                        [_businessArray removeAllObjects];
 
                     }
 
@@ -201,6 +199,7 @@
 }
 #pragma mark---加载数据
 -(void)addLoadStatuss {
+    _pageNum =0;
     if (!isLoadMore) {
         isLoadMore = YES;
         _footer.hidden = NO;
@@ -361,8 +360,13 @@
         Cell.selectionStyle =UITableViewCellSelectionStyleNone;
         businessModel *busineModel =[_businessArray objectAtIndex:indexPath.row];
         Cell.textLabel.text =busineModel.title;
-        Cell.imageView.image = [UIImage imageNamed:@"business_img.png"];
-        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
+        if ([busineModel.typeId isEqualToString:@"2"]) {
+            Cell.imageView.image = [UIImage imageNamed:@"business_imge.png"];
+            
+        }else{
+            Cell.imageView.image = [UIImage imageNamed:@"business_img.png"];
+            
+        }        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
         [Cell.contentView addSubview:cellLine];
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
         return Cell;

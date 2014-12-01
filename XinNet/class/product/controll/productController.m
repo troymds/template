@@ -13,6 +13,7 @@
 #import "productTool.h"
 #import "categoryLestModel.h"
 #import "categoryLestTool.h"
+#define YYBORDERH 44
 @interface productController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     
@@ -52,22 +53,20 @@
     _productArray3 =[[NSMutableArray alloc]init];
     _productNstrIndex=[[NSString alloc]init];
     
-    _pageNum = 1;
+    _pageNum = 0;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     
     [self addLineView];
     [self addMBprogressView];
-    [self addBigCompanyScrollView];
-    [self addRefreshViews];
-
+//先拉取分类数据
     [self addLoadcategoryStatus];
-    [self addLoadStatus];
+
 }
 #pragma mark ---滑动线条
 -(void)addLineView{
     _orangLin =[[UIView alloc]init];
     [self.view addSubview:_orangLin];
-    _orangLin.frame =CGRectMake(0, 93, 107, 2);
+    _orangLin.frame =CGRectMake(0, YYBORDERH+62, kWidth/3, 2);
     _orangLin.backgroundColor =HexRGB(0x38c166);
 }
 
@@ -178,50 +177,78 @@
 -(void)addLoadStatus
 {
     _pageNum = 0;
-    if (!isLoadMore) {
-        isLoadMore = YES;
-        _footer.hidden = NO;
-    }
+//    if (!isLoadMore) {
+//        isLoadMore = YES;
+//        _footer.hidden = NO;
+//    }
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
         if (_selectedBtn.tag==21){
         [productTool statusesWithSuccess:^(NSArray *statues) {
-            [_productArray removeAllObjects];
-            [_productArray addObjectsFromArray:statues];
+            // 判断是否需要显示加载更多
+            if (statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+            }
+            
+            [_productArray2 removeAllObjects];
+            [_productArray2 addObjectsFromArray:statues];
             _pageNum = _productArray2.count % 10 + 1;
+            // 刷新表格数据
             [self addLodadTableView];
 
-        }company_Id:nil keywords_Id:nil category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
+        } category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
             
         }];
     }else if(_selectedBtn.tag==22){
         [productTool statusesWithSuccess:^(NSArray *statues) {
-            [_productArray removeAllObjects];
+            if (statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+            }
+            [_productArray3 removeAllObjects];
 
-            [_productArray addObjectsFromArray:statues];
+            [_productArray3 addObjectsFromArray:statues];
             _pageNum = _productArray3.count % 10 + 1;
             [self addLodadTableView];
 
-        }company_Id:nil keywords_Id:nil category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
+        }category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
             
         }];
-    }else {
+    }else if(_selectedBtn.tag==20){
 
     [productTool statusesWithSuccess:^(NSArray *statues) {
+        if (statues.count < 10) {
+            isLoadMore = NO;
+            _footer.hidden = YES;
+        }else
+        {
+            isLoadMore = YES;
+            _footer.hidden = NO;
+        }
         [_productArray removeAllObjects];
 
         [_productArray addObjectsFromArray:statues];
         _pageNum = _productArray.count % 10 + 1;
         [self addLodadTableView];
 
-    }company_Id:nil keywords_Id:nil category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
+    }category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
         
     }];
     }
 }
+
 #pragma mark背景scrollview
 -(void)addBigCompanyScrollView
 {
-    _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 96, kWidth, kHeight-32-62)];
+    _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, YYBORDERH+64, kWidth, kHeight-YYBORDERH-64)];
     _BigCompanyScrollView.contentSize = CGSizeMake(kWidth*3, _BigCompanyScrollView.frame.size.height);
     _BigCompanyScrollView.showsHorizontalScrollIndicator = NO;
     _BigCompanyScrollView.showsVerticalScrollIndicator = NO;
@@ -239,37 +266,32 @@
     [self addBusinessSuplyTableview];
     
 }
+
 #pragma mark 全部
 -(void)addBusinessAllTableview
 {
-    _allTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-32-44) style:UITableViewStylePlain];
+    _allTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-YYBORDERH-64) style:UITableViewStylePlain];
     _allTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_BigCompanyScrollView addSubview:_allTableView];
     _allTableView.backgroundColor =[UIColor whiteColor];
     _allTableView.delegate =self;
     _allTableView.dataSource = self;
-    
-    
-    
 }
 #pragma mark 供应
 -(void)addBusinessSuplyTableview
 {
-    _supplyTablView =[[UITableView alloc]initWithFrame:CGRectMake(kWidth, 0, kWidth, kHeight-32-44) style:UITableViewStylePlain];
+    _supplyTablView =[[UITableView alloc]initWithFrame:CGRectMake(kWidth, 0, kWidth, kHeight-YYBORDERH-64) style:UITableViewStylePlain];
     _supplyTablView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_BigCompanyScrollView addSubview:_supplyTablView];
     _supplyTablView.backgroundColor =[UIColor whiteColor];
     _supplyTablView.delegate =self;
     _supplyTablView.dataSource = self;
-    
-    
-    
-    
 }
+
 #pragma mark 求购
 -(void)addBusinessDemandTableview
 {
-    _demandTablView =[[UITableView alloc]initWithFrame:CGRectMake(kWidth*2, 0, kWidth, kHeight-32-44) style:UITableViewStylePlain];
+    _demandTablView =[[UITableView alloc]initWithFrame:CGRectMake(kWidth*2, 0, kWidth, kHeight-YYBORDERH-64) style:UITableViewStylePlain];
     _demandTablView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_BigCompanyScrollView addSubview:_demandTablView];
     _demandTablView.backgroundColor =[UIColor whiteColor];
@@ -277,6 +299,7 @@
     _demandTablView.dataSource = self;
     
 }
+
 #pragma mark--刷新表
 -(void)addLodadTableView{
     switch (_selectedBtn.tag) {
@@ -309,74 +332,97 @@
             scrollView.contentOffset = CGPointMake(kWidth*2, 0);
         }
         [UIView animateWithDuration:0.01 animations:^{
-            _orangLin.frame = CGRectMake(scrollView.contentOffset.x/3,93, kWidth/3, 2);
+            _orangLin.frame = CGRectMake(scrollView.contentOffset.x/3,YYBORDERH+62, kWidth/3, 2);
         }];
-//        [self addLoadStatus];
         if (scrollView.contentOffset.x==0) {
+
             for (UIView *subView in companyBackView.subviews) {
                 if ([subView isKindOfClass:[UIButton class]]) {
                     UIButton *btn =(UIButton *)subView;
                     if (btn.tag ==20) {
                         _selectedBtn=btn;
                         _selectedBtn.selected = YES;
+                     //拿到当前选中按钮，重新请求数据
+                        categoryLestModel *cateModel =[_categoryArray objectAtIndex:0];
+                        _productNstrIndex =cateModel.typeID;
+                        [self addLoadStatus];
                     }else{
                         btn.selected = NO;
                     }
                 }
+
             }
-            
         }else if(scrollView.contentOffset.x==kWidth){
+
             for (UIView *subView in companyBackView.subviews) {
                 if ([subView isKindOfClass:[UIButton class]]) {
                     UIButton *btn =(UIButton *)subView;
                     if (btn.tag ==21) {
                         _selectedBtn=btn;
                         _selectedBtn.selected=YES;
+                        
+                        categoryLestModel *cateModel =[_categoryArray objectAtIndex:1];
+                        _productNstrIndex =cateModel.typeID;
+                        [self addLoadStatus];
                     }else{
                         btn.selected = NO;
                     }
-                    
                 }
             }
         }
         else if(scrollView.contentOffset.x==kWidth*2){
+
             for (UIView *subView in companyBackView.subviews) {
                 if ([subView isKindOfClass:[UIButton class]]) {
                     UIButton *btn =(UIButton *)subView;
                     if (btn.tag ==22) {
                         _selectedBtn=btn;
                         _selectedBtn.selected=YES;
+                        
+                        categoryLestModel *cateModel =[_categoryArray objectAtIndex:2];
+                        _productNstrIndex =cateModel.typeID;
+                        [self addLoadStatus];
                     }else{
                         btn.selected = NO;
                     }
-                    
                 }
             }
         }
-        [self addLoadStatus];
     }
-    
 }
+
 #pragma mark  -----TableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 80;
 }
 
-
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (_selectedBtn.tag ==20) {
-        return _productArray.count  ;
+
+        return _productArray.count;
         
     }else if(_selectedBtn.tag ==21){
+
         return _productArray2.count;
     }else{
+
         return _productArray3.count;
     }
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    productModel *prModel =[_productArray objectAtIndex:indexPath.row];
+    
+    productModel *prModel = nil;
+    if (_selectedBtn.tag ==20) {
+        prModel = [_productArray objectAtIndex:indexPath.row];
+        
+    }else if(_selectedBtn.tag ==21){
+        prModel = [_productArray2 objectAtIndex:indexPath.row];
+    }else{
+        prModel = [_productArray3 objectAtIndex:indexPath.row];
+    }
     productDetailsView *productVC =[[productDetailsView alloc]init];
     productVC.productIndex =prModel.indexID;
     [self.navigationController pushViewController:productVC animated:YES];
@@ -425,7 +471,7 @@
         cell.lineView.frame =CGRectMake(0, 10, OldWidth+15, 1);
         
         return cell;
-    }else{
+    }else if(_selectedBtn.tag == 22){
         static NSString *cellIndexfider =@"cell3";
         productCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
         if (!cell) {
@@ -446,16 +492,17 @@
         cell.priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.price ];
         return cell;
     }
+    return  nil;
 }
 
 -(void)addbusinessBtn{
     
     
-    companyBackView =[[UIView alloc]initWithFrame:CGRectMake(0, 64, kWidth, 30)];
+    companyBackView =[[UIView alloc]initWithFrame:CGRectMake(0, 62, kWidth, YYBORDERH)];
     [self.view addSubview:companyBackView];
     companyBackView.backgroundColor =HexRGB(0xe1e9e9);
     
-    UIView *companyBackLine =[[UIView alloc]initWithFrame:CGRectMake(0, 29, kWidth, 1)];
+    UIView *companyBackLine =[[UIView alloc]initWithFrame:CGRectMake(0, YYBORDERH-1, kWidth, 1)];
     companyBackLine.backgroundColor =[UIColor lightGrayColor];
     
     [companyBackView addSubview:companyBackLine];
@@ -471,7 +518,7 @@
         
         
         [companyBtn setBackgroundImage:[UIImage imageNamed:@"deleteBtn _selected.png"] forState:UIControlStateHighlighted];
-        companyBtn.frame =CGRectMake(0+p%3*kWidth/3, 0, kWidth/3, 30);
+        companyBtn.frame =CGRectMake(0+p%3*kWidth/3, 0, kWidth/3, YYBORDERH);
         companyBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
         [companyBtn setTitle:cateModel.categoryNmae forState:UIControlStateNormal];
         
@@ -481,7 +528,7 @@
         {
             companyBtn.selected = YES;
             _selectedBtn = companyBtn;
-            
+            [self companyBtnClick:_selectedBtn];
         }
         [companyBtn addTarget:self action:@selector(companyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -492,21 +539,21 @@
     [categoryLestTool statusesWithSuccess:^(NSArray *statues) {
         [_categoryArray removeAllObjects];
         [_categoryArray addObjectsFromArray:statues];
+        //成功获得分类数据后，1 加ScrollView和table   2 加刷新控件   3 添加button并获取分类详情数据
+        [self addBigCompanyScrollView];
+        [self addRefreshViews];
         [self addbusinessBtn];
+
     } entity_Type:@"4" failure:^(NSError *error) {
         
     }];
-    
 }
 -(void)companyBtnClick:(UIButton *)company
 {
     categoryLestModel *cateModel =[_categoryArray objectAtIndex:company.tag-20];
     _productNstrIndex =cateModel.typeID;
 
-//    _selectedBtn.selected = NO;
     _selectedBtn = company;
-//    _selectedBtn.selected = YES;
-//    [self addLoadStatus];
 
     if (company.tag == 20)
     {
@@ -523,8 +570,7 @@
         _footer.scrollView = _demandTablView;
         [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth*2, 0) animated:YES];
     }
-    
+    [self addLoadStatus];
 }
-
 
 @end
