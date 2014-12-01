@@ -15,9 +15,7 @@
 
 @interface FindPasswordController ()<UITextFieldDelegate>
 {
-    UITextField *_textField;
     TextListView *_userNameView;
-
 }
 
 
@@ -46,7 +44,7 @@
     _userNameView = [[TextListView alloc] initWithFrame:CGRectMake(leftDistance,topDistance,kWidth-leftDistance*2,height)];
     [_userNameView setTitle:@"账号:"];
     _userNameView.textField.delegate = self;
-    _userNameView.textField.placeholder = @"请输入您的邮箱";
+    _userNameView.textField.placeholder = @"请输入您的注册邮箱";
     _userNameView.layer.masksToBounds = YES;
     _userNameView.layer.cornerRadius = 4.0f;
     [self.view addSubview:_userNameView];
@@ -92,6 +90,18 @@
     }else{
         [RemindView showViewWithTitle:@"请输入您的邮箱" location:MIDDLE];
     }
+}
+
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [_userNameView.textField resignFirstResponder];
+    return YES;
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [_userNameView.textField resignFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning {

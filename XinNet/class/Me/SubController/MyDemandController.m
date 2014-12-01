@@ -14,8 +14,9 @@
 #import "httpTool.h"
 #import "RemindView.h"
 #import "MJRefresh.h"
+#import "ReloadViewDelegate.h"
 
-@interface MyDemandController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
+@interface MyDemandController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate,ReloadViewDelegate>
 {
     UITableView *_tableView;
     NSMutableArray *_dataArray;
@@ -55,7 +56,7 @@
     [self addRefreshView];
 }
 
-//添加上拉加载
+#pragma mark 添加上拉加载
 - (void)addRefreshView
 {
     footView =[[MJRefreshFooterView alloc] init];
@@ -63,7 +64,7 @@
     footView.scrollView = _tableView;
 }
 
-
+#pragma mark 加载代理
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
     if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
@@ -72,7 +73,7 @@
     }
 }
 
-//添加右导航按钮
+#pragma mark  导航右侧按钮
 - (void)addRightNavButton
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -84,16 +85,24 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
 }
 
-//右导航按钮点击
+#pragma mark 右导航按钮点击
 - (void)rightBarButtonDown
 {
     PublishController *pc = [[PublishController alloc] init];
     pc.title = @"发布";
     pc.isPublish = YES;
+    pc.delegate = self;
     [self.navigationController pushViewController:pc animated:YES];
 }
 
+#pragma mark ReloadViewDelegate 发布求购成功后刷新页面
+- (void)reloadTableView
+{
+    isReflesh = YES;
+    [self loadData];
+}
 
+#pragma mark  请求数据
 - (void)loadData
 {
     NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",@"1",@"type", nil];
@@ -111,6 +120,10 @@
         NSDictionary *dic = [result objectForKey:@"response"];
         int code = [[dic objectForKey:@"code"] intValue];
         if (code == 100) {
+            if (isReflesh) {
+                isReflesh = NO;
+                [_dataArray removeAllObjects];
+            }
             NSArray *array  = [dic objectForKey:@"data"];
             if (![array isKindOfClass:[NSNull class]]) {
                 for (NSDictionary *subDict in array) {
@@ -141,6 +154,7 @@
 }
 
 
+#pragma mark tableview_delegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _dataArray.count;
@@ -169,10 +183,11 @@
 {
     DemandItem *item = [_dataArray objectAtIndex:indexPath.row];
     DemandDetailController *detail = [[DemandDetailController alloc] init];
-    detail.title = @"发布";
     detail.businessDetailIndex = item.uid;
     [self.navigationController pushViewController:detail animated:YES];
 }
+
+#pragma mark-------
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
