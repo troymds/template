@@ -59,10 +59,7 @@
     _orangLin.backgroundColor =HexRGB(0x38c166);
 
     [self addMBprogressView];
-    [self addBigCompanyScrollView];
-    
     [self addLoadcategoryStatus];
-    [self addLoadStatus];
 }
 
 #pragma  mark ------显示指示器
@@ -100,6 +97,7 @@
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     
     if (_selectedBtn.tag ==21) {
+        
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count < 10) {
@@ -110,15 +108,15 @@
                 isLoadMore = YES;
                 _footer.hidden = NO;
             }
-            [_interfaceArray addObjectsFromArray:statues];
+            [_interfaceArray2 addObjectsFromArray:statues];
             [self addloadTableView];
             [refreshView endRefreshing];
-        } company_Id:nil keywords_Str:nil category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
-            
+        } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
+        
         }];
+        
     }else if (_selectedBtn.tag==22){
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
-
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count < 10) {
                 isLoadMore = NO;
@@ -128,15 +126,14 @@
                 isLoadMore = YES;
                 _footer.hidden = NO;
             }
-            [_interfaceArray addObjectsFromArray:statues];
+            [_interfaceArray3 addObjectsFromArray:statues];
             [self addloadTableView];
             [refreshView endRefreshing];
-        } company_Id:nil keywords_Str:nil category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
+        } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
             
         }];
     }else{
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
-
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count < 10) {
                 isLoadMore = NO;
@@ -149,7 +146,7 @@
             [_interfaceArray addObjectsFromArray:statues];
             [self addloadTableView];
             [refreshView endRefreshing];
-        } company_Id:nil keywords_Str:nil category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
+        } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
             
         }];
     }
@@ -159,40 +156,67 @@
 #pragma mark---加载数据
 -(void)addLoadStatus{
     _pageNum = 0;
-    if (!isLoadMore) {
-        isLoadMore = YES;
-        _footer.hidden = NO;
-    }
+//    if (!isLoadMore) {
+//        isLoadMore = YES;
+//        _footer.hidden = NO;
+//    }
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     
     if (_selectedBtn.tag ==21) {
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
+            // 判断是否需要显示加载更多
+            if (statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+            }
             [_interfaceArray2 removeAllObjects];
             [_interfaceArray2 addObjectsFromArray:statues];
             _pageNum = _interfaceArray2.count % 10 + 1;
             [self addloadTableView];
-        } company_Id:nil keywords_Str:nil category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
+        } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
             
         }];
     }else if (_selectedBtn.tag==22){
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
+            // 判断是否需要显示加载更多
+            if (statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+            }
             [_interfaceArray3 removeAllObjects];
             [_interfaceArray3 addObjectsFromArray:statues];
             _pageNum = _interfaceArray3.count % 10 + 1;
             [self addloadTableView];
 
-        } company_Id:nil keywords_Str:nil category_Id:_categoryIndex page:self.page  failure:^(NSError *error) {
+        } category_Id:_categoryIndex page:self.page  failure:^(NSError *error) {
             
         }];
     }else{
     [interfaceTool statusesWithSuccess:^(NSArray *statues) {
+        // 判断是否需要显示加载更多
+        if (statues.count < 10) {
+            isLoadMore = NO;
+            _footer.hidden = YES;
+        }else
+        {
+            isLoadMore = YES;
+            _footer.hidden = NO;
+        }
         [_interfaceArray removeAllObjects];
 
         [_interfaceArray addObjectsFromArray:statues];
         _pageNum = _interfaceArray.count % 10 + 1;
         [self addloadTableView];
 
-    } company_Id:nil keywords_Str:nil category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
+    } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
         
     }];
     }
@@ -203,7 +227,10 @@
     [categoryLestTool statusesWithSuccess:^(NSArray *statues) {
         [_categoryArray removeAllObjects];
         [_categoryArray addObjectsFromArray:statues];
+        [self addBigCompanyScrollView];
+        [self addRefreshViews];
         [self addbusinessBtn];
+        
     } entity_Type:@"7" failure:^(NSError *error) {
         
     }];
@@ -305,6 +332,11 @@
                     if (btn.tag ==20) {
                         _selectedBtn=btn;
                         _selectedBtn.selected = YES;
+                        //拿到当前选中按钮，重新请求数据
+                        categoryLestModel *cateModel =[_categoryArray objectAtIndex:0];
+                        _categoryIndex =cateModel.typeID;
+                        [self addLoadStatus];
+                        
                     }else{
                         btn.selected = NO;
                     }
@@ -319,6 +351,10 @@
                     if (btn.tag ==21) {
                         _selectedBtn=btn;
                         _selectedBtn.selected=YES;
+                        //拿到当前选中按钮，重新请求数据
+                        categoryLestModel *cateModel =[_categoryArray objectAtIndex:1];
+                        _categoryIndex =cateModel.typeID;
+                        [self addLoadStatus];
                     }else{
                         btn.selected = NO;
                     }
@@ -334,6 +370,10 @@
                     if (btn.tag ==22) {
                         _selectedBtn=btn;
                         _selectedBtn.selected=YES;
+                        //拿到当前选中按钮，重新请求数据
+                        categoryLestModel *cateModel =[_categoryArray objectAtIndex:2];
+                        _categoryIndex =cateModel.typeID;
+                        [self addLoadStatus];
                     }else{
                         btn.selected = NO;
                     }
@@ -364,11 +404,20 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    interfaceModel *interModel =[_interfaceArray objectAtIndex:indexPath.row];
-
+    
+    interfaceModel *prModel = nil;
+    if (_selectedBtn.tag ==20) {
+        prModel = [_interfaceArray objectAtIndex:indexPath.row];
+        
+    }else if(_selectedBtn.tag ==21){
+        prModel = [_interfaceArray2 objectAtIndex:indexPath.row];
+    }else{
+        prModel = [_interfaceArray3 objectAtIndex:indexPath.row];
+    }
+    
     interfaceDetailsView *productVC =[[interfaceDetailsView alloc]init];
-    productVC.interface_Url=interModel.wapUrl;
-    productVC.interfaceIndex =interModel.indexId;
+    productVC.interface_Url=prModel.wapUrl;
+    productVC.interfaceIndex =prModel.indexId;
     [self.navigationController pushViewController:productVC animated:YES];
     
 }
@@ -462,7 +511,7 @@
         {
             companyBtn.selected = YES;
             _selectedBtn = companyBtn;
-            
+            [self companyBtnClick:_selectedBtn];
         }
         [companyBtn addTarget:self action:@selector(companyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
