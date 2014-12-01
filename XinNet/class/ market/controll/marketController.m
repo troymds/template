@@ -135,10 +135,17 @@
     _pageNum++;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     
-     [self addMBprogressView];
     if (_moreSelectedBtn.tag ==30) {
         [marketTOOL statusesWithSuccess:^(NSArray *statues) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            if (statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+                [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+            }
 
             if (statues.count < 10) {
                 isLoadMore = NO;
@@ -154,12 +161,20 @@
             [_tableView reloadData];
             [refreshView endRefreshing];
         }  keywords_Id:@"" category_Id:_category_Index page:self.page  failure:^(NSError *error) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
         }];
     }else if (_moreSelectedBtn.tag==31){
         [marketTOOL statusesWithSuccess:^(NSArray *statues) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            if (statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+                [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+            }
+
             if (statues.count < 10) {
                 isLoadMore = NO;
                 _footer.hidden = YES;
@@ -175,13 +190,21 @@
             [refreshView endRefreshing];
             
         }  keywords_Id:@"" category_Id:@"4" page:self.page  failure:^(NSError *error) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
             
         }];
     }else{
     [marketTOOL statusesWithSuccess:^(NSArray *statues) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        if (statues.count < 10) {
+            isLoadMore = NO;
+            _footer.hidden = YES;
+            [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
+        }else
+        {
+            isLoadMore = YES;
+            _footer.hidden = NO;
+        }
+
 
         if (statues.count > 0 && statues.count < 10) {
             isLoadMore = NO;
@@ -197,7 +220,6 @@
         [refreshView endRefreshing];
         
     }  keywords_Id:nil category_Id:nil  page:self.page failure:^(NSError *error) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
         
     }];
@@ -207,7 +229,7 @@
     _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-64) style:UITableViewStylePlain];
     _tableView.delegate =self;
     _tableView.dataSource =self;
-    _tableView.hidden = YES;
+    _tableView.hidden = NO;
     _tableView.backgroundColor =[UIColor whiteColor];
     _tableView.showsHorizontalScrollIndicator = NO;
     _tableView.showsVerticalScrollIndicator = NO;
@@ -322,7 +344,12 @@
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
     }
     marketModel *markModel =[_marketArray objectAtIndex:indexPath.row];
-    [cell.marketImage setImageWithURL:[NSURL URLWithString:markModel.coverimage] placeholderImage:placeHoderImage2];
+    if ([markModel.coverimage isKindOfClass:[NSNull class]]) {
+        
+    }else {
+        [cell.marketImage setImageWithURL:[NSURL URLWithString:markModel.coverimage] placeholderImage:placeHoderImage2];
+        
+    }
     cell.timeLabel.text = markModel.create_time;
     if ([markModel.nametitle isKindOfClass:[NSNull class]]) {
         

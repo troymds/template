@@ -312,7 +312,6 @@
         [UIView animateWithDuration:0.01 animations:^{
             _orangLin.frame = CGRectMake(scrollView.contentOffset.x/3,YYBORDERH+62, kWidth/3, 2);
         }];
-//        [self addLoadStatus];
         if (scrollView.contentOffset.x==0) {
             for (UIView *subView in companyBackView.subviews) {
                 if ([subView isKindOfClass:[UIButton class]]) {

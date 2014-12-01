@@ -181,6 +181,7 @@
                 if (statues.count < 10) {
                     isLoadMore = NO;
                     _footer.hidden = YES;
+                    [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
                 }else
                 {
                     isLoadMore = YES;
@@ -197,6 +198,8 @@
             if (statues.count < 10) {
                 isLoadMore = NO;
                 _footer.hidden = YES;
+                [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
+
             }else
             {
                 isLoadMore = YES;
@@ -214,6 +217,8 @@
             if (statues.count < 10) {
                 isLoadMore = NO;
                 _footer.hidden = YES;
+                [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
+
             }else
             {
                 isLoadMore = YES;
