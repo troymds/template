@@ -1019,6 +1019,10 @@
 				556EB0C21A1B598F006D5E0F /* Others */,
 				556EB0D41A1B598F006D5E0F /* Resouse */,
 				556EB0DB1A1B598F006D5E0F /* square */,
+				556525B91A28510A00281504 /* controll */,
+				556525BC1A28510A00281504 /* marketModel */,
+				556525C31A28510A00281504 /* marketTool */,
+				556525CA1A28510A00281504 /* views */,
 			);
 			path = " market";
 			sourceTree = "<group>";

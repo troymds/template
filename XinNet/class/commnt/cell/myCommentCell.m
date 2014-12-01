@@ -22,7 +22,8 @@
         //1 avatar
         UIImageView *avatar = [[UIImageView alloc] initWithFrame:CGRectMake(leftSpace, topSpace, avatarW, avatarH)];
         [self.contentView addSubview:avatar];
-        avatar.backgroundColor = [UIColor redColor];
+        avatar.backgroundColor = [UIColor clearColor];
+        avatar.layer.cornerRadius = avatarW/2;
         _avatar = avatar;
         
         //2 userName
@@ -71,10 +72,10 @@
     _detailContent.frame = CGRectMake(CGRectGetMaxX(_avatar.frame) + nameBwnavata, CGRectGetMaxY(_userName.frame), _detailW, size.height);
     _detailHeight = size.height;
     if ([data.userAvata isKindOfClass:[NSNull class]]) {
-        [_avatar setImageWithURL:[NSURL URLWithString:@""] placeholderImage:placeHoderImage];
+        [_avatar setImageWithURL:[NSURL URLWithString:@""] placeholderImage:placeHoderImage1];
     }else
     {
-        [_avatar setImageWithURL:[NSURL URLWithString:data.userAvata] placeholderImage:placeHoderImage];
+        [_avatar setImageWithURL:[NSURL URLWithString:data.userAvata] placeholderImage:placeHoderImage1];
     }
     CGFloat y = _detailContent.frame.origin.y + _detailHeight + bottomSpace ;
 
