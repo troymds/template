@@ -82,7 +82,7 @@
             break;
         case 2:
         {
-            [ShareView showViewWithTitle:@"新网" content:@"这是一段分享内容" description:@"这是一段描述信息" url:@"www.baidu.com" delegate:self];
+            [ShareView showViewWithTitle:@"新网" content:@"这是一段分享内容" description:@"这是一段描述信息" url:@"www.ebingoo.com" delegate:self];
         }
             break;
         default:
