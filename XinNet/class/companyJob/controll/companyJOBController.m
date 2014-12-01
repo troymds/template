@@ -14,11 +14,11 @@
 
 @interface companyJOBController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
-    UITableView *_tableView;
     
     NSMutableArray *_companyJobArray;
     MJRefreshFooterView *_footer;
     BOOL isLoadMore;//判断是否加载更多
+    UILabel *dataLabel;
 }
 
 @property (nonatomic,assign) NSInteger pageNum;//页数
@@ -26,7 +26,7 @@
 @end
 
 @implementation companyJOBController
-
+@synthesize tableView =_tableView;
 - (void)viewDidLoad {
     [super viewDidLoad];
     if (IsIos7) {
@@ -35,12 +35,12 @@
     self.view.backgroundColor =[UIColor whiteColor];
     self.title = @ "企业招聘";
     _companyJobArray =[NSMutableArray array];
+    [self addShowNoDataView];
     
-    _pageNum = 1;
+    _pageNum = 0;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     [self addTableView];
     [self addRefreshViews];
-    [self addMBprogressView];
     [self addLoadStatus];
     
 }
@@ -59,7 +59,7 @@
     
     // 2.上拉加载更多
     MJRefreshFooterView *footer = [MJRefreshFooterView footer];
-    footer.scrollView = _tableView;
+    footer.scrollView = self.tableView;
     footer.delegate = self;
     _footer = footer;
     isLoadMore = NO;
@@ -85,30 +85,51 @@
         if (statues.count < 10) {
             isLoadMore = NO;
             _footer.hidden = YES;
+             [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
         }else
         {
             isLoadMore = YES;
             _footer.hidden = NO;
         }
-        [_companyJobArray addObjectsFromArray:statues];
-        [_tableView reloadData];
+               [_companyJobArray addObjectsFromArray:statues];
+        [self.tableView reloadData];
         [refreshView endRefreshing];
     } company_Id:nil keywords_Str:nil page:self.page failure:^(NSError *error) {
         
     }];
 }
+- (void)addShowNoDataView
+{
+    dataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+    dataLabel.textAlignment = NSTextAlignmentCenter;
+    dataLabel.backgroundColor = [UIColor clearColor];
+    dataLabel.text = @"没有数据！";
+    dataLabel.hidden = YES;
+    dataLabel.enabled = NO;
+    [self.view addSubview:dataLabel];
+    
+    
+}
 
 #pragma mark----加载数据
 -(void)addLoadStatus{
-    _pageNum = 1;
+    [self addMBprogressView];
+
+    _pageNum = 0;
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+
     if (!isLoadMore) {
         isLoadMore = YES;
         _footer.hidden = NO;
     }
     
     [companyJobTool statusesWithSuccess:^(NSArray *statues) {
+
+        [_tableView reloadData];
         [_companyJobArray removeAllObjects];
         [_companyJobArray addObjectsFromArray:statues];
+        _pageNum = _companyJobArray.count % 10 + 1;
+
         [_tableView reloadData];
     } company_Id:nil keywords_Str:nil page:self.page failure:^(NSError *error) {
         

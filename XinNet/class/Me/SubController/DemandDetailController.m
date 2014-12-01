@@ -47,8 +47,8 @@
 - (void)addRightBarButton
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(0, 0,53, 25);
-    [button setTitle:@"编辑" forState:UIControlStateNormal];
+    button.frame = CGRectMake(0, 0,40, 19);
+    [button setBackgroundImage:[UIImage imageNamed:@"edit.png"] forState:UIControlStateNormal];
     [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(rightBarButtonDown) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
@@ -96,15 +96,19 @@
     
     float  webheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
     
-    marketWebView.frame = CGRectMake(1, 80, kWidth, webheight);
+    marketWebView.frame = CGRectMake(5, 80, kWidth-5*2, webheight);
     
-    _backScrollView.contentSize = CGSizeMake(kWidth,webheight+350);
+    if (80+webheight+10>kHeight-64) {
+        _backScrollView.contentSize = CGSizeMake(kWidth,80+webheight+10);
+    }
+    
+    
     
     
 }
 -(void)addLabel{
     
-    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-64)];
+    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0,0, kWidth, kHeight-64)];
     _backScrollView.userInteractionEnabled=YES;
     _backScrollView.backgroundColor=HexRGB(0xededed);
     [self.view addSubview:_backScrollView];

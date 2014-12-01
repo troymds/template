@@ -14,6 +14,8 @@
 @property (nonatomic, strong)NSString *indexID;//
 @property (nonatomic,strong)NSString *read_num;
 @property (nonatomic, strong)NSString *title;//
+@property (nonatomic, strong)NSString *typeId;//
+
 - (instancetype)initWithDictionaryForBusiness:(NSDictionary *)dict;
 
 @end

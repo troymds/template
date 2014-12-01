@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface productController : UIViewController
-
+@property(nonatomic,copy)NSString *company_id;
 @end

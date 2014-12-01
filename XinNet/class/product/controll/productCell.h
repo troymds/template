@@ -14,5 +14,6 @@
 @property (copy, nonatomic)  UILabel *companyLabel;
 @property (copy, nonatomic)  UILabel *priceLabel;
 @property (copy, nonatomic)  UILabel *old_priceLabel;
+@property (strong, nonatomic)  UIView *lineView;
 
 @end

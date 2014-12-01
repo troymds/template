@@ -9,7 +9,8 @@
 #import "jobDetailsView.h"
 #import "YYSearchButton.h"
 #import "YYalertView.h"
-
+#import "collectionModel.h"
+#import "collectionHttpTool.h"
 #import "jobDetailTool.h"
 #import "jobDetailModel.h"
 #define YYBODER 16
@@ -21,6 +22,8 @@
     UIButton *_selectedBtn;
     jobDetailModel *jobModel;
 }
+@property (nonatomic, strong)NSString *collectionId;
+
 @end
 
 @implementation jobDetailsView
@@ -29,19 +32,93 @@
     [super viewDidLoad];
     self.view.backgroundColor =HexRGB(0xe9f1f6);
     self.title = @"招聘详情";
-     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"colloct_img.png" highlightedSearch:@"colloct_img.png" target:(self) action:@selector(collectClick:)];
+    
     _selectedBtn =[[UIButton alloc]init];
     [self addChooseBtn];
     [self addWriteBtn];
     [self addLoadStatus];
-
+    [self addCollection];
+    [self addMBprogressView];
 }
--(void)collectClick:(UIButton *)collect{
+#pragma  mark ------显示指示器
+-(void)addMBprogressView{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
+    
     
 }
+//收藏
+-(void)addCollection{
+    
+    
+    UIView *backCollectView =[[UIView alloc]init];
+    backCollectView.frame = CGRectMake(0, 20, 300, 44);
+    backCollectView.backgroundColor =[UIColor clearColor];
+    self.navigationItem.titleView = backCollectView;
+    
+    UILabel *titiLabel =[[UILabel alloc]initWithFrame:CGRectMake(60, 0, 100, 44)];
+    titiLabel.text =@"招聘详情";
+    titiLabel.font =[UIFont systemFontOfSize:PxFont(23)];
+    [backCollectView addSubview:titiLabel];
+    titiLabel.backgroundColor =[UIColor clearColor];
+    
+    
+    YYSearchButton * collectionBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
+    collectionBtn.frame =CGRectMake(200, 8, 40, 30);
+    collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
+    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateNormal];
+    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateHighlighted];
+    [collectionBtn setTitle:@"收藏" forState:UIControlStateNormal];
+    [collectionBtn addTarget:self action:@selector(collectionBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [backCollectView addSubview:collectionBtn];
+}
+
+
+
+
+
+
+
+
+-(void)collectionBtn:(UIButton *)sender{
+    
+    
+    if ([sender.titleLabel.text isEqualToString:@"收藏"]) {//收藏
+        [collectionHttpTool addCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
+            if (code == 100) {
+                [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
+                collectionModel *model = [data objectAtIndex:0];
+                [sender setTitle:@"取消" forState:UIControlStateNormal];
+                self.collectionId = model.data;
+            }else
+            {
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+            }
+            
+        } entityId:_jobDetailsIndex entityType:@"1" withFailure:^(NSError *error) {
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
+    }else//取消收藏
+    {
+        [collectionHttpTool cancleCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
+            
+            [RemindView showViewWithTitle:msg location:MIDDLE];
+            [sender setTitle:@"收藏" forState:UIControlStateNormal];
+        } collectionId:self.collectionId withFailure:^(NSError *error) {
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
+    }
+    
+    
+}
+
 #pragma mark ---加载数据
 -(void)addLoadStatus{
     [jobDetailTool CompanyStatusesWithSuccesscategory:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
         NSDictionary *dict =[statues objectAtIndex:0];
         jobModel =[[jobDetailModel alloc]init];
         jobModel.company_url=[dict objectForKey:@"company_url"];
@@ -50,7 +127,8 @@
 
         [self addScrollview];
     } company_id:_jobDetailsIndex CompanyFailure:^(NSError *error) {
-        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+  
     }];
 }
 #pragma mark ---添加UI

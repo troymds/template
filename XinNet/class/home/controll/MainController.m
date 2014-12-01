@@ -38,7 +38,7 @@
     _homeArray =[NSMutableArray array];
     _hotImageArrayOff =[NSMutableArray array];
 
-    self.view.backgroundColor =[UIColor whiteColor];
+    self.view.backgroundColor =HexRGB(0xededed);
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
@@ -99,7 +99,7 @@
         homeModel *homeMode =[_homeArray objectAtIndex:i];
         UIImageView *MainImage =[[UIImageView alloc]init];
         MainImage.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+10+i/3*(kHeight/3-30),width,width);
-        [MainImage setImageWithURL:[NSURL URLWithString:homeMode.image_url] placeholderImage:placeHoderImage];
+        [MainImage setImageWithURL:[NSURL URLWithString:homeMode.image_url] placeholderImage:placeHoderImage1];
         MainImage.backgroundColor =[UIColor clearColor];
         [self.view addSubview:MainImage];
         MainImage.userInteractionEnabled = YES;
@@ -133,7 +133,7 @@
     for (int i=0; i<9; i++) {
         UIImageView *MainImage =[[UIImageView alloc]init];
         MainImage.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+10+i/3*(kHeight/3-30),width,width);
-        MainImage.image = placeHoderImage;
+        MainImage.image = placeHoderImage1;
         MainImage.backgroundColor =[UIColor clearColor];
         [self.view addSubview:MainImage];
         MainImage.userInteractionEnabled = YES;
@@ -150,7 +150,7 @@
         homeModel *homeMode =[_hotImageArrayOff objectAtIndex:i];
         UIImageView *MainImage =[[UIImageView alloc]init];
         MainImage.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+10+i/3*(kHeight/3-30),width,width);
-        [MainImage setImageWithURL:[NSURL URLWithString:homeMode.image_url] placeholderImage:placeHoderImage];
+        [MainImage setImageWithURL:[NSURL URLWithString:homeMode.image_url] placeholderImage:placeHoderImage1];
         MainImage.backgroundColor =[UIColor clearColor];
         [self.view addSubview:MainImage];
         MainImage.userInteractionEnabled = YES;

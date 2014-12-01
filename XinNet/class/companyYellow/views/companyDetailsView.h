@@ -10,4 +10,5 @@
 
 @interface companyDetailsView : UIViewController
 @property(nonatomic,retain)NSString *companyDetailIndex;
+@property(nonatomic,retain)NSString *headerImage;
 @end

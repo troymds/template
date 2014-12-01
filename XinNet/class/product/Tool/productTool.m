@@ -9,7 +9,6 @@
 #import "productTool.h"
 #import "productModel.h"
 @implementation productTool
-+ (void)statusesWithSuccess:(StatusSuccessBlock)success company_Id:(NSString *)company_id keywords_Id:(NSString *)keywords category_Id:(NSString *)category_id failure:(StatusFailureBlock)failure
 
 {
     

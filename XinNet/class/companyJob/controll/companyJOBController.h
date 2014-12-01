@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface companyJOBController : UIViewController
+@interface companyJOBController : UIViewController{
+    UITableView *_tableView;
 
+}
+@property(nonatomic,copy)NSString *company_id;
+@property(nonatomic,strong)UITableView *tableView;
 @end

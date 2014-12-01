@@ -24,13 +24,17 @@
 #import "businessDetailsView.h"
 #import "productDetailsView.h"
 #import "jobDetailsView.h"
-@interface searchTableViewController ()
+@interface searchTableViewController ()<MJRefreshBaseViewDelegate>
 {
     NSMutableArray *_businessArray;
     NSMutableArray *_companyJobArray;
     NSMutableArray *_productArray;
     UILabel *dataLabel;
+    MJRefreshFooterView *_footer;
+     BOOL isLoadMore;//判断是否加载更多
 }
+@property (nonatomic,assign) NSInteger pageNum;//页数
+@property (nonatomic,strong) NSString *page;//页数
 @end
 
 @implementation searchTableViewController
@@ -44,11 +48,47 @@
     _businessArray =[NSMutableArray array];
     _companyJobArray =[NSMutableArray array];
     _productArray =[NSMutableArray array];
-    
+    _pageNum = 0;
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self addLoadStatus];
+    [self addLoadStatuss];
+    [self addMBprogressView];
+    [self addRefreshViews];
    
 }
+
+#pragma  mark ------显示指示器
+-(void)addMBprogressView{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
+    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    
+    
+}
+
+#pragma mark 集成刷新控件
+- (void)addRefreshViews
+{
+    
+    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
+    footer.scrollView = self.tableView;
+    footer.delegate = self;
+    _footer = footer;
+    isLoadMore = NO;
+}
+
+#pragma mark 刷新代理方法
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    // 下拉刷新
+    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        // 上拉加载更多
+        [self addLoadStatus:refreshView];
+    }
+}
+
+
 - (void)addShowNoDataView
 {
     dataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
@@ -62,9 +102,22 @@
     
 }
 #pragma mark---加载数据
--(void)addLoadStatus{
+-(void)addLoadStatus:(MJRefreshBaseView *)refershview {
+        //更新page
+    _pageNum++;
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
     if (_searchSelectedIndex==200) {
         [productTool statusesWithSuccess:^(NSArray *statues) {
+            if (statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+                [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+
+            }
             [_productArray addObjectsFromArray: statues];
             [self.tableView reloadData];
             [self addShowNoDataView];
@@ -76,13 +129,26 @@
                 dataLabel.hidden = YES;
                 self.tableView.hidden = NO;
             }
+            [refershview endRefreshing];
+        } company_Id:@"" keywords_Id:_keyWordesIndex category_Id:@"" page:self.page failure:^(NSError *error) {
             
-        }company_Id:nil keywords_Id:_keyWordesIndex category_Id:nil failure:^(NSError *error) {
-            
-        }];
-            }else if (_searchSelectedIndex ==201){
+        }   ];
+    }else if (_searchSelectedIndex ==201){
                 [businessTool statusesWithSuccess:^(NSArray *statues) {
+                  
+                    if (statues.count < 10) {
+                        isLoadMore = NO;
+                        _footer.hidden = YES;
+                        [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
+                    }else
+                    {
+                        isLoadMore = YES;
+                        _footer.hidden = NO;
+
+                    }
+
                     [_businessArray addObjectsFromArray: statues];
+                    
                     [self.tableView reloadData];
                     [self addShowNoDataView];
                     
@@ -93,15 +159,97 @@
                         dataLabel.hidden = YES;
                         self.tableView.hidden = NO;
                     }
-                    
-                } keywords_Id:_keyWordesIndex type_ID:nil company_Id:nil failure:^(NSError *error) {
+                    [refershview endRefreshing];
+
+                } keywords_Id:_keyWordesIndex type_ID:@"" company_Id:@"" page:self.page failure:^(NSError *error) {
                     
                 }];
    
         
     }else{
         [companyJobTool statusesWithSuccess:^(NSArray *statues) {
+            if (statues.count < 10) {
+                isLoadMore = NO;
+                _footer.hidden = YES;
+                [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
+                
+            }else
+            {
+                isLoadMore = YES;
+                _footer.hidden = NO;
+            }
+
             [_companyJobArray addObjectsFromArray: statues];
+            [self.tableView reloadData];
+            [self addShowNoDataView];
+            
+            if (_companyJobArray.count ==0) {
+                dataLabel.hidden = NO;
+            [self.tableView removeFromSuperview];
+            }else{
+                dataLabel.hidden = YES;
+                self.tableView.hidden = NO;
+            }
+            [refershview endRefreshing];
+
+        } company_Id:@"" keywords_Str:_keyWordesIndex page:self.page failure:^(NSError *error) {
+            
+        }];
+    }
+}
+#pragma mark---加载数据
+-(void)addLoadStatuss {
+    _pageNum =0;
+    if (!isLoadMore) {
+        isLoadMore = YES;
+        _footer.hidden = NO;
+    }
+    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+    
+
+    if (_searchSelectedIndex==200) {
+        [productTool statusesWithSuccess:^(NSArray *statues) {
+            [_productArray addObjectsFromArray: statues];
+             _pageNum = _productArray.count % 10 + 1;
+            [self.tableView reloadData];
+            [self addShowNoDataView];
+            
+            if (_productArray.count ==0) {
+                dataLabel.hidden = NO;
+                [self.tableView removeFromSuperview];
+            }else{
+                dataLabel.hidden = YES;
+                self.tableView.hidden = NO;
+            }
+        } company_Id:@"" keywords_Id:_keyWordesIndex category_Id:@"" page:self.page failure:^(NSError *error) {
+            
+        }   ];
+    }else if (_searchSelectedIndex ==201){
+        [businessTool statusesWithSuccess:^(NSArray *statues) {
+            [_businessArray addObjectsFromArray: statues];
+            _pageNum = _businessArray.count % 10 + 1;
+
+            [self.tableView reloadData];
+            [self addShowNoDataView];
+            
+            if (_businessArray.count ==0) {
+                dataLabel.hidden = NO;
+                [self.tableView removeFromSuperview];
+            }else{
+                dataLabel.hidden = YES;
+                self.tableView.hidden = NO;
+            }
+            
+        } keywords_Id:_keyWordesIndex type_ID:@"" company_Id:@"" page:self.page failure:^(NSError *error) {
+            
+        }];
+        
+        
+    }else{
+        [companyJobTool statusesWithSuccess:^(NSArray *statues) {
+            [_companyJobArray addObjectsFromArray: statues];
+            _pageNum = _companyJobArray.count % 10 + 1;
+
             [self.tableView reloadData];
             [self addShowNoDataView];
             
@@ -113,11 +261,12 @@
                 self.tableView.hidden = NO;
             }
             
-        } company_Id:nil keywords_Str:_keyWordesIndex failure:^(NSError *error) {
+        } company_Id:@"" keywords_Str:_keyWordesIndex page:self.page  failure:^(NSError *error) {
             
         }];
     }
 }
+
 -(void)returnClick{
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -190,10 +339,13 @@
         proCell.selectionStyle =UITableViewCellSelectionStyleNone;
         
         productModel *proModel =[_productArray objectAtIndex:indexPath.row];
-        [proCell.hearderImage setImageWithURL:[NSURL URLWithString:proModel.cover] placeholderImage:placeHoderImage];
+        [proCell.hearderImage setImageWithURL:[NSURL URLWithString:proModel.cover] placeholderImage:placeHoderImage3];
         proCell.nameLabel.text= proModel.name;
-        proCell.old_priceLabel.text =[NSString stringWithFormat:@"产品价格:                %@",proModel.old_price];
+        proCell.companyLabel.text =proModel.name;
+        proCell.old_priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.old_price];
         proCell.priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.price ];
+        CGFloat  OldWidth =[proModel.old_price sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(80, 20)].width;
+        proCell.lineView.frame =CGRectMake(0, 10, OldWidth+15, 1);
         UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
         [proCell.contentView addSubview:cellLine];
         cellLine.backgroundColor =HexRGB(0xe6e3e4);

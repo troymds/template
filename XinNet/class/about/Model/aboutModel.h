@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface aboutModel : NSObject
+@interface aboutModel : NSObject<NSCoding>
 @property (nonatomic, strong)NSString *company_about;//
 @property (nonatomic, strong)NSString *company_address;//
 @property (nonatomic, strong)NSString *company_email;//

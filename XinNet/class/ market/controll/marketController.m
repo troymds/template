@@ -22,6 +22,8 @@
     UIView *_moreView;
     UIButton *_bigButton;
     UIButton *_moreSelectedBtn;
+    UILabel *dataLabel;
+    
     NSMutableArray *_marketArray;
     NSMutableArray *_cagegoryArray;
     NSString *_category_Index;
@@ -48,10 +50,22 @@
     
     _pageNum = 0;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
-    
+    [self addShowNoDataView];
     [self addTableView];
     [self addRefreshViews];
     [self addLoadStatus];
+}
+- (void)addShowNoDataView
+{
+    dataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+    dataLabel.textAlignment = NSTextAlignmentCenter;
+    dataLabel.backgroundColor = [UIColor clearColor];
+    dataLabel.text = @"没有数据！";
+    dataLabel.hidden = YES;
+    dataLabel.enabled = NO;
+    [self.view addSubview:dataLabel];
+    
+    
 }
 #pragma  mark ------显示指示器
 -(void)addMBprogressView{
@@ -93,13 +107,21 @@
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     
     [self addMBprogressView];
+    
     [marketTOOL statusesWithSuccess:^(NSArray *statues) {
+        if (statues.count==0) {
+            dataLabel.hidden = NO;
+            _tableView.hidden=YES;
+        }else{
+            dataLabel.hidden = YES;
+            _tableView.hidden =NO;
+        }
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [_marketArray removeAllObjects];
         [_marketArray addObjectsFromArray:statues];
         _pageNum = _marketArray.count % 10 + 1;
         [_tableView reloadData];
-    }  keywords_Id:nil category_Id:nil page:self.page failure:^(NSError *error) {
+    }  keywords_Id:@"" category_Id:_category_Index page:self.page failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
         
@@ -121,6 +143,7 @@
             if (statues.count < 10) {
                 isLoadMore = NO;
                 _footer.hidden = YES;
+                 [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
             }else
             {
                 isLoadMore = YES;
@@ -130,16 +153,17 @@
             
             [_tableView reloadData];
             [refreshView endRefreshing];
-        }  keywords_Id:nil category_Id:_category_Index page:self.page  failure:^(NSError *error) {
+        }  keywords_Id:@"" category_Id:_category_Index page:self.page  failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
         }];
     }else if (_moreSelectedBtn.tag==31){
         [marketTOOL statusesWithSuccess:^(NSArray *statues) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            if (statues.count > 0 && statues.count < 10) {
+            if (statues.count < 10) {
                 isLoadMore = NO;
                 _footer.hidden = YES;
+                 [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
             }else
             {
                 isLoadMore = YES;
@@ -150,7 +174,7 @@
             [_tableView reloadData];
             [refreshView endRefreshing];
             
-        }  keywords_Id:nil category_Id:@"4" page:self.page  failure:^(NSError *error) {
+        }  keywords_Id:@"" category_Id:@"4" page:self.page  failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
             
@@ -162,6 +186,7 @@
         if (statues.count > 0 && statues.count < 10) {
             isLoadMore = NO;
             _footer.hidden = YES;
+             [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
         }else
         {
             isLoadMore = YES;
@@ -179,9 +204,10 @@
     }
 }
 -(void)addTableView{
-    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight) style:UITableViewStylePlain];
+    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-64) style:UITableViewStylePlain];
     _tableView.delegate =self;
     _tableView.dataSource =self;
+    _tableView.hidden = YES;
     _tableView.backgroundColor =[UIColor whiteColor];
     _tableView.showsHorizontalScrollIndicator = NO;
     _tableView.showsVerticalScrollIndicator = NO;
@@ -296,7 +322,7 @@
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
     }
     marketModel *markModel =[_marketArray objectAtIndex:indexPath.row];
-    [cell.marketImage setImageWithURL:[NSURL URLWithString:markModel.coverimage] placeholderImage:placeHoderImage];
+    [cell.marketImage setImageWithURL:[NSURL URLWithString:markModel.coverimage] placeholderImage:placeHoderImage2];
     cell.timeLabel.text = markModel.create_time;
     cell.titleName.text=markModel.nametitle;
     cell.fromLabel.text = markModel.from;

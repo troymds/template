@@ -11,6 +11,7 @@
 #import "RemindView.h"
 #import "AuthencateTool.h"
 #import "httpTool.h"
+#import "MBProgressHUD.h"
 
 @interface FindPasswordController ()<UITextFieldDelegate>
 {
@@ -56,8 +57,9 @@
     getBtn.frame = CGRectMake(leftDistance,topDistance+height+20, kWidth-leftDistance*2, 35);
     [getBtn setTitle:@"确 定" forState:UIControlStateNormal];
     [getBtn addTarget:self action:@selector(buttonDown) forControlEvents:UIControlEventTouchUpInside];
-    [getBtn setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
-    [getBtn setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
+    [getBtn setBackgroundColor:HexRGB(0x9be4aa)];
+//    [getBtn setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
+//    [getBtn setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
     [getBtn setTitleColor:HexRGB(0xffffff) forState:UIControlStateNormal];
     
     [self.view addSubview:getBtn];
@@ -68,8 +70,11 @@
 {
     if (_userNameView.textField.text.length!=0) {
         if ([AuthencateTool isValidateEmail:_userNameView.textField.text]) {
-            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:_userNameView.textField.text,@"phone_num", nil];
+            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:_userNameView.textField.text,@"email", nil];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.dimBackground = NO;
             [httpTool postWithPath:@"sendChangePasswordEmail" params:param success:^(id JSON) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
                 NSDictionary *dic = [result objectForKey:@"response"];
                 if ([[dic objectForKey:@"code"] intValue]==100) {
@@ -77,10 +82,9 @@
                     alertView.delegate = self;
                     [alertView show];
                 }
-
             } failure:^(NSError *error) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-
             }];
         }else{
             [RemindView showViewWithTitle:@"邮箱格式不正确" location:MIDDLE];

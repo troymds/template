@@ -21,8 +21,9 @@
 #define SIMULATOR 0
 #endif
 //占位图片
-#define placeHoderImage [UIImage imageNamed:@"load_big.png"]
-
+#define placeHoderImage1 [UIImage imageNamed:@"fail_image1.png"]
+#define placeHoderImage2 [UIImage imageNamed:@"fail_image2.png"]
+#define placeHoderImage3 [UIImage imageNamed:@"fail_image3.png"]
 //加载图片
 //#define LOADIMAGE(file,type) [UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:file ofType:type]]
 //#define LOADPNGIMAGE(file) [UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:file ofType:@"png"]]

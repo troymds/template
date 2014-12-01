@@ -22,6 +22,7 @@
     MoreListView *_exitView;
     UILabel *versionLabel;
     UILabel *cachesLabel;
+    NSString *_url;  //更新版本的url
 }
 @end
 
@@ -165,6 +166,7 @@
                 [RemindView showViewWithTitle:@"您还未登陆" location:MIDDLE];
             }else{
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"退出当前账号?" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+                alertView.tag = 1000;
                 [alertView show];
             }
         }
@@ -182,10 +184,17 @@
     cachesLabel.text = [NSString stringWithFormat:@"%.2fM",chcheSize];
 }
 
+#pragma mark alertView_delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 1) {
-        [self exit];
+    if (alertView.tag==1000) {
+        if (buttonIndex == 1) {
+            [self exit];
+        }
+    }else{
+        if (buttonIndex == 1) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_url]];
+        }
     }
 }
 
@@ -209,7 +218,26 @@
 //检查版本
 - (void)checkVersion
 {
-    
+    [httpTool postWithPath:@"getNewestVersion" params:nil success:^(id JSON) {
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        int code = [[dic objectForKey:@"code"] intValue];
+        if (code == 100) {
+            NSDictionary *dict = [NSBundle mainBundle].infoDictionary;
+            NSString *myVersion = [dict objectForKey:(NSString *)kCFBundleInfoDictionaryVersionKey];
+            NSString *version = [[dic objectForKey:@"data"] objectForKey:@"version"];
+            if ([myVersion isEqualToString:version]) {
+                [RemindView showViewWithTitle:@"您当前已是最新版本" location:MIDDLE];
+            }else{
+                _url = [[dic objectForKey:@"data"] objectForKey:@"url"];
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"检测到最新版本,是否进行更新?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"前往更新", nil];
+                alertView.tag = 1001;
+                [alertView show];
+            }
+        }
+    } failure:^(NSError *error) {
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+    }];
 }
 
 
@@ -218,6 +246,10 @@
 {
     [RemindView showViewWithTitle:@"缓存已清空" location:MIDDLE];
 }
+
+
+#pragma mark ---------
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

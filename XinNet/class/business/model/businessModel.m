@@ -9,7 +9,7 @@
 #import "businessModel.h"
 
 @implementation businessModel
-@synthesize company_id,indexID,read_num,title,create_time;
+@synthesize company_id,indexID,read_num,title,create_time,typeId;
 - (instancetype)initWithDictionaryForBusiness:(NSDictionary *)dict{
     if ([super self]) {
         self.company_id =dict[@"company_id"];
@@ -17,6 +17,8 @@
         self.read_num =dict[@"read_num"];
         self.title =dict[@"title"];
         self.create_time =dict[@"create_time"];
+        self.typeId =dict[@"type"];
+
         
     }
     return self;

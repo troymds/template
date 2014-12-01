@@ -19,7 +19,7 @@
 #define YYBODERW 16
 #define YYBODERY 11
 #define BtnWidth 288
-@interface SearchViewController ()
+@interface SearchViewController ()<UITextFieldDelegate>
 {
     UIView *backMenuView;
     UIButton *classBackBtn;
@@ -74,10 +74,12 @@
     
      keyText =[[UITextField alloc]initWithFrame:CGRectMake(YYBODERW, 132, BtnWidth, 43)];
     [self.view addSubview:keyText];
+    keyText.delegate =self;
     keyText.borderStyle =UITextBorderStyleNone;
     keyText.backgroundColor =HexRGB(0xffffff);
     keyText.placeholder =@"   请输入关键词";
     keyText.clearButtonMode = UITextFieldViewModeWhileEditing;
+    
     
     YYSearchButton *searchBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
     [searchBtn setTitle:@"搜索" forState:UIControlStateNormal];
@@ -85,9 +87,21 @@
     [self.view addSubview:searchBtn];
     searchBtn.backgroundColor =HexRGB(0x9be4aa);
     searchBtn.contentHorizontalAlignment =UIControlContentHorizontalAlignmentCenter;
-    searchBtn.frame =CGRectMake(YYBODERW, 300, kWidth-YYBODERW*2, 42);
+    searchBtn.frame =CGRectMake(YYBODERW, 270, kWidth-YYBODERW*2, 42);
     [searchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [searchBtn addTarget:self action:@selector(searchBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+}
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [keyText resignFirstResponder];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    [textField resignFirstResponder];
+    
+    return YES;
     
 }
 -(void)addClassBackView{
