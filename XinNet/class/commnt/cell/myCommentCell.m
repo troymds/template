@@ -72,7 +72,7 @@
     _detailContent.frame = CGRectMake(CGRectGetMaxX(_avatar.frame) + nameBwnavata, CGRectGetMaxY(_userName.frame), _detailW, size.height);
     _detailHeight = size.height;
     if ([data.userAvata isKindOfClass:[NSNull class]]) {
-        [_avatar setImageWithURL:[NSURL URLWithString:@""] placeholderImage:placeHoderImage1];
+        _avatar.image = [UIImage imageNamed:@"user_default.png"];
     }else
     {
         [_avatar setImageWithURL:[NSURL URLWithString:data.userAvata] placeholderImage:placeHoderImage1];

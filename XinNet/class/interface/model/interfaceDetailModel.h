@@ -17,4 +17,5 @@
 @property (nonatomic, strong)NSString *title;
 @property (nonatomic, strong)NSString *company_name;
 @property (nonatomic, strong)NSString *wapUrl;
+@property (nonatomic,strong)NSString *start_time;//时间
 @end

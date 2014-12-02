@@ -63,7 +63,7 @@
 {
     UIView *commentBtnBackView = [[UIView alloc] initWithFrame:CGRectMake(0, KAppH - commentBtnBackH - 44, kWidth, commentBtnBackH)];
     [self.view addSubview:commentBtnBackView];
-    commentBtnBackView.backgroundColor = [UIColor redColor];
+    commentBtnBackView.backgroundColor = HexRGB(0xe9f1f6);
     YYSearchButton *commentBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
     [commentBtnBackView addSubview:commentBtn];
     commentBtn.frame = CGRectMake(40, 7, kWidth-80, commentBtnBackH - 14);
