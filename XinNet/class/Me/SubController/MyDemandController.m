@@ -77,8 +77,8 @@
 - (void)addRightNavButton
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(0, 0,40, 19);
-    [button setTitle:@"发布" forState:UIControlStateNormal];
+    button.frame = CGRectMake(0, 0,60, 30);
+    [button setBackgroundImage:[UIImage imageNamed:@"publish.png"] forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont systemFontOfSize:14];
     [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(rightBarButtonDown) forControlEvents:UIControlEventTouchUpInside];

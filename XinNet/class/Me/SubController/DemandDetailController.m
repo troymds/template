@@ -47,7 +47,7 @@
 - (void)addRightBarButton
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(0, 0,40, 19);
+    button.frame = CGRectMake(0, 0,30, 30);
     [button setBackgroundImage:[UIImage imageNamed:@"edit.png"] forState:UIControlStateNormal];
     [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(rightBarButtonDown) forControlEvents:UIControlEventTouchUpInside];

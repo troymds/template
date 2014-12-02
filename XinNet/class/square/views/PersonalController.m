@@ -70,8 +70,8 @@
 - (void)addRightNavButton
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(0, 0, 54, 25);
-    [button setTitle:@"保存" forState:UIControlStateNormal];
+    button.frame = CGRectMake(0, 0,60,30);
+    [button setBackgroundImage:[UIImage imageNamed:@"publish.png"] forState:UIControlStateNormal];
     [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(rightBarButtonDown) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
