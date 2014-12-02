@@ -62,9 +62,7 @@
     collectionBtn.frame =CGRectMake(200, 8, 40, 30);
     collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
     [collectionBtn setTitle:@"收藏" forState:UIControlStateNormal];
-    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateNormal];
-    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateHighlighted];
-
+   
 
     [collectionBtn addTarget:self action:@selector(collectionBtn:) forControlEvents:UIControlEventTouchUpInside];
     [backCollectView addSubview:collectionBtn];

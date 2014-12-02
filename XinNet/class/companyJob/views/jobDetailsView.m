@@ -66,8 +66,7 @@
     YYSearchButton * collectionBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
     collectionBtn.frame =CGRectMake(200, 8, 40, 30);
     collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
-    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateNormal];
-    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateHighlighted];
+    
     [collectionBtn setTitle:@"收藏" forState:UIControlStateNormal];
     [collectionBtn addTarget:self action:@selector(collectionBtn:) forControlEvents:UIControlEventTouchUpInside];
     [backCollectView addSubview:collectionBtn];
@@ -88,7 +87,9 @@
             if (code == 100) {
                 [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
                 collectionModel *model = [data objectAtIndex:0];
-                [sender setTitle:@"取消" forState:UIControlStateNormal];
+                [sender setTitle:@"取消收藏" forState:UIControlStateNormal];
+                sender.frame =CGRectMake(120, 8, 80, 30);
+
                 self.collectionId = model.data;
             }else
             {

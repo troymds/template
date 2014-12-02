@@ -42,7 +42,7 @@
         NSDictionary *dict =[NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =[dict[@"response"]objectForKey:@"data"];
-        NSLog(@"---ffff-%@",array);
+      
         if (![array isKindOfClass:[NSNull class]]) {
             for (NSDictionary *diction in array) {
                 productModel *s =[[productModel alloc] initWithDictionaryForBusiness:diction];

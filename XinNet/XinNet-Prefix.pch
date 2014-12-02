@@ -12,7 +12,6 @@
 #warning "This project uses features only available in iOS SDK 3.0 and later."
 #endif
 
-#ifdef __OBJC__
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import "httpTool.h"
@@ -24,12 +23,5 @@
 #import "MJRefreshFooterView.h"
 #import "RemindView.h"
 
-#ifdef DEBUG
-#define MYNSLog(...) NSLog(__VA_ARGS__)
-#else
-#define MYNSLog(...)
-#endif
 
-
-#endif
 

@@ -7,8 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface MainController : UIViewController
+#import "KDCycleBannerView.h"
+@interface MainController : UIViewController<KDCycleBannerViewDataource,KDCycleBannerViewDelegate>{
+    KDCycleBannerView * _bannerView; // 轮播
+}
 //离线数据
 @property(nonatomic,strong)NSMutableArray *hotImageArrayOff;
+@property(nonatomic,strong)NSMutableArray *adsImageArrayOff;
+
+
+@property (strong,nonatomic)NSMutableArray *slideImages;
 @end

@@ -77,7 +77,7 @@
 #define NSLog(...) NSLog(__VA_ARGS__)
 #else
 // 发布状态
-#define NSLog(...)
+#define MYNSLog(...)
 #endif
 
 #define KCompanyMenuItemW   kWidth/3

@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @interface homeModel : NSObject
-@property(nonatomic,strong)NSString *image_url;
-@property(nonatomic,strong)NSString *name;
-@property(nonatomic,copy)NSString* typeId;
-- (instancetype)initWithDictionaryForMarket:(NSDictionary *)dict;
+@property(nonatomic,strong)NSArray *ads;
+@property(nonatomic,strong)NSArray *module;
+@property(nonatomic,strong)NSString *logo;
+
 
 @end

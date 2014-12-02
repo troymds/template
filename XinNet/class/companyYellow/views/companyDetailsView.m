@@ -61,8 +61,7 @@
     collectionBtn.frame =CGRectMake(200, 8, 40, 30);
     collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
     [collectionBtn setTitle:@"分享" forState:UIControlStateNormal];
-    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateNormal];
-    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateHighlighted];
+    
     
     
     [collectionBtn addTarget:self action:@selector(shareBtnClick:) forControlEvents:UIControlEventTouchUpInside];

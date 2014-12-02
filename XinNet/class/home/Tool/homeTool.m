@@ -7,30 +7,24 @@
 //
 
 #import "homeTool.h"
-#import "homeModel.h"
 @implementation homeTool
 + (void)statusesWithSuccess:(StatusSuccessBlock)success failure:(StatusFailureBlock)failure
 {
     
     
     
-    [httpTool postWithPath:@"getModule" params:nil success:^(id JSON) {
+    [httpTool postWithPath:@"getIndex" params:nil success:^(id JSON) {
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
-        NSDictionary *array =[dict[@"response"]objectForKey:@"data"];
-        
-        if (array) {
-            if ([array isKindOfClass:[NSNull class]])
-            {
-            }else{
-                
-                for (NSDictionary *diction in array) {
-                    homeModel *s =[[homeModel alloc] initWithDictionaryForMarket:diction];
-                    [statuses addObject:s];
-                }
-            }
+        NSDictionary *array =dict[@"response"];
+        if (![array isKindOfClass:[NSNull class]]) {
+            [statuses addObject:[array objectForKey:@"data"]];
+        }
+        else{
+            
         }
         success(statuses);
+
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);

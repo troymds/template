@@ -23,11 +23,18 @@
 #import "SearchViewController.h"//搜索热词
 #import "PersonCenterController.h"
 #import "homeModel.h"
+#import "adsModel.h"
+#import "moduleModel.h"
 #import "homeTool.h"
 #define khotImageFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"hotImage.data"]
+#define kadsImageFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"adsImage.data"]
+
 @interface MainController ()
 {
-    NSMutableArray *_homeArray;
+    NSMutableArray *_adsArray;
+    NSMutableArray *_moduleArray;
+    homeModel *_homeModel;
+    
 }
 @end
 
@@ -35,32 +42,33 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _homeArray =[NSMutableArray array];
+    _adsArray =[NSMutableArray array];
+    _moduleArray =[NSMutableArray array];
     _hotImageArrayOff =[NSMutableArray array];
+    _adsImageArrayOff =[NSMutableArray array];
 
-    self.view.backgroundColor =[UIColor whiteColor];
+    
+    _slideImages = [[NSMutableArray alloc] init];
+
+    self.view.backgroundColor =HexRGB(0xf5f0ef);
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    UIButton * _searchImage =[UIButton buttonWithType:UIButtonTypeCustom];
-    _searchImage.frame =CGRectMake(0, 0, kWidth-120, 30);
-    [self.view addSubview:_searchImage];
-    self.navigationItem.titleView =_searchImage;
-    [_searchImage setImage:[UIImage imageNamed:@"nav_searchhome.png"] forState:UIControlStateNormal];
-    [_searchImage setImage:[UIImage imageNamed:@"nav_searchhome.png"] forState:UIControlStateHighlighted];
-    [_searchImage addTarget:self action:@selector(searchBarBtn) forControlEvents:UIControlEventTouchUpInside];
     
     
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"pressent_img" highlightedSearch:@"pressent_img" target:(self) action:@selector(zbarSdk)];
-    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_logo.png" highlightedSearch:@"nav_logo.png" target:(self) action:nil];
+   
     self.view.userInteractionEnabled = YES;
     
     [self addMBprogressView];
     [self addLoadStatus];
-   
+    
+
     
   
 }
+
+
 #pragma  mark ------显示指示器
 -(void)addMBprogressView{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -72,33 +80,125 @@
 #pragma mark---加载数据
 -(void)addLoadStatus{
     [homeTool statusesWithSuccess:^(NSArray *statues) {
-        [_hotImageArrayOff removeAllObjects];
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [_homeArray addObjectsFromArray:statues];
-        [self ADDMainBtn];
+        
+        NSDictionary *dict =[statues objectAtIndex:0];
+        _homeModel =[[homeModel alloc]init];
+        _homeModel.ads =[dict objectForKey:@"ads"];
+        _homeModel.module =[dict objectForKey:@"module"];
+        _homeModel.logo =[dict objectForKey:@"logo"];
+        [self addNavImage];
+        for (NSDictionary *dict in _homeModel.ads) {
+            adsModel *adsMod=[[adsModel alloc]initWithDictionaryForHomeAds:dict];
+            [_adsArray addObject:adsMod];
+        }
+        [NSKeyedArchiver archiveRootObject:_adsArray toFile:kadsImageFilePath];
+
+        for (NSDictionary *moDict in _homeModel.module) {
+            moduleModel *modulModel =[[moduleModel alloc]initWithDictionaryForHomeModule:moDict];
+            [_moduleArray addObject:modulModel];
+        }
+
         //归档离线数据
-        [NSKeyedArchiver archiveRootObject:_homeArray toFile:khotImageFilePath];
+        [NSKeyedArchiver archiveRootObject:_moduleArray toFile:khotImageFilePath];
+
+        [self initBannerView];
+        [self addADSimageBtn:_adsArray];
+        [self addCategorybutton:_moduleArray];
+        
     } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+
+        NSLog(@"error");
         self.hotImageArrayOff = [NSKeyedUnarchiver unarchiveObjectWithFile:khotImageFilePath];
-        [self ADDMainBtnFail];
+        self.adsImageArrayOff =[NSKeyedUnarchiver unarchiveObjectWithFile:kadsImageFilePath];
+        [self addFailbutton:_hotImageArrayOff];
         if (_hotImageArrayOff.count ==0) {
             [self addFirstImage];
         }
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
-    }];
+        [self initBannerView];
+        [self addADSimageBtn:_adsImageArrayOff];
+        [self addNavImage];
+            }];
 }
-#pragma mark---UI
--(void)ADDMainBtn{
-    CGFloat leftDistace = 20;                              //第一列图片距离左边的距离
-    CGFloat width = 80;                                    //图片宽高
-    CGFloat distance = (kWidth-width*3-leftDistace*2)/2;   //每行图片的中间距离
-    CGFloat topDistace  = 20;                              //第一列图片距顶部的距离
+
+-(void)addNavImage{
+    UIView *nav_View =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth-44, 44)];
+    [self.view addSubview:nav_View];
+    nav_View.backgroundColor =[UIColor clearColor];
+    self.navigationItem.titleView =nav_View;
+
+    UIButton * _searchImage =[UIButton buttonWithType:UIButtonTypeCustom];
+    _searchImage.frame =CGRectMake(60, 7, kWidth-120, 30);
+    _searchImage.backgroundColor =[UIColor clearColor];
+    [nav_View addSubview:_searchImage];
+    [_searchImage setImage:[UIImage imageNamed:@"nav_searchhome.png"] forState:UIControlStateNormal];
+    [_searchImage setImage:[UIImage imageNamed:@"nav_searchhome.png"] forState:UIControlStateHighlighted];
+    [_searchImage addTarget:self action:@selector(searchBarBtn) forControlEvents:UIControlEventTouchUpInside];
     
-    for (int i=0; i<_homeArray.count; i++) {
-        homeModel *homeMode =[_homeArray objectAtIndex:i];
+    UIImageView *navLogoImage =[[UIImageView alloc]initWithFrame:CGRectMake(-60, 0, 60, 30)];
+    [_searchImage addSubview:navLogoImage];
+    [navLogoImage setImageWithURL:[NSURL URLWithString:_homeModel.logo] placeholderImage:placeHoderImage3];
+}
+
+-(void)addADSimageBtn:(NSMutableArray *)tody
+{
+    
+    
+    // 创建图片 imageview
+    for (int i = 0;i<[tody count];i++)
+    {
+        adsModel *ads =[tody objectAtIndex:i];
+        [_slideImages addObject:ads.image_url];
+        
+    }
+}
+-(void)initBannerView{
+    UIImageView *bannView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kWidth,118)];
+    [self.view addSubview:bannView];
+    bannView.image =[UIImage imageNamed:@"load_big.png"];
+    _bannerView =[[KDCycleBannerView alloc] initWithFrame:CGRectMake(0, 0,kWidth,118)];
+    
+    _bannerView.datasource = self;
+    _bannerView.delegate = self;
+    _bannerView.continuous = YES;
+    _bannerView.autoPlayTimeInterval = 3;
+    [self.view addSubview:_bannerView];
+}
+- (NSArray *)numberOfKDCycleBannerView:(KDCycleBannerView *)bannerView{
+    
+    
+    return _slideImages;
+}
+- (UIViewContentMode)contentModeForImageIndex:(NSUInteger)index{
+    return UIViewContentModeScaleAspectFill;
+}
+- (UIImage *)placeHolderImageOfBannerView:(KDCycleBannerView *)bannerView atIndex:(NSUInteger)index{
+    return placeHoderImage3;
+}
+// 滚动到第几个图片
+- (void)cycleBannerView:(KDCycleBannerView *)bannerView didScrollToIndex:(NSUInteger)index{
+    
+}
+// 选中第几个图片
+- (void)cycleBannerView:(KDCycleBannerView *)bannerView didSelectedAtIndex:(NSUInteger)index{
+    
+   }
+
+
+#pragma mark---UI
+-(void)addCategorybutton:(NSMutableArray *)btnImgArray
+{
+    CGFloat leftDistace = 20;                              //第一列图片距离左边的距离
+    CGFloat width = 70;                                    //图片宽高
+    CGFloat distance = (kWidth-width*3-leftDistace*2)/2;   //每行图片的中间距离
+    CGFloat topDistace  = 10;                              //第一列图片距顶部的距离
+    
+    for (int i=0; i<_moduleArray.count; i++) {
+        moduleModel *homeMode =[btnImgArray objectAtIndex:i];
         UIImageView *MainImage =[[UIImageView alloc]init];
-        MainImage.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+10+i/3*(kHeight/3-30),width,width);
+        MainImage.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+130+i/3*(kHeight/3-70),width,width);
         [MainImage setImageWithURL:[NSURL URLWithString:homeMode.image_url] placeholderImage:placeHoderImage1];
         MainImage.backgroundColor =[UIColor clearColor];
         [self.view addSubview:MainImage];
@@ -106,50 +206,58 @@
         
         UIButton *titleBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [self.view addSubview:titleBtn];
-        titleBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+100+i/3*(kHeight/3-30), width, 30);
+        titleBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+200+i/3*(kHeight/3-70), width, 30);
         [titleBtn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
         [titleBtn setTitle:homeMode.name forState:UIControlStateNormal];
-        titleBtn.titleLabel.font =[UIFont systemFontOfSize:18];
-        [titleBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        titleBtn.titleLabel.font =[UIFont systemFontOfSize:16];
+        [titleBtn setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
         
       
         UIButton *bigBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [self.view addSubview:bigBtn];
-        bigBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+10+i/3*(kHeight/3-30), width, width+35);
+        bigBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+130+i/3*(kHeight/3-70), width, width+35);
         [bigBtn  addTarget:self action:@selector(titbtnClick:) forControlEvents:UIControlEventTouchUpInside];
         bigBtn.backgroundColor =[UIColor clearColor];
        
-        NSString *aNumberString = homeMode.typeId;
+        NSString *aNumberString = homeMode.typeID;
         int type_id = [aNumberString intValue];
 
         bigBtn.tag =type_id;
                    }
 }
 -(void)addFirstImage{
+    UIImageView *adsImageBanner=[[UIImageView alloc]initWithFrame:CGRectMake(16, 0, kWidth-32, 118)];
+    [self.view addSubview:adsImageBanner];
+    adsImageBanner.image =placeHoderImage3;
+    
     CGFloat leftDistace = 20;                              //第一列图片距离左边的距离
-    CGFloat width = 80;                                    //图片宽高
+    CGFloat width = 70;                                    //图片宽高
     CGFloat distance = (kWidth-width*3-leftDistace*2)/2;   //每行图片的中间距离
     CGFloat topDistace  = 20;
     for (int i=0; i<9; i++) {
-        UIImageView *MainImage =[[UIImageView alloc]init];
-        MainImage.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+10+i/3*(kHeight/3-30),width,width);
-        MainImage.image = placeHoderImage1;
-        MainImage.backgroundColor =[UIColor clearColor];
+        UIButton *MainImage =[UIButton buttonWithType:UIButtonTypeCustom];
+        MainImage.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+130+i/3*(kHeight/3-70),width,width);
+        [MainImage setImage:placeHoderImage1 forState:UIControlStateNormal];
         [self.view addSubview:MainImage];
         MainImage.userInteractionEnabled = YES;
+        [MainImage addTarget:self action:@selector(mainImageBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
 }
+-(void)mainImageBtnClick:(UIButton *)main{
+    [RemindView showViewWithTitle:@"网络断开，请连接！" location:BELLOW];
+}
 #pragma mark---FailUI
--(void)ADDMainBtnFail{
+-(void)addFailbutton:(NSMutableArray *)ImgArray
+{
     CGFloat leftDistace = 20;                              //第一列图片距离左边的距离
-    CGFloat width = 80;                                    //图片宽高
+    CGFloat width = 70;                                    //图片宽高
     CGFloat distance = (kWidth-width*3-leftDistace*2)/2;   //每行图片的中间距离
-    CGFloat topDistace  = 20;                              //第一列图片距顶部的距离
+    CGFloat topDistace  = 10;                              //第一列图片距顶部的距离
     
     for (int i=0; i<_hotImageArrayOff.count; i++) {
-        homeModel *homeMode =[_hotImageArrayOff objectAtIndex:i];
+        moduleModel *homeMode =[ImgArray objectAtIndex:i];
         UIImageView *MainImage =[[UIImageView alloc]init];
-        MainImage.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+10+i/3*(kHeight/3-30),width,width);
+        MainImage.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+130+i/3*(kHeight/3-70),width,width);
         [MainImage setImageWithURL:[NSURL URLWithString:homeMode.image_url] placeholderImage:placeHoderImage1];
         MainImage.backgroundColor =[UIColor clearColor];
         [self.view addSubview:MainImage];
@@ -157,25 +265,26 @@
         
         UIButton *titleBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [self.view addSubview:titleBtn];
-        titleBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+100+i/3*(kHeight/3-30), width, 30);
+        titleBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+200+i/3*(kHeight/3-70), width, 30);
         [titleBtn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
         [titleBtn setTitle:homeMode.name forState:UIControlStateNormal];
-        titleBtn.titleLabel.font =[UIFont systemFontOfSize:18];
-        [titleBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        titleBtn.titleLabel.font =[UIFont systemFontOfSize:16];
+        [titleBtn setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
         
         
         UIButton *bigBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [self.view addSubview:bigBtn];
-        bigBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+10+i/3*(kHeight/3-30), width, width+35);
+        bigBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+130+i/3*(kHeight/3-70), width, width+35);
         [bigBtn  addTarget:self action:@selector(titbtnFailClick:) forControlEvents:UIControlEventTouchUpInside];
         bigBtn.backgroundColor =[UIColor clearColor];
         
-        NSString *aNumberString = homeMode.typeId;
+        NSString *aNumberString = homeMode.typeID;
         int type_id = [aNumberString intValue];
         
         bigBtn.tag =type_id;
     }
 }
+
 -(void)titbtnFailClick:(UIButton *)tit{
     
     
