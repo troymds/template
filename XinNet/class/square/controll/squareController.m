@@ -26,7 +26,8 @@
     int _page;
     BOOL isRefresh;
     BOOL isLoad;
-    MJRefreshFooterView *footView;
+    MJRefreshFooterView *refreshFootView;
+    MJRefreshHeaderView *refreshHeadView;
     SquareHeadView *headView;
 }
 @end
@@ -67,9 +68,13 @@
 #pragma mark  添加上拉加载
 - (void)addRefreshView
 {
-    footView =[[MJRefreshFooterView alloc] init];
-    footView.delegate = self;
-    footView.scrollView = _tableView;
+    refreshHeadView = [[MJRefreshHeaderView alloc] init];
+    refreshHeadView.delegate = self;
+    refreshHeadView.scrollView = _tableView;
+    
+    refreshFootView =[[MJRefreshFooterView alloc] init];
+    refreshFootView.delegate = self;
+    refreshFootView.scrollView = _tableView;
 }
 
 
@@ -77,6 +82,9 @@
 {
     if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
         isLoad = YES;
+        [self loadData];
+    }else{
+        isRefresh = YES;
         [self loadData];
     }
 }
@@ -193,8 +201,10 @@
     }
     NSString *page = [NSString stringWithFormat:@"%d",_page];
     [param setObject:page forKey:@"page"];
+    NSLog(@"page:%@",page);
     [httpTool postWithPath:@"getTopicList" params:param success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"result:%@",result);
         NSDictionary *dic = [result objectForKey:@"response"];
         int code = [[dic objectForKey:@"code"]intValue];
         if (code ==100) {
@@ -215,21 +225,36 @@
             }
             if (isLoad) {
                 isLoad = NO;
-                [footView endRefreshing];
+                [refreshFootView endRefreshing];
+            }
+            if (isRefresh) {
+                isRefresh = NO;
+                [refreshHeadView endRefreshing];
             }
             [_tableView reloadData];
+            
         }else{
+            //请求数据失败
             if (isLoad) {
                 isLoad = NO;
-                [footView endRefreshing];
+                [refreshFootView endRefreshing];
+            }
+            if (isRefresh) {
+                isRefresh = NO;
+                [refreshHeadView endRefreshing];
             }
             NSString *msg = [dic objectForKey:@"msg"];
             [RemindView showViewWithTitle:msg location:MIDDLE];
+            
         }
     } failure:^(NSError *error) {
         if (isLoad) {
             isLoad = NO;
-            [footView endRefreshing];
+            [refreshFootView endRefreshing];
+        }
+        if (isRefresh) {
+            isRefresh = NO;
+            [refreshHeadView endRefreshing];
         }
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];

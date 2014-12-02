@@ -14,6 +14,7 @@
 #import "categoryLestModel.h"
 #import "categoryLestTool.h"
 #define YYBORDERH 44
+#define KNoMoreData @"没有更多数据"
 @interface productController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     
@@ -86,7 +87,7 @@
     footer.scrollView = _allTableView;
     footer.delegate = self;
     _footer = footer;
-    isLoadMore = NO;
+    isLoadMore = YES;
 }
 
 #pragma mark 刷新代理方法
@@ -106,60 +107,86 @@
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     
     if (_selectedBtn.tag ==21) {
-        [productTool statusesWithSuccess:^(NSArray *statues) {
+        [productTool statusesWithSuccess:^(NSArray *statues,int code, NSString* message) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            if (statues.count < 10) {
-                isLoadMore = NO;
-                _footer.hidden = YES;
+            if (statues.count >0) {
+                if (statues.count < 10) {
+                    isLoadMore = NO;
+                    _footer.hidden = YES;
+                    [RemindView showViewWithTitle:KNoMoreData location:MIDDLE];
+                }else
+                {
+                    isLoadMore = YES;
+                    _footer.hidden = NO;
+                }
+
+                [_productArray2 addObjectsFromArray:statues];
             }else
             {
-                isLoadMore = YES;
-                _footer.hidden = NO;
+                [RemindView showViewWithTitle:message location:MIDDLE];
+                isLoadMore = NO;
+                _footer.hidden = YES;
             }
-            [self addremoveThreeArray];
-            [_productArray2 addObjectsFromArray:statues];
+
             [refreshView endRefreshing];
             [self addLodadTableView];
-            
-        }company_Id:nil keywords_Id:nil category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
+        } category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
             
         }];
     }else if (_selectedBtn.tag==22){
-        [productTool statusesWithSuccess:^(NSArray *statues) {
+        [productTool statusesWithSuccess:^(NSArray *statues,int code, NSString* message) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            if (statues.count < 10) {
-                isLoadMore = NO;
-                _footer.hidden = YES;
+            if (statues.count >0) {
+                if (statues.count < 10) {
+                    isLoadMore = NO;
+                    _footer.hidden = YES;
+                    [RemindView showViewWithTitle:KNoMoreData location:MIDDLE];
+                }else
+                {
+                    isLoadMore = YES;
+                    _footer.hidden = NO;
+                }
+
+                [_productArray3 addObjectsFromArray:statues];
             }else
             {
-                isLoadMore = YES;
-                _footer.hidden = NO;
+                [RemindView showViewWithTitle:message location:MIDDLE];
+                isLoadMore = NO;
+                _footer.hidden = YES;
             }
-            [self addremoveThreeArray];
-            [_productArray3 addObjectsFromArray:statues];
+            
             [refreshView endRefreshing];
             [self addLodadTableView];
             
-        }company_Id:nil keywords_Id:nil category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
+        } category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
             
         }];
     }else{
-        [productTool statusesWithSuccess:^(NSArray *statues) {
+        [productTool statusesWithSuccess:^(NSArray *statues,int code, NSString* message) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            if (statues.count < 10) {
-                isLoadMore = NO;
-                _footer.hidden = YES;
+            if (statues.count >0) {
+                if (statues.count < 10) {
+                    isLoadMore = NO;
+                    _footer.hidden = YES;
+                    [RemindView showViewWithTitle:KNoMoreData location:MIDDLE];
+                }else
+                {
+                    isLoadMore = YES;
+                    _footer.hidden = NO;
+                }
+
+                [_productArray addObjectsFromArray:statues];
             }else
             {
-                isLoadMore = YES;
-                _footer.hidden = NO;
+                [RemindView showViewWithTitle:message location:MIDDLE];
+                isLoadMore = NO;
+                _footer.hidden = YES;
             }
-            [self addremoveThreeArray];
-            [_productArray addObjectsFromArray:statues];
+            
             [refreshView endRefreshing];
             [self addLodadTableView];
             
-        }company_Id:nil keywords_Id:nil category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
+        } category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
             
         }];
     }
@@ -177,26 +204,22 @@
 -(void)addLoadStatus
 {
     _pageNum = 0;
-//    if (!isLoadMore) {
-//        isLoadMore = YES;
-//        _footer.hidden = NO;
-//    }
+
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
         if (_selectedBtn.tag==21){
-        [productTool statusesWithSuccess:^(NSArray *statues) {
-            // 判断是否需要显示加载更多
-            if (statues.count < 10) {
-                isLoadMore = NO;
-                _footer.hidden = YES;
-            }else
-            {
+        [productTool statusesWithSuccess:^(NSArray *statues,int code, NSString* message) {
+            if (statues.count > 0) {//有数据
                 isLoadMore = YES;
                 _footer.hidden = NO;
+                [_productArray2 removeAllObjects];
+                [_productArray2 addObjectsFromArray:statues];
+            }else
+            {
+                [RemindView showViewWithTitle:message location:MIDDLE];
+                isLoadMore = NO;
+                _footer.hidden = YES;
             }
-            
-            [_productArray2 removeAllObjects];
-            [_productArray2 addObjectsFromArray:statues];
-            _pageNum = _productArray2.count % 10 + 1;
+
             // 刷新表格数据
             [self addLodadTableView];
 
@@ -204,19 +227,18 @@
             
         }];
     }else if(_selectedBtn.tag==22){
-        [productTool statusesWithSuccess:^(NSArray *statues) {
-            if (statues.count < 10) {
-                isLoadMore = NO;
-                _footer.hidden = YES;
-            }else
-            {
+        [productTool statusesWithSuccess:^(NSArray *statues,int code, NSString* message) {
+            if (statues.count > 0) {//有数据
                 isLoadMore = YES;
                 _footer.hidden = NO;
+                [_productArray3 removeAllObjects];
+                [_productArray3 addObjectsFromArray:statues];
+            }else
+            {
+                [RemindView showViewWithTitle:message location:MIDDLE];
+                isLoadMore = NO;
+                _footer.hidden = YES;
             }
-            [_productArray3 removeAllObjects];
-
-            [_productArray3 addObjectsFromArray:statues];
-            _pageNum = _productArray3.count % 10 + 1;
             [self addLodadTableView];
 
         }category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
@@ -224,19 +246,18 @@
         }];
     }else if(_selectedBtn.tag==20){
 
-    [productTool statusesWithSuccess:^(NSArray *statues) {
-        if (statues.count < 10) {
-            isLoadMore = NO;
-            _footer.hidden = YES;
-        }else
-        {
+    [productTool statusesWithSuccess:^(NSArray *statues,int code, NSString* message) {
+        if (statues.count > 0) {//有数据
             isLoadMore = YES;
             _footer.hidden = NO;
+            [_productArray removeAllObjects];
+            [_productArray addObjectsFromArray:statues];
+        }else
+        {
+            [RemindView showViewWithTitle:message location:MIDDLE];
+            isLoadMore = NO;
+            _footer.hidden = YES;
         }
-        [_productArray removeAllObjects];
-
-        [_productArray addObjectsFromArray:statues];
-        _pageNum = _productArray.count % 10 + 1;
         [self addLodadTableView];
 
     }category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
@@ -335,13 +356,14 @@
             _orangLin.frame = CGRectMake(scrollView.contentOffset.x/3,YYBORDERH+62, kWidth/3, 2);
         }];
         if (scrollView.contentOffset.x==0) {
-
+            
             for (UIView *subView in companyBackView.subviews) {
                 if ([subView isKindOfClass:[UIButton class]]) {
                     UIButton *btn =(UIButton *)subView;
                     if (btn.tag ==20) {
                         _selectedBtn=btn;
                         _selectedBtn.selected = YES;
+                        _footer.scrollView = _allTableView;
                      //拿到当前选中按钮，重新请求数据
                         categoryLestModel *cateModel =[_categoryArray objectAtIndex:0];
                         _productNstrIndex =cateModel.typeID;
@@ -360,7 +382,7 @@
                     if (btn.tag ==21) {
                         _selectedBtn=btn;
                         _selectedBtn.selected=YES;
-                        
+                        _footer.scrollView = _supplyTablView;
                         categoryLestModel *cateModel =[_categoryArray objectAtIndex:1];
                         _productNstrIndex =cateModel.typeID;
                         [self addLoadStatus];
@@ -378,7 +400,7 @@
                     if (btn.tag ==22) {
                         _selectedBtn=btn;
                         _selectedBtn.selected=YES;
-                        
+                        _footer.scrollView = _demandTablView;
                         categoryLestModel *cateModel =[_categoryArray objectAtIndex:2];
                         _productNstrIndex =cateModel.typeID;
                         [self addLoadStatus];
@@ -572,5 +594,6 @@
     }
     [self addLoadStatus];
 }
+
 
 @end

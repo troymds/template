@@ -8,19 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol  protocolViewDelegate <NSObject>
-
-@optional
-
-- (void)btnClicked:(UIButton *)btn;
-
-@end
 
 @interface ProtocolView : UIView<UIScrollViewDelegate,UIWebViewDelegate>
 
 @property (nonatomic,strong) UIScrollView *bgScrollView;
 @property (nonatomic,strong) UIWebView *protocolWebView;
-@property (nonatomic,weak) id <protocolViewDelegate>delegate;
+
+- (id)initWithUrl:(NSString *)url;
 
 - (void)showProtocolView;
 

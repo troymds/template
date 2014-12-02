@@ -125,6 +125,7 @@
         interfaceModel.from =[dict objectForKey:@"from"];
         interfaceModel.wapUrl =[dict objectForKey:@"wapUrl"];
         interfaceModel.indexId =[dict objectForKey:@"id"];
+        interfaceModel.start_time = [dict objectForKey:@"start_time"];
         [self addheaderView];
         
     } company_id:_interfaceIndex CompanyFailure:^(NSError *error) {
@@ -174,7 +175,7 @@
     [_backScrollView addSubview:headerLabel];
     
     for (int i=0; i<2; i++) {
-        NSArray *titleArr =@[[NSString stringWithFormat:@"时间:%@",interfaceModel.create_time],[NSString stringWithFormat:@"来源:%@",interfaceModel.from]];
+        NSArray *titleArr =@[[NSString stringWithFormat:@"时间:%@",interfaceModel.start_time],[NSString stringWithFormat:@"来源:%@",interfaceModel.from]];
         UILabel *titleLabel =[[UILabel alloc]initWithFrame:CGRectMake(YYBODER+80, 35+i%3*(20),kWidth-YYBODER*2-80, 20)];
         titleLabel.text =titleArr[i];
         titleLabel.textAlignment = NSTextAlignmentLeft;
