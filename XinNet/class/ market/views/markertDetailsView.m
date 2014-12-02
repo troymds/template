@@ -30,6 +30,9 @@
     [super viewDidLoad];
     self.view.backgroundColor =HexRGB(0xe9f1f6);
     
+    if (IsIos7) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     [self addCollectionAndShareSDK];
 
     [self addLoadStatus];
@@ -205,7 +208,7 @@
 }
 
 -(void)addLabel{
-    UIWebView *marketWebView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-120)];
+    UIWebView *marketWebView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-120)];
     [self.view addSubview:marketWebView];
     [marketWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:mardetModel.wapUrl]] ];
     [self.view addSubview:marketWebView];
@@ -218,7 +221,7 @@
     
     YYSearchButton *writeBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:writeBtn];
-    writeBtn.frame = CGRectMake(40, kHeight-44, kWidth-85, 34);
+    writeBtn.frame = CGRectMake(40, kHeight-44-64, kWidth-85, 34);
     writeBtn.contentHorizontalAlignment =UIControlContentVerticalAlignmentCenter;
     [writeBtn setTitle:@"评论" forState:UIControlStateNormal];
     writeBtn.backgroundColor =[UIColor whiteColor];
