@@ -177,7 +177,6 @@
     
         if (_selectedBtn.tag ==20) {
             [businessTool statusesWithSuccess:^(NSArray *statues) {
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 if (statues.count < 10) {
                     isLoadMore = NO;
                     _footer.hidden = YES;
@@ -194,7 +193,6 @@
             }];
         }else if (_selectedBtn.tag==21){
         [businessTool statusesWithSuccess:^(NSArray *statues) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count < 10) {
                 isLoadMore = NO;
                 _footer.hidden = YES;
@@ -213,7 +211,6 @@
     }
     else{
         [businessTool statusesWithSuccess:^(NSArray *statues) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count < 10) {
                 isLoadMore = NO;
                 _footer.hidden = YES;

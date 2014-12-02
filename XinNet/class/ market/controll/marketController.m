@@ -147,15 +147,6 @@
                 _footer.hidden = NO;
             }
 
-            if (statues.count < 10) {
-                isLoadMore = NO;
-                _footer.hidden = YES;
-                 [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
-            }else
-            {
-                isLoadMore = YES;
-                _footer.hidden = NO;
-            }
             [_marketArray addObjectsFromArray:statues];
             
             [_tableView reloadData];
@@ -169,16 +160,6 @@
                 isLoadMore = NO;
                 _footer.hidden = YES;
                 [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
-            }else
-            {
-                isLoadMore = YES;
-                _footer.hidden = NO;
-            }
-
-            if (statues.count < 10) {
-                isLoadMore = NO;
-                _footer.hidden = YES;
-                 [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
             }else
             {
                 isLoadMore = YES;
@@ -206,15 +187,6 @@
         }
 
 
-        if (statues.count > 0 && statues.count < 10) {
-            isLoadMore = NO;
-            _footer.hidden = YES;
-             [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
-        }else
-        {
-            isLoadMore = YES;
-            _footer.hidden = NO;
-        }
         [_marketArray addObjectsFromArray:statues];
         [_tableView reloadData];
         [refreshView endRefreshing];
