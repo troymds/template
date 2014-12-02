@@ -89,7 +89,7 @@
 
     
     UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(YYBODER, 0, kWidth-YYBODER*2, 100)];
-    headerImage.backgroundColor =[UIColor purpleColor];
+    headerImage.backgroundColor =[UIColor clearColor];
     [headerImage setImageWithURL:[NSURL URLWithString:prodModel.cover] placeholderImage:placeHoderImage3];
     [_backScrollView addSubview:headerImage];
     

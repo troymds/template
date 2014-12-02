@@ -35,11 +35,41 @@
 
     self.view.backgroundColor =HexRGB(0xe9f1f6);
     
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"shar_sdk_img.png" highlightedSearch:@"shar_sdk_img.png" target:(self) action:@selector(sharSdk:)];
+    [self addShareBtn];
    
     [self addLoadStatus];
     [self addMBprogressView];
 
+}
+//收藏
+-(void)addShareBtn{
+    
+    
+    UIView *backCollectView =[[UIView alloc]init];
+    backCollectView.frame = CGRectMake(0, 20, 300, 44);
+    backCollectView.backgroundColor =[UIColor clearColor];
+    self.navigationItem.titleView = backCollectView;
+    
+    UILabel *titiLabel =[[UILabel alloc]initWithFrame:CGRectMake(60, 0, 100, 44)];
+    titiLabel.text =@"企业详情";
+    titiLabel.font =[UIFont systemFontOfSize:PxFont(23)];
+    [backCollectView addSubview:titiLabel];
+    titiLabel.backgroundColor =[UIColor clearColor];
+    
+    
+    YYSearchButton * collectionBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
+    collectionBtn.frame =CGRectMake(200, 8, 40, 30);
+    collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
+    [collectionBtn setTitle:@"分享" forState:UIControlStateNormal];
+    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateNormal];
+    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateHighlighted];
+    
+    
+    [collectionBtn addTarget:self action:@selector(shareBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [backCollectView addSubview:collectionBtn];
+}
+-(void)shareBtnClick:(UIButton *)shar{
+    [self addShare];
 }
 #pragma  mark ------显示指示器
 -(void)addMBprogressView{
@@ -78,10 +108,7 @@
 
     }];
 }
--(void)sharSdk:(UIButton *)share{
-    [self addShare];
-    
-}
+
 - (void)addShare
 {
     //分享的 底ViewControoler
