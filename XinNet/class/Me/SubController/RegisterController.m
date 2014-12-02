@@ -72,7 +72,7 @@
     [bgView addSubview:userNameLabel];
     
     _userNameField = [[UITextField alloc] initWithFrame:CGRectMake(60,0,width-60,height)];
-    _userNameField.placeholder = @"请输入手机号或邮箱";
+    _userNameField.placeholder = @"请输入您的邮箱";
     [bgView addSubview:_userNameField];
     
     

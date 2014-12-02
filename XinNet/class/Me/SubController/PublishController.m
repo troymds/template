@@ -59,7 +59,7 @@
     }
 }
 
-//获取键盘高度
+#pragma mark 获取键盘高度
 - (void)keyboardWillChange:(NSNotification *)notify
 {
     NSDictionary *info = [notify userInfo];
@@ -76,7 +76,7 @@
     }
 }
 
-//编辑页面加载数据
+#pragma mark 请求需要编辑的数据
 - (void)loadData
 {
     NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:self.uid,@"id", nil];
@@ -110,12 +110,14 @@
     contentView.textColor = [UIColor blackColor];
 }
 
+#pragma mark 键盘隐藏
 - (void)keyboardWillHiden
 {
     [_scrollView setContentSize:CGSizeMake(kWidth, kHeight-64)];
     bottomSpace = _scrollView.contentSize.height-(pubBtn.frame.origin.y+pubBtn.frame.size.height);
 }
 
+#pragma mark  添加视图
 - (void)addView
 {
     _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0,kWidth,kHeight-64)];
@@ -199,7 +201,7 @@
     bottomSpace = _scrollView.contentSize.height-(pubBtn.frame.origin.y+pubBtn.frame.size.height);
 }
 
-//发布按钮点击事件
+#pragma mark  确认按钮点击
 - (void)btnDown
 {
     [activeText resignFirstResponder];
@@ -219,6 +221,11 @@
                 if (_isPublish) {
                     data = @"发布成功";
                     [self clearData];
+                    
+                    if ([self.delegate respondsToSelector:@selector(reloadTableView)]) {
+                        [self.delegate reloadTableView];
+                    }
+                    
                 }else{
                     data = @"修改成功";
                 }
@@ -233,6 +240,7 @@
     }
 }
 
+#pragma mark 发布成功后清空数据
 - (void)clearData
 {
     titleField.text = @"";
@@ -240,6 +248,7 @@
     contentView.text = @"";
 }
 
+#pragma mark 检查数据
 - (BOOL)checkData
 {
     if (titleField.text.length == 0) {

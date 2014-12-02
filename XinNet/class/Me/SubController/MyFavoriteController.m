@@ -429,59 +429,62 @@
 //编辑
 - (void)edit:(UIButton *)btn
 {
-    if (!isEdit) {
-        isEdit = YES;
-        [_tableView setEditing:YES animated:YES];
-        btn.selected = !btn.selected;
+    if (_dataArray.count==0) {
+        [RemindView showViewWithTitle:@"没有可编辑的数据" location:MIDDLE];
     }else{
-        //需要删除的数据数组
-        NSMutableArray *arr = [[NSMutableArray alloc] initWithCapacity:0];
-        
-        //如果有删除数据 进行删除
-        if (deleteArray.count!=0) {
-            for (int i = 0; i < [deleteArray count]; i++) {
-                NSIndexPath *indexPath = [deleteArray objectAtIndex:i];
-                FavoriteItem *item = [_dataArray objectAtIndex:indexPath.row];
-                [arr addObject:item];
-            }
-            NSMutableString *collection_ids = [NSMutableString stringWithString:@""];
-            for (int i = 0 ; i < arr.count;i++) {
-                FavoriteItem *item = [arr objectAtIndex:i];
-                if (i<deleteArray.count-1) {
-                    [collection_ids appendString:[NSString stringWithFormat:@"%@,",item.vid]];
-                }else{
-                    [collection_ids appendString:item.vid];
-                }
-            }
-            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:collection_ids,@"collection_ids", nil];
-            [httpTool postWithPath:@"batchCancelCollection" params:param success:^(id JSON) {
-                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                NSDictionary *dic = [result objectForKey:@"response"];
-                int code = [[dic objectForKey:@"code"] intValue];
-                if (code == 100) {
-                    //删除成功
-                    
-                    isEdit = NO;
-                    btn.selected = !btn.selected;
-                    
-                    [_dataArray removeObjectsInArray:arr];
-                    [_tableView deleteRowsAtIndexPaths:deleteArray withRowAnimation:UITableViewRowAnimationFade];
-                    [_tableView setEditing:NO];
-                    [deleteArray removeAllObjects];
-                }else{
-                    NSString *msg = [dic objectForKey:@"msg"];
-                    [RemindView showViewWithTitle:msg location:MIDDLE];
-                }
-            } failure:^(NSError *error) {
-                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-            }];
+        if (!isEdit) {
+            isEdit = YES;
+            [_tableView setEditing:YES animated:YES];
+            btn.selected = !btn.selected;
         }else{
-            isEdit = NO;
-            btn.selected = NO;
-            [_tableView setEditing:NO animated:YES];
+            //需要删除的数据数组
+            NSMutableArray *arr = [[NSMutableArray alloc] initWithCapacity:0];
+            
+            //如果有删除数据 进行删除
+            if (deleteArray.count!=0) {
+                for (int i = 0; i < [deleteArray count]; i++) {
+                    NSIndexPath *indexPath = [deleteArray objectAtIndex:i];
+                    FavoriteItem *item = [_dataArray objectAtIndex:indexPath.row];
+                    [arr addObject:item];
+                }
+                NSMutableString *collection_ids = [NSMutableString stringWithString:@""];
+                for (int i = 0 ; i < arr.count;i++) {
+                    FavoriteItem *item = [arr objectAtIndex:i];
+                    if (i<deleteArray.count-1) {
+                        [collection_ids appendString:[NSString stringWithFormat:@"%@,",item.vid]];
+                    }else{
+                        [collection_ids appendString:item.vid];
+                    }
+                }
+                NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:collection_ids,@"collection_ids", nil];
+                [httpTool postWithPath:@"batchCancelCollection" params:param success:^(id JSON) {
+                    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                    NSDictionary *dic = [result objectForKey:@"response"];
+                    int code = [[dic objectForKey:@"code"] intValue];
+                    if (code == 100) {
+                        //删除成功
+                        
+                        isEdit = NO;
+                        btn.selected = !btn.selected;
+                        
+                        [_dataArray removeObjectsInArray:arr];
+                        [_tableView deleteRowsAtIndexPaths:deleteArray withRowAnimation:UITableViewRowAnimationFade];
+                        [_tableView setEditing:NO];
+                        [deleteArray removeAllObjects];
+                    }else{
+                        NSString *msg = [dic objectForKey:@"msg"];
+                        [RemindView showViewWithTitle:msg location:MIDDLE];
+                    }
+                } failure:^(NSError *error) {
+                    [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+                }];
+            }else{
+                isEdit = NO;
+                btn.selected = NO;
+                [_tableView setEditing:NO animated:YES];
+            }
         }
     }
-    
 }
 //分类列表展开按钮点击
 - (void)playMore

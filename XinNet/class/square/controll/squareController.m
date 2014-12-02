@@ -64,7 +64,7 @@
 }
 
 
-//添加上拉加载
+#pragma mark  添加上拉加载
 - (void)addRefreshView
 {
     footView =[[MJRefreshFooterView alloc] init];
@@ -82,7 +82,7 @@
 }
 
 
-//添加右导航按钮
+#pragma mark  添加右导航按钮
 - (void)addRightNavButton
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -94,7 +94,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
 }
 
-//右导航按钮点击
+#pragma mark 右导航按钮点击
 - (void)rightBarButtonDown
 {
     if ([SystemConfig sharedInstance].isUserLogin) {
@@ -107,20 +107,20 @@
     
 }
 #pragma mark   reloadViewDelegate
+//发布话题成功后 重新刷新一次tableview
 - (void)reloadTableView
 {
-    _page = 0;
+    isRefresh = YES;
     [self loadData];
 }
 
+//更新个人信息成功后  刷新一下headview
 - (void)reloadView
 {
     [self loadHeadViewData];
 }
 
-#pragma mark --------
-
-//添加顶部视图
+#pragma mark 添加顶部视图
 - (void)addHeadView
 {
     headView = [[SquareHeadView alloc] initWithFrame:CGRectMake(0, 0, kWidth,154)];
@@ -134,7 +134,7 @@
 
 }
 
-//刷新顶部视图数据
+#pragma mark 刷新顶部视图数据
 - (void)loadHeadViewData
 {
     if ([SystemConfig sharedInstance].isUserLogin) {
@@ -158,6 +158,7 @@
     }
 }
 
+#pragma mark 登陆
 - (void)loginBtnDown
 {
     LoginController *login = [[LoginController alloc] init];
@@ -166,20 +167,27 @@
 }
 
 
-//个人头像点击
+#pragma mark 个人头像点击
 - (void)imageViewClick:(TJImageView *)view
 {
-    PersonalController *pc = [[PersonalController alloc] init];
-    [self.navigationController pushViewController:pc animated:YES];
+    if (![SystemConfig sharedInstance].isUserLogin) {
+        [RemindView showViewWithTitle:@"您还未登陆,请先登录" location:MIDDLE];
+    }else{
+        PersonalController *pc = [[PersonalController alloc] init];
+        pc.delegate = self;
+        [self.navigationController pushViewController:pc animated:YES];
+    }
 }
 
-
+#pragma mark 请求数据
 - (void)loadData
 {
     NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize", nil];
+    //刷新
     if (isRefresh) {
         _page = 0;
     }
+    //加载
     if (isLoad) {
         _page++;
     }
@@ -190,10 +198,11 @@
         NSDictionary *dic = [result objectForKey:@"response"];
         int code = [[dic objectForKey:@"code"]intValue];
         if (code ==100) {
-            if (_page==0) {
+            if (isRefresh) {
                 [_dataArray removeAllObjects];
             }
             NSArray *data = [dic objectForKey:@"data"];
+            //数据不为空
             if (![data isKindOfClass:[NSNull class]]) {
                 for (NSDictionary *subDic in data) {
                     SquareUserItem *item = [[SquareUserItem alloc] initWithDic:subDic];
@@ -227,7 +236,7 @@
 }
 
 
-
+#pragma mark tableview_delegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _dataArray.count;
@@ -251,6 +260,7 @@
     return [self getCellHeight:indexPath];
 }
 
+#pragma mark 获取cell的高度
 - (CGFloat)getCellHeight:(NSIndexPath *)indexPath
 {
     CGFloat cellHeight = 0;
@@ -266,6 +276,7 @@
     return cellHeight;
 }
 
+#pragma mark -----
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ReloadViewDelegate.h"
 
 @interface PersonalController : UIViewController
 
 @property (nonatomic,copy) NSString *email;
+@property (nonatomic,weak) id <ReloadViewDelegate> delegate;
 
 @end
