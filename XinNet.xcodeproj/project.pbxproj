@@ -45,6 +45,7 @@
 		04ADFE3C1A2D41490000B0CC /* CategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ADFE3B1A2D41490000B0CC /* CategoryView.m */; };
 		04ADFE3E1A2D9E5F0000B0CC /* edit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04ADFE3D1A2D9E5F0000B0CC /* edit@2x.png */; };
 		04ADFE421A2DA00A0000B0CC /* edit1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04ADFE411A2DA00A0000B0CC /* edit1@2x.png */; };
+		04ADFE441A2DA5A20000B0CC /* interfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C536541A2C6B5400172230 /* interfaceController.m */; };
 		04AEC45C1A2423340030E3E9 /* SubscribController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AEC45B1A2423340030E3E9 /* SubscribController.m */; };
 		04AEC45F1A2423610030E3E9 /* SubscribCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AEC45E1A2423610030E3E9 /* SubscribCell.m */; };
 		04AEC4621A2423830030E3E9 /* SubscribItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AEC4611A2423830030E3E9 /* SubscribItem.m */; };
@@ -155,7 +156,6 @@
 		5595ECA51A25E2DE000D4AB1 /* search_img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5595EC9F1A25E2DE000D4AB1 /* search_img@2x.png */; };
 		5595ECA61A25E2DE000D4AB1 /* search_kuang@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5595ECA01A25E2DE000D4AB1 /* search_kuang@2x.png */; };
 		5595ECA71A25E2DE000D4AB1 /* shar_sdk_img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5595ECA11A25E2DE000D4AB1 /* shar_sdk_img@2x.png */; };
-		55B4DF2D1A2701E200F7AB54 /* GTMBase64.h in Sources */ = {isa = PBXBuildFile; fileRef = 04F8CE4E1A25815F005A7FDE /* GTMBase64.h */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		55B4DF2E1A2701E200F7AB54 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F8CE4F1A25815F005A7FDE /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		55B4DF451A27125200F7AB54 /* homeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B4DF441A27125200F7AB54 /* homeModel.m */; };
 		55B4DF491A27126F00F7AB54 /* homeTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B4DF481A27126F00F7AB54 /* homeTool.m */; };
@@ -194,7 +194,6 @@
 		55B96C891A1F12E600876892 /* Loa_img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B96C881A1F12E600876892 /* Loa_img@2x.png */; };
 		55BA01141A1D752400D19D4E /* finish@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55BA01121A1D752400D19D4E /* finish@2x.png */; };
 		55BA01151A1D752400D19D4E /* finish1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55BA01131A1D752400D19D4E /* finish1@2x.png */; };
-		55C536551A2C6B5400172230 /* interfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C536541A2C6B5400172230 /* interfaceController.m */; };
 		55C536591A2C6E0200172230 /* fail_image1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55C536561A2C6E0200172230 /* fail_image1@2x.png */; };
 		55C5365A1A2C6E0200172230 /* fail_image2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55C536571A2C6E0200172230 /* fail_image2@2x.png */; };
 		55C5365B1A2C6E0200172230 /* fail_image3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55C536581A2C6E0200172230 /* fail_image3@2x.png */; };
@@ -1006,12 +1005,6 @@
 		556525B81A28510A00281504 /*  market */ = {
 			isa = PBXGroup;
 			children = (
-				F34D525B1A257461001947B0 /* commnt */,
-				55B6176F1A240CDA00088E39 /* Me */,
-				556EB0AB1A1B598F006D5E0F /* home */,
-				556EB0BB1A1B598F006D5E0F /* more */,
-				556EB0C21A1B598F006D5E0F /* Others */,
-				556EB0D41A1B598F006D5E0F /* Resouse */,
 				556EB0DB1A1B598F006D5E0F /* square */,
 				556525B91A28510A00281504 /* controll */,
 				556525BC1A28510A00281504 /* marketModel */,
@@ -2199,8 +2192,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04ADFE441A2DA5A20000B0CC /* interfaceController.m in Sources */,
 				556526501A28510B00281504 /* marketTOOL.m in Sources */,
-				55B4DF2D1A2701E200F7AB54 /* GTMBase64.h in Sources */,
 				556526711A28510B00281504 /* interfaceDetailModel.m in Sources */,
 				55B4DF2E1A2701E200F7AB54 /* GTMBase64.m in Sources */,
 				F34D525A1A257318001947B0 /* (null) in Sources */,
