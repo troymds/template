@@ -61,6 +61,7 @@
     collectionBtn.frame =CGRectMake(200, 8, 40, 30);
     collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
     [collectionBtn setTitle:@"分享" forState:UIControlStateNormal];
+    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateHighlighted];
     
     
     
@@ -226,7 +227,7 @@
         [collectionBtn addTarget:self action:@selector(collectionBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         collectionBtn.imageEdgeInsets =UIEdgeInsetsMake(-10, 0, 30, 0);
         [collectionBtn setImage:[UIImage imageNamed:@"collect0"] forState:UIControlStateNormal];
-        [collectionBtn setImage:[UIImage imageNamed:@"collect_selected0.png"] forState:UIControlStateSelected];
+        [collectionBtn setImage:[UIImage imageNamed:@"collect_selected.png"] forState:UIControlStateSelected];
         [line addSubview:collectionBtn];
         collectionBtn.backgroundColor =[UIColor clearColor];
         [collectionBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -267,13 +268,12 @@
     
     
 
-    
-    
+       
     YYSearchButton *findBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
     findBtn.frame = CGRectMake(YYBODER, kHeight-40,kWidth-YYBODER*2,30);
     [findBtn addTarget:self action:@selector(wirteBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [findBtn setTitle:@"     写评论" forState:UIControlStateNormal];
-    [findBtn setImage:[UIImage imageNamed:@"write.png"] forState:UIControlStateNormal];
+    [findBtn setTitle:@"  评论" forState:UIControlStateNormal];
+    [findBtn setImage:[UIImage imageNamed:@"write_pre.png"] forState:UIControlStateNormal];
     findBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
     [findBtn setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
     [self.view addSubview:findBtn];

@@ -9,7 +9,8 @@
 #import "productDetailsView.h"
 #import "YYSearchButton.h"
 #import "CommentController.h"
-
+#import "collectionHttpTool.h"
+#import "collectionModel.h"
 #import "productDetailModel.h"
 #import "productDetailTool.h"
 #define YYBODER 16
@@ -20,6 +21,7 @@
     UIWebView *_proWebView;
     UIView *line;//背景线条
 }
+@property(nonatomic,strong)NSString *collectionId;
 @end
 
 @implementation productDetailsView
@@ -30,6 +32,7 @@
     self.view.backgroundColor =HexRGB(0xe9f1f6);
     [self addLoadStatus];
     [self addMBprogressView];
+    [self addCollection];
 }
 #pragma  mark ------显示指示器
 -(void)addMBprogressView{
@@ -38,6 +41,82 @@
     
     
 }
+
+//收藏
+-(void)addCollection{
+    
+    
+    UIView *backCollectView =[[UIView alloc]init];
+    backCollectView.frame = CGRectMake(0, 20, 300, 44);
+    backCollectView.backgroundColor =[UIColor clearColor];
+    self.navigationItem.titleView = backCollectView;
+    
+    UILabel *titiLabel =[[UILabel alloc]initWithFrame:CGRectMake(60, 0, 100, 44)];
+    titiLabel.text =@"详情";
+    titiLabel.font =[UIFont systemFontOfSize:PxFont(23)];
+    [backCollectView addSubview:titiLabel];
+    titiLabel.backgroundColor =[UIColor clearColor];
+    
+    
+    YYSearchButton * collectionBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
+    collectionBtn.frame =CGRectMake(200, 8, 40, 30);
+    collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
+    [collectionBtn setTitle:@"收藏" forState:UIControlStateNormal];
+    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateHighlighted];
+    
+    
+    [collectionBtn addTarget:self action:@selector(collectionBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [backCollectView addSubview:collectionBtn];
+}
+
+
+
+
+
+
+
+
+-(void)collectionBtn:(UIButton *)sender{
+    
+    
+    if ([sender.titleLabel.text isEqualToString:@"收藏"]) {//收藏
+        [collectionHttpTool addCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
+            if (code == 100) {
+                [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
+                collectionModel *model = [data objectAtIndex:0];
+                [sender setTitle:@"取消收藏" forState:UIControlStateNormal];
+                [sender setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateNormal];
+                sender.frame =CGRectMake(180, 8, 60, 30);
+                self.collectionId = model.data;
+            }else
+            {
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+            }
+            
+        } entityId:_productIndex entityType:@"1" withFailure:^(NSError *error) {
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
+    }else//取消收藏
+    {
+        [collectionHttpTool cancleCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
+            
+            [RemindView showViewWithTitle:msg location:MIDDLE];
+            [sender setTitle:@"收藏" forState:UIControlStateNormal];
+            [sender setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+
+            sender.frame =CGRectMake(200, 8, 40, 30);
+
+        } collectionId:self.collectionId withFailure:^(NSError *error) {
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
+    }
+    
+    
+}
+
+
 #pragma mark ---加载数据
 -(void)addLoadStatus{
     [productDetailTool statusesWithSuccess:^(NSArray *statues) {
@@ -114,13 +193,15 @@
         contentLable.numberOfLines = 0;
         contentLable.font =[UIFont systemFontOfSize:PxFont(20)];
     }
-    
+    UIView *writeLine =[[UIView alloc]initWithFrame:CGRectMake(0, kHeight-50, kWidth, 1)];
+    [self.view addSubview:writeLine];
+    writeLine.backgroundColor =HexRGB(0xe6e3e4);
     
     YYSearchButton *findBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
     findBtn.frame = CGRectMake(20, kHeight-40,kWidth-YYBODER*2,30);
     [findBtn addTarget:self action:@selector(wirteBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [findBtn setTitle:@"      写评论" forState:UIControlStateNormal];
-    [findBtn setImage:[UIImage imageNamed:@"write.png"] forState:UIControlStateNormal];
+    [findBtn setTitle:@"  评论" forState:UIControlStateNormal];
+    [findBtn setImage:[UIImage imageNamed:@"write_pre.png"] forState:UIControlStateNormal];
     findBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
     [findBtn setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
     [self.view addSubview:findBtn];

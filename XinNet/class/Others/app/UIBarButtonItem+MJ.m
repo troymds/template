@@ -18,14 +18,14 @@
     
     // 设置普通背景图片
     UIImage *image = [UIImage imageNamed:icon];
-    btn.backgroundColor =[UIColor clearColor];
     [btn setBackgroundImage:image forState:UIControlStateNormal];
     // 设置高亮图片
     [btn setBackgroundImage:[UIImage imageNamed:highlighted] forState:UIControlStateHighlighted];
     
     // 设置尺寸
 //    btn.bounds = (CGRect){CGPointZero, image.size};
-    btn.frame =CGRectMake(0, 5, image.size.width, image.size.height);
+    btn.frame =CGRectMake(0, 0, image.size.width, image.size.height);
+    btn.backgroundColor =[UIColor clearColor];
     [btn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     [viewItem addSubview:btn];
     return [self initWithCustomView:viewItem];

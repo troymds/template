@@ -13,6 +13,7 @@
 #import "interfaceDetailModel.h"
 #import "collectionModel.h"
 #import "collectionHttpTool.h"
+#import "CommentController.h"
 #define YYBODER 16
 @interface interfaceDetailsView ()<YYalertViewDelegate,UIWebViewDelegate>
 {
@@ -36,6 +37,7 @@
     [self addWriteBtn];
     [self addLoadStatus];
     [self addMBprogressView];
+    
 }
 #pragma  mark ------显示指示器
 -(void)addMBprogressView{
@@ -65,7 +67,8 @@
         collectionBtn.frame =CGRectMake(200, 8, 40, 30);
         collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
         [collectionBtn setTitle:@"收藏" forState:UIControlStateNormal];
-    
+        [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateHighlighted];
+
         [collectionBtn addTarget:self action:@selector(collectionBtn:) forControlEvents:UIControlEventTouchUpInside];
         [backCollectView addSubview:collectionBtn];
     }
@@ -86,7 +89,9 @@
                         [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
                         collectionModel *model = [data objectAtIndex:0];
                         [sender setTitle:@"取消收藏" forState:UIControlStateNormal];
-                        sender.frame =CGRectMake(120, 8, 80, 30);
+                        [sender setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateNormal];
+
+                        sender.frame =CGRectMake(180, 8, 60, 30);
                         self.collectionId = model.data;
                     }else
                     {
@@ -103,6 +108,9 @@
                     
                     [RemindView showViewWithTitle:msg location:MIDDLE];
                      [sender setTitle:@"收藏" forState:UIControlStateNormal];
+                    sender.frame =CGRectMake(200, 8, 40, 30);
+                    [sender setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+
                 } collectionId:self.collectionId withFailure:^(NSError *error) {
                     
                     [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
@@ -144,7 +152,7 @@
     
     float  webheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
     
-    interfaceWebView.frame = CGRectMake(0, 100, kWidth, webheight);
+    interfaceWebView.frame = CGRectMake(0, 90, kWidth, webheight);
     
     _backScrollView.contentSize = CGSizeMake(kWidth,webheight+100);
     
@@ -153,7 +161,7 @@
 -(void)addheaderView{
     
     
-    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-64)];
+    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-114)];
     _backScrollView.userInteractionEnabled=YES;
     _backScrollView.backgroundColor=HexRGB(0xededed);
     [self.view addSubview:_backScrollView];
@@ -185,40 +193,42 @@
         [_backScrollView addSubview:titleLabel];
         
     }
-    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(0, 90, kWidth, 1)];
+    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(0, 89, kWidth, 1)];
     [_backScrollView addSubview:line];
     line.backgroundColor =HexRGB(0xe6e3e4);
 
-    interfaceWebView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 100, kWidth, kHeight-100)];
+    interfaceWebView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 90, kWidth, kHeight-130)];
     interfaceWebView.scrollView.bounces = NO;
     interfaceWebView.delegate =self;
     interfaceWebView.scrollView.showsHorizontalScrollIndicator = NO;
     interfaceWebView.scrollView.showsVerticalScrollIndicator =NO;
-    [interfaceWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_interface_Url]] ];
+    [interfaceWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:interfaceModel.wapUrl]] ];
     [_backScrollView addSubview:interfaceWebView];
     interfaceWebView.backgroundColor =[UIColor clearColor];
 
-
-
 }
 -(void)addWriteBtn{
-    YYSearchButton *wirteBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
-    wirteBtn.frame = CGRectMake(20, kHeight-40,kWidth-YYBODER*2,30);
-    [wirteBtn addTarget:self action:@selector(wirteBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [wirteBtn setTitle:@"       写评论" forState:UIControlStateNormal];
-    [wirteBtn setImage:[UIImage imageNamed:@"write.png"] forState:UIControlStateNormal];
-    wirteBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
-    wirteBtn.backgroundColor =[UIColor whiteColor];
-    [wirteBtn setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
-    [self.view addSubview:wirteBtn];
     
+    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(0, kHeight-50, kWidth, 1)];
+    [self.view addSubview:line];
+    line.backgroundColor =HexRGB(0xe6e3e4);
+    YYSearchButton *findBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
+    findBtn.frame = CGRectMake(20, kHeight-40,kWidth-YYBODER*2,30);
+    findBtn.backgroundColor =[UIColor clearColor];
+    [findBtn addTarget:self action:@selector(wirteBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [findBtn setTitle:@"  评论" forState:UIControlStateNormal];
+    [findBtn setImage:[UIImage imageNamed:@"write_pre.png"] forState:UIControlStateNormal];
+    findBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
+    [findBtn setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
+    [self.view addSubview:findBtn];
 }
 -(void)wirteBtnClick:(UIButton *)write{
-    YYalertView *aleartView =[[YYalertView alloc]init];
-    aleartView.delegate = self;
-    [aleartView showView ];
-
+    CommentController *ctl = [[CommentController alloc] init];
+    ctl.entityID = _interfaceIndex;
+    [self.navigationController pushViewController:ctl animated:YES];
 }
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

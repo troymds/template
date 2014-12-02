@@ -314,15 +314,18 @@
         UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
         [cell.contentView addSubview:cellLine];
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
+        
     }
     marketModel *markModel =[_marketArray objectAtIndex:indexPath.row];
+    
     if ([markModel.coverimage isKindOfClass:[NSNull class]]) {
         
     }else {
         [cell.marketImage setImageWithURL:[NSURL URLWithString:markModel.coverimage] placeholderImage:placeHoderImage2];
+      
         
     }
-    cell.timeLabel.text = markModel.create_time;
+       cell.timeLabel.text = markModel.create_time;
     if ([markModel.nametitle isKindOfClass:[NSNull class]]) {
         
     }else {

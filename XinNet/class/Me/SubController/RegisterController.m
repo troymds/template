@@ -217,6 +217,7 @@
                 NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:_userNameField.text,@"email",_secretField.text,@"password", nil];
                 [httpTool postWithPath:@"register" params:param success:^(id JSON) {
                     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                    NSLog(@"%@",result);
                     NSDictionary *dic = [result objectForKey:@"response"];
                     int code = [[dic objectForKey:@"code"] intValue];
                     if (code == 100) {

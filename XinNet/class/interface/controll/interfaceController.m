@@ -55,12 +55,10 @@
     _pageNum = 0;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     
-    _orangLin =[[UIView alloc]init];
-    [self.view addSubview:_orangLin];
-    _orangLin.frame =CGRectMake(0, YYBORDERH+62, kWidth/3, 2);
-    _orangLin.backgroundColor =HexRGB(0x38c166);
-    [self addMBprogressView];
+        [self addMBprogressView];
     [self addLoadcategoryStatus];
+    
+    
 }
 - (void)addShowNoDataView
 {
@@ -333,7 +331,7 @@
             scrollView.contentOffset = CGPointMake(kWidth*2, 0);
         }
         [UIView animateWithDuration:0.01 animations:^{
-            _orangLin.frame = CGRectMake(scrollView.contentOffset.x/3,YYBORDERH+62, kWidth/3, 2);
+            _orangLin.frame = CGRectMake(scrollView.contentOffset.x/3,YYBORDERH-1, kWidth/3, 2);
         }];
         
         if (scrollView.contentOffset.x==0) {
@@ -502,6 +500,12 @@
     
     [companyBackView addSubview:companyBackLine];
     
+    _orangLin =[[UIView alloc]init];
+    [companyBackView addSubview:_orangLin];
+    _orangLin.frame =CGRectMake(0, YYBORDERH-1, kWidth/3, 2);
+    _orangLin.backgroundColor =HexRGB(0x38c166);
+
+    
     for (int p=0; p<3; p++)
     {
         categoryLestModel *cateModel =[_categoryArray objectAtIndex:p];
@@ -526,6 +530,11 @@
             [self companyBtnClick:_selectedBtn];
         }
         [companyBtn addTarget:self action:@selector(companyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        UIView *yyLine =[[UIView alloc]initWithFrame:CGRectMake(kWidth/3+p%2*(kWidth/3), 10, 1, 24)];
+        [companyBackView addSubview:yyLine];
+        yyLine.backgroundColor =[UIColor lightGrayColor];
+        yyLine.alpha = 0.5;
     }
     
 }

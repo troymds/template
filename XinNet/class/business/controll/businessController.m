@@ -50,17 +50,19 @@
     _pageNum = 0;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     
-    _orangLin =[[UIView alloc]init];
-    [self.view addSubview:_orangLin];
-    _orangLin.frame =CGRectMake(0, 63+YYBODERH, kWidth/3, 2);
-    _orangLin.backgroundColor =HexRGB(0x38c166);
-
+    
     [self addBigCompanyScrollView];
     [self addMBprogressView];
     [self addRefreshViews];
     [self addbusinessBtn];
     [self addLoadStatus];
     [self addShowNoDataView];
+    
+    _orangLin =[[UIView alloc]init];
+    [self.view addSubview:_orangLin];
+    _orangLin.frame =CGRectMake(0, 63+YYBODERH, kWidth/3, 2);
+    _orangLin.backgroundColor =HexRGB(0x38c166);
+
 }
 - (void)addShowNoDataView
 {
@@ -486,6 +488,12 @@
             
         }
         [companyBtn addTarget:self action:@selector(companyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        UIView *yyLine =[[UIView alloc]initWithFrame:CGRectMake(kWidth/3+p%2*(kWidth/3), 10, 1, 24)];
+        [companyBackView addSubview:yyLine];
+        yyLine.backgroundColor =[UIColor lightGrayColor];
+        yyLine.alpha =0.5;
+        
     }
 }
 

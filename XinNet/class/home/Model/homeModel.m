@@ -10,5 +10,18 @@
 
 @implementation homeModel
 @synthesize ads,module,logo;
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+       [coder encodeObject:self.logo forKey:@"logo"];
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super init];
+    if (self) {
+               self.logo =  [coder decodeObjectForKey:@"logo"];
+    }
+    return self;
+}
 
 @end

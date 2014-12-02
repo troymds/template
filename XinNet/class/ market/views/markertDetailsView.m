@@ -68,9 +68,15 @@
     
     for (int i=0; i<2; i++) {
         NSArray *titleArr =@[@"收藏",@"分享"];
-        YYSearchButton * collectionBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
-        collectionBtn.frame =CGRectMake(150+i%3*50, 8, 40, 30);
+        UIButton * collectionBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+        collectionBtn.frame =CGRectMake(160+i%3*40, 8, 40, 30);
         collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
+        [collectionBtn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"collect%d",i]] forState:UIControlStateNormal];
+        if (i==0) {
+            [collectionBtn setImage:[UIImage imageNamed:@"collect_selected.png"] forState:UIControlStateSelected];
+
+        }
+
         collectionBtn.tag = 2000+i;
         [collectionBtn setTitle:titleArr[i] forState:UIControlStateNormal];
         [collectionBtn addTarget:self action:@selector(collectionBtn:) forControlEvents:UIControlEventTouchUpInside];
@@ -85,6 +91,7 @@
 }
 
 -(void)collectionBtn:(UIButton *)sender{
+    sender.selected=!sender.selected;
     if (sender.tag == 2001) {
         [self share];
     }else
@@ -95,6 +102,8 @@
                     [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
                     collectionModel *model = [data objectAtIndex:0];
                     [sender setTitle:@"取消收藏" forState:UIControlStateNormal];
+                    [sender setImage:[UIImage imageNamed:@"collect_selected.png"] forState:UIControlStateSelected];
+
                     self.collectionId = model.data;
                 }else
                 {
@@ -111,6 +120,8 @@
                 if (code == 100) {
                     [RemindView showViewWithTitle:msg location:MIDDLE];
                     [sender setTitle:@"收藏" forState:UIControlStateNormal];
+                    [sender setImage:[UIImage imageNamed:@"collect.png"] forState:UIControlStateSelected];
+
                 }else
                 {
                     [RemindView showViewWithTitle:msg location:MIDDLE];
@@ -215,16 +226,20 @@
     marketWebView.backgroundColor =[UIColor clearColor];
 
     
-    UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, kHeight-55, kWidth, 1)];
-    [self.view addSubview:cellLine];
-    cellLine.backgroundColor =HexRGB(0xe6e3e4);
+    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(0, kHeight-120, kWidth, 1)];
+    [self.view addSubview:line];
+    line.backgroundColor =HexRGB(0xe6e3e4);
+    
+    
     
     YYSearchButton *writeBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:writeBtn];
     writeBtn.frame = CGRectMake(40, kHeight-44-64, kWidth-85, 34);
     writeBtn.contentHorizontalAlignment =UIControlContentVerticalAlignmentCenter;
-    [writeBtn setTitle:@"评论" forState:UIControlStateNormal];
+    [writeBtn setTitle:@"  评论" forState:UIControlStateNormal];
     writeBtn.backgroundColor =[UIColor whiteColor];
+    [writeBtn setImage:[UIImage imageNamed:@"write_pre.png"] forState:UIControlStateNormal];
+
     [writeBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     writeBtn.titleLabel.font =[UIFont systemFontOfSize:20];
     
@@ -236,9 +251,7 @@
     
 }
 -(void)writeBtnClick:(UIButton *)write{
-//    YYalertView *aleartView =[[YYalertView alloc]init];
-//    aleartView.delegate = self;
-//    [aleartView showView ];
+
     
     CommentController *ctl = [[CommentController alloc] init];
     ctl.entityID = _markIndex;

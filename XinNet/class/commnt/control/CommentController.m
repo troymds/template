@@ -68,7 +68,9 @@
     [commentBtnBackView addSubview:commentBtn];
     commentBtn.frame = CGRectMake(40, 7, kWidth-80, commentBtnBackH - 14);
     commentBtn.contentHorizontalAlignment =UIControlContentVerticalAlignmentCenter;
-    [commentBtn setTitle:@"评论" forState:UIControlStateNormal];
+    [commentBtn setTitle:@"  写评论" forState:UIControlStateNormal];
+    [commentBtn setImage:[UIImage imageNamed:@"write.png"] forState:UIControlStateNormal];
+
     commentBtn.backgroundColor =[UIColor whiteColor];
     [commentBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     commentBtn.titleLabel.font =[UIFont systemFontOfSize:20];

@@ -43,11 +43,19 @@
         NSDictionary *dict =[NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =[dict[@"response"]objectForKey:@"data"];
-      
-        if (![array isKindOfClass:[NSNull class]]) {
-            for (NSDictionary *diction in array) {
-                productModel *s =[[productModel alloc] initWithDictionaryForBusiness:diction];
-                [statuses addObject:s];
+        int code = [[[dict objectForKey:@"response"] objectForKey:@"code"] intValue];
+        NSString * message = nil;
+        if (code == 100) {
+            if (![array isKindOfClass:[NSNull class]]) {
+                for (NSDictionary *diction in array) {
+                    productModel *s =[[productModel alloc] initWithDictionaryForBusiness:diction];
+                    [statuses addObject:s];
+                }
+                success(statuses,code,message);
+            }else
+            {
+                message = @"没有更多数据";
+                success(statuses,code,message);
             }
         }
         else
@@ -59,5 +67,4 @@
     } failure:^(NSError *error) {
         
     }];
-}
-@end
+}@end

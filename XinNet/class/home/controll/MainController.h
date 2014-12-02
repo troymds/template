@@ -14,6 +14,8 @@
 //离线数据
 @property(nonatomic,strong)NSMutableArray *hotImageArrayOff;
 @property(nonatomic,strong)NSMutableArray *adsImageArrayOff;
+@property(nonatomic,strong)NSString *logoArrayOff;
+
 
 
 @property (strong,nonatomic)NSMutableArray *slideImages;

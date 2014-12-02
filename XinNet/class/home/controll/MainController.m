@@ -28,6 +28,8 @@
 #import "homeTool.h"
 #define khotImageFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"hotImage.data"]
 #define kadsImageFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"adsImage.data"]
+#define klogoImageFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"logoImage.data"]
+
 
 @interface MainController ()
 {
@@ -46,6 +48,8 @@
     _moduleArray =[NSMutableArray array];
     _hotImageArrayOff =[NSMutableArray array];
     _adsImageArrayOff =[NSMutableArray array];
+    _logoArrayOff =[[NSString alloc]init];
+
 
     
     _slideImages = [[NSMutableArray alloc] init];
@@ -88,6 +92,8 @@
         _homeModel.module =[dict objectForKey:@"module"];
         _homeModel.logo =[dict objectForKey:@"logo"];
         [self addNavImage];
+        [NSKeyedArchiver archiveRootObject:_homeModel.logo  toFile:klogoImageFilePath];
+
         for (NSDictionary *dict in _homeModel.ads) {
             adsModel *adsMod=[[adsModel alloc]initWithDictionaryForHomeAds:dict];
             [_adsArray addObject:adsMod];
@@ -113,13 +119,15 @@
         NSLog(@"error");
         self.hotImageArrayOff = [NSKeyedUnarchiver unarchiveObjectWithFile:khotImageFilePath];
         self.adsImageArrayOff =[NSKeyedUnarchiver unarchiveObjectWithFile:kadsImageFilePath];
+        self.logoArrayOff = [NSKeyedUnarchiver unarchiveObjectWithFile:klogoImageFilePath];
+
         [self addFailbutton:_hotImageArrayOff];
         if (_hotImageArrayOff.count ==0) {
             [self addFirstImage];
         }
         [self initBannerView];
         [self addADSimageBtn:_adsImageArrayOff];
-        [self addNavImage];
+        [self addNavImageFail];
             }];
 }
 
@@ -139,7 +147,36 @@
     
     UIImageView *navLogoImage =[[UIImageView alloc]initWithFrame:CGRectMake(-60, 0, 60, 30)];
     [_searchImage addSubview:navLogoImage];
+    navLogoImage.image =placeHoderImage3;
+
     [navLogoImage setImageWithURL:[NSURL URLWithString:_homeModel.logo] placeholderImage:placeHoderImage3];
+}
+-(void)addNavImageFail{
+    UIView *nav_View =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth-44, 44)];
+    [self.view addSubview:nav_View];
+    nav_View.backgroundColor =[UIColor clearColor];
+    self.navigationItem.titleView =nav_View;
+    
+    UIButton * _searchImage =[UIButton buttonWithType:UIButtonTypeCustom];
+    _searchImage.frame =CGRectMake(60, 7, kWidth-120, 30);
+    _searchImage.backgroundColor =[UIColor clearColor];
+    [nav_View addSubview:_searchImage];
+    [_searchImage setImage:[UIImage imageNamed:@"nav_searchhome.png"] forState:UIControlStateNormal];
+    [_searchImage setImage:[UIImage imageNamed:@"nav_searchhome.png"] forState:UIControlStateHighlighted];
+    [_searchImage addTarget:self action:@selector(searchBarBtnFail) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIImageView *navLogoImage =[[UIImageView alloc]initWithFrame:CGRectMake(-60, 0, 60, 30)];
+    [_searchImage addSubview:navLogoImage];
+    navLogoImage.image =placeHoderImage3;
+    
+    [navLogoImage setImageWithURL:[NSURL URLWithString:_logoArrayOff] placeholderImage:placeHoderImage3];
+    
+    
+}
+-(void)searchBarBtnFail{
+    [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+    
+    return ;
 }
 
 -(void)addADSimageBtn:(NSMutableArray *)tody
@@ -343,8 +380,14 @@
     [self.navigationController pushViewController:search animated:YES];
 }
 -(void)zbarSdk{
+    if (_adsImageArrayOff.count>0) {
+        [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+        
+        return ;
+    }else{
     PersonCenterController *person = [[PersonCenterController alloc] init];
     [self.navigationController pushViewController:person animated:YES];
+    }
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
