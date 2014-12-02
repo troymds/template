@@ -28,6 +28,7 @@
     BOOL isRefresh;  //刷新
     BOOL isLoad;  //加载
     MJRefreshFooterView *footView;
+    UIView *noDataView;
 }
 @end
 
@@ -43,6 +44,7 @@
     // Do any additional setup after loading the view.
     
     self.title = @"我的评论";
+
     
     _dataArray = [[NSMutableArray alloc] initWithCapacity:0];
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64) style:UITableViewStylePlain];
@@ -52,6 +54,20 @@
     _tableView.backgroundColor =HexRGB(0xe9f1f6);
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
+    
+    
+    //没有数据时显示
+    noDataView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth,kHeight-64)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,kWidth,20)];
+    label.backgroundColor = [UIColor clearColor];
+    label.text = @"您当前还没有发表过评论!";
+    label.textColor = [UIColor blackColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.center = noDataView.center;
+    [noDataView addSubview:label];
+    [self.view addSubview:noDataView];
+    noDataView.hidden = YES;
+
     
     _page = 0;
     [self loadData];
@@ -89,11 +105,11 @@
     [httpTool postWithPath:@"getCommentList" params:param success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
-        NSLog(@"%@",result);
         int code = [[dic objectForKey:@"code"] intValue];
         if (code == 100) {
             NSArray *data = [dic objectForKey:@"data"];
             if (![data isKindOfClass:[NSNull class]]) {
+                noDataView.hidden = YES;
                 for (NSDictionary *subDic in data) {
                     CommentItem *item = [[CommentItem alloc] initWithDic:subDic];
                     [_dataArray addObject:item];
@@ -101,6 +117,8 @@
             }else{
                 if (isLoad) {
                     [RemindView showViewWithTitle:@"数据已全部加载完毕" location:MIDDLE];
+                }else{
+                    noDataView.hidden = NO;
                 }
             }
             if (isLoad) {

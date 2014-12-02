@@ -38,7 +38,7 @@
     _homeArray =[NSMutableArray array];
     _hotImageArrayOff =[NSMutableArray array];
 
-    self.view.backgroundColor =HexRGB(0xededed);
+    self.view.backgroundColor =[UIColor whiteColor];
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }

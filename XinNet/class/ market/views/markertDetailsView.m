@@ -61,7 +61,7 @@
     self.navigationItem.titleView = backCollectView;
     
     UILabel *titiLabel =[[UILabel alloc]initWithFrame:CGRectMake(70, 0, 100, 44)];
-    titiLabel.text =@"详情";
+    titiLabel.text =@"市场详情";
     titiLabel.font =[UIFont systemFontOfSize:PxFont(23)];
     [backCollectView addSubview:titiLabel];
     titiLabel.backgroundColor =[UIColor clearColor];
@@ -69,7 +69,7 @@
     for (int i=0; i<2; i++) {
         NSArray *titleArr =@[@"收藏",@"分享"];
         YYSearchButton * collectionBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
-        collectionBtn.frame =CGRectMake(170+i%3*40, 18, 30, 20);
+        collectionBtn.frame =CGRectMake(150+i%3*50, 8, 40, 30);
         collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
         collectionBtn.tag = 2000+i;
         [collectionBtn setTitle:titleArr[i] forState:UIControlStateNormal];

@@ -72,7 +72,7 @@
     [bgView addSubview:userNameLabel];
     
     _userNameField = [[UITextField alloc] initWithFrame:CGRectMake(60,0,width-60,height)];
-    _userNameField.placeholder = @"请输入手机号或邮箱";
+    _userNameField.placeholder = @"请输入您的邮箱";
     [bgView addSubview:_userNameField];
     
     
@@ -194,8 +194,20 @@
             //展开条款
         case macroType:
         {
-            ProtocolView *view = [[ProtocolView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-            [view showProtocolView];
+            [httpTool postWithPath:@"getProtocol" params:nil success:^(id JSON) {
+                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                NSDictionary *dict = [result objectForKey:@"response"];
+                int code = [[dict objectForKey:@"code"] intValue];
+                if (code == 100) {
+                    NSString *urlStr = [[dict objectForKey:@"data"] objectForKey:@"wapUrl"];
+                    ProtocolView *protocolView = [[ProtocolView alloc] initWithUrl:urlStr];
+                    [protocolView showProtocolView];
+                }else{
+                    [RemindView showViewWithTitle:@"获取服务条款失败" location:MIDDLE];
+                }
+            } failure:^(NSError *error) {
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            }];
         }
             break;
         //下一步

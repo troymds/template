@@ -217,6 +217,7 @@
         int code = [[dic objectForKey:@"code"]intValue];
         //更新成功
         if (code == 100) {
+            //1.如果是第一次注册 上传信息成功后跳转到登陆页面登陆
             NSArray *array = self.navigationController.viewControllers;
             for (UIViewController *viewController in array) {
                 if ([viewController isKindOfClass:[LoginController class]]) {
@@ -225,7 +226,7 @@
                     return ;
                 }
             }
-            //更新内存和本地用户信息（登陆状态下）
+            //2.如果是在登陆状态下修改的个人信息 更新内存和本地用户信息
             if ([SystemConfig sharedInstance].isUserLogin) {
                 UserItem *item = [SystemConfig sharedInstance].userItem;
                 UserItem *newItem = [[UserItem alloc] init];
@@ -243,6 +244,12 @@
                 dm.userItem = newItem;
                 [dm archive];
             }
+            
+            //刷新话题广场的headview（头像、昵称）
+            if ([self.delegate respondsToSelector:@selector(reloadView)]) {
+                [self.delegate reloadView];
+            }
+            
             [RemindView showViewWithTitle:@"更新成功" location:MIDDLE];
             
         }else{

@@ -146,7 +146,7 @@
     _tableView.delegate =self;
     _tableView.dataSource =self;
     _tableView.backgroundColor =[UIColor whiteColor];
-    _tableView.hidden = YES;
+    _tableView.hidden = NO;
     _tableView.showsHorizontalScrollIndicator = NO;
     _tableView.showsVerticalScrollIndicator = NO;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -185,7 +185,7 @@
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
     }
     companyListModel *comapnyModel =[_companyArray objectAtIndex:indexPath.row];
-    [cell.logoImage setImageWithURL:[NSURL URLWithString:nil] placeholderImage:placeHoderImage2];
+    [cell.logoImage setImageWithURL:[NSURL URLWithString:comapnyModel.logo] placeholderImage:placeHoderImage2];
     cell.nameLabel.text =comapnyModel.name;
     cell.addressLabel.text =comapnyModel.address;
     return cell;

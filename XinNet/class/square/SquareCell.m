@@ -88,7 +88,7 @@
         self.publishImg.hidden = NO;
         self.publishImg.frame = CGRectMake(x,y, PublishImgWidth,PublishImgHeiht);
         //此处应设置图片
-        [self.publishImg setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"l.png"]];
+        [self.publishImg setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"fail_image2.png"]];
         
     }else{
         self.publishImg.hidden = YES;

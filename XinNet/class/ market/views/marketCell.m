@@ -19,13 +19,10 @@
     if (self) {
         
         marketImage = [[UIImageView alloc] initWithFrame:CGRectMake(16, 11, 60, 60)];
-        marketImage.image =[UIImage imageNamed:@""];
-        marketImage.backgroundColor =[UIColor lightGrayColor];
         [self addSubview:marketImage];
         
         
         titleName = [[UILabel alloc] initWithFrame:CGRectMake(86, 11, 215, 20)];
-        titleName.text = @"新闻标题";
         titleName.font =[UIFont systemFontOfSize:PxFont(23)];
         [self addSubview:titleName];
         titleName.textColor=HexRGB(0x3a3a3a);
@@ -34,7 +31,6 @@
         
         
         fromLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 32, 190, 20)];
-        fromLabel.text = @"来源";
         [self addSubview:fromLabel];
         fromLabel.numberOfLines = 0;
         fromLabel.font =[UIFont systemFontOfSize:PxFont(18)];
@@ -42,7 +38,6 @@
         
         
         timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 52, 150, 20)];
-        timeLabel.text = @"时间";
         [self addSubview:timeLabel];
         timeLabel.font =[UIFont systemFontOfSize:PxFont(18)];
         timeLabel.textColor = HexRGB(0x808080);

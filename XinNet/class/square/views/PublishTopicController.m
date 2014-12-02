@@ -40,6 +40,7 @@
     [self addView];
 }
 
+#pragma mark  添加视图
 - (void)addView
 {
     //输入框
@@ -101,7 +102,7 @@
 }
 
 
-//发布按钮点击
+#pragma mark 发布按钮点击
 - (void)btnDown:(UIButton *)btn
 {
     if (btn.tag == 1000) {
@@ -120,7 +121,7 @@
     }
 }
 
-//上传图片
+#pragma mark 上传图片
 - (void)uploadImage:(UIImage *)img
 {
     NSData *data;
@@ -152,7 +153,7 @@
 }
 
 
-//发布话题内容
+#pragma mark  上传发布内容
 - (void)uploadContent:(NSString *)data
 {
     NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:content,@"content", nil];
@@ -165,7 +166,7 @@
         int code = [[dic objectForKey:@"code"]intValue];
         if (code == 100) {
             [RemindView showViewWithTitle:@"发布成功" location:MIDDLE];
-            //刷新话题广场内容
+            //发布成功后 刷新话题广场的tableview
             if ([self.delegate respondsToSelector:@selector(reloadView)]) {
                 [self.delegate reloadView];
                 [self.navigationController popViewControllerAnimated:YES];
@@ -179,6 +180,7 @@
     }];
 }
 
+#pragma mark textview_delegate
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
     if (!isEditing) {
@@ -219,11 +221,14 @@
     [_textView resignFirstResponder];
 }
 
+#pragma mark 改变字数显示
 - (void)changeUI
 {
     _markLabel.text = [NSString stringWithFormat:@"%d/%d",(int)_textView.text.length,MaxCount];
 }
 
+
+#pragma mark alertview_delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1){
@@ -258,7 +263,7 @@
 }
 
 
-
+#pragma mark ------
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -31,6 +31,7 @@
     NSString *_categoryIndex;
     MJRefreshFooterView *_footer;
     BOOL isLoadMore;//判断是否加载更多
+    UILabel *dataLabel;
 }
 @property(nonatomic ,strong)UIScrollView *BigCompanyScrollView;
 @property (nonatomic,assign) NSInteger pageNum;//页数
@@ -58,11 +59,21 @@
     [self.view addSubview:_orangLin];
     _orangLin.frame =CGRectMake(0, YYBORDERH+62, kWidth/3, 2);
     _orangLin.backgroundColor =HexRGB(0x38c166);
-
     [self addMBprogressView];
     [self addLoadcategoryStatus];
 }
-
+- (void)addShowNoDataView
+{
+    dataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+    dataLabel.textAlignment = NSTextAlignmentCenter;
+    dataLabel.backgroundColor = [UIColor clearColor];
+    dataLabel.text = @"没有数据！";
+    dataLabel.hidden = YES;
+    dataLabel.enabled = NO;
+    [_BigCompanyScrollView addSubview:dataLabel];
+    
+    
+}
 #pragma  mark ------显示指示器
 -(void)addMBprogressView{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -104,6 +115,7 @@
             if (statues.count < 10) {
                 isLoadMore = NO;
                 _footer.hidden = YES;
+                [RemindView showViewWithTitle:@"数据加载完毕" location:BELLOW];
             }else
             {
                 isLoadMore = YES;
@@ -157,22 +169,21 @@
 #pragma mark---加载数据
 -(void)addLoadStatus{
     _pageNum = 0;
-//    if (!isLoadMore) {
-//        isLoadMore = YES;
-//        _footer.hidden = NO;
-//    }
+    if (!isLoadMore) {
+        isLoadMore = YES;
+        _footer.hidden = NO;
+    }
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     
     if (_selectedBtn.tag ==21) {
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
-            // 判断是否需要显示加载更多
-            if (statues.count < 10) {
-                isLoadMore = NO;
-                _footer.hidden = YES;
-            }else
-            {
-                isLoadMore = YES;
-                _footer.hidden = NO;
+            if (statues.count==0) {
+                dataLabel.hidden = NO;
+                _allTableView.hidden =YES;
+                dataLabel.frame=CGRectMake(kWidth, 0, kWidth, kHeight-64);
+            }else{
+                dataLabel.hidden =YES;
+                _allTableView.hidden = NO;
             }
             [_interfaceArray2 removeAllObjects];
             [_interfaceArray2 addObjectsFromArray:statues];
@@ -183,15 +194,15 @@
         }];
     }else if (_selectedBtn.tag==22){
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
-            // 判断是否需要显示加载更多
-            if (statues.count < 10) {
-                isLoadMore = NO;
-                _footer.hidden = YES;
-            }else
-            {
-                isLoadMore = YES;
-                _footer.hidden = NO;
+            if (statues.count==0) {
+                dataLabel.hidden = NO;
+                _allTableView.hidden =YES;
+                dataLabel.frame=CGRectMake(kWidth*2, 0, kWidth, kHeight-64);
+            }else{
+                dataLabel.hidden =YES;
+                _allTableView.hidden = NO;
             }
+
             [_interfaceArray3 removeAllObjects];
             [_interfaceArray3 addObjectsFromArray:statues];
             _pageNum = _interfaceArray3.count % 10 + 1;
@@ -202,14 +213,13 @@
         }];
     }else{
     [interfaceTool statusesWithSuccess:^(NSArray *statues) {
-        // 判断是否需要显示加载更多
-        if (statues.count < 10) {
-            isLoadMore = NO;
-            _footer.hidden = YES;
-        }else
-        {
-            isLoadMore = YES;
-            _footer.hidden = NO;
+        if (statues.count==0) {
+            dataLabel.hidden = NO;
+            _allTableView.hidden =YES;
+            dataLabel.frame=CGRectMake(0, 0, kWidth, kHeight-64);
+        }else{
+            dataLabel.hidden =YES;
+            _allTableView.hidden = NO;
         }
         [_interfaceArray removeAllObjects];
 
@@ -248,7 +258,7 @@
     _BigCompanyScrollView.bounces = NO;
     _BigCompanyScrollView.tag = 9999;
     _BigCompanyScrollView.userInteractionEnabled = YES;
-    _BigCompanyScrollView.backgroundColor =HexRGB(0xe6e3e4);
+    _BigCompanyScrollView.backgroundColor =[UIColor whiteColor];
     
     _BigCompanyScrollView.delegate = self;
     [self.view addSubview:_BigCompanyScrollView];
@@ -256,6 +266,7 @@
     [self addBusinessDemandTableview];
     [self addBusinessSuplyTableview];
     [self addRefreshViews];
+    [self addShowNoDataView];
 }
 #pragma mark 全部
 -(void)addBusinessAllTableview

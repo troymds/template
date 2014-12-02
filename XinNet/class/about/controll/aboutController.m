@@ -73,6 +73,7 @@
     //顶部图片
     UIImageView *topImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
     topImg.frame = CGRectMake((kWidth-imgWidth)/2,topDistance,imgWidth,imgHeight);
+    
     [topImg setImageWithURL:[NSURL URLWithString:abModel.company_logo] placeholderImage:placeHoderImage3];
     [self.view addSubview:topImg];
     

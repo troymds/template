@@ -47,8 +47,6 @@ const static NSString *archiveFileName = @"XWihone.dat";
     NSString *dir = [paths objectAtIndex:0];
     dir = [dir stringByAppendingPathComponent:@"Caches"];
     dir = [dir stringByAppendingPathComponent:xwFileBaseDir];
-    NSLog(@"%@",dir);
-    
     NSFileManager *fm = [NSFileManager defaultManager];
     BOOL isDir = YES;
     if ([fm fileExistsAtPath:dir isDirectory:&isDir]) {

@@ -124,8 +124,13 @@
     }
     
     [companyJobTool statusesWithSuccess:^(NSArray *statues) {
-
-        [_tableView reloadData];
+        if (statues.count ==0) {
+            dataLabel.hidden =NO;
+            _tableView.hidden = YES;
+        }else{
+            dataLabel.hidden = YES;
+            _tableView.hidden =NO;
+        }
         [_companyJobArray removeAllObjects];
         [_companyJobArray addObjectsFromArray:statues];
         _pageNum = _companyJobArray.count % 10 + 1;
@@ -140,6 +145,7 @@
     _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, KAppH) style:UITableViewStylePlain];
     _tableView.delegate =self;
     _tableView.dataSource =self;
+    _tableView.hidden =NO;
     _tableView.backgroundColor =[UIColor whiteColor];
     _tableView.showsHorizontalScrollIndicator = NO;
     _tableView.showsVerticalScrollIndicator = NO;

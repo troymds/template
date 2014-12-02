@@ -177,10 +177,10 @@
     
         if (_selectedBtn.tag ==20) {
             [businessTool statusesWithSuccess:^(NSArray *statues) {
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 if (statues.count < 10) {
                     isLoadMore = NO;
                     _footer.hidden = YES;
+                    [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
                 }else
                 {
                     isLoadMore = YES;
@@ -193,10 +193,11 @@
             }];
         }else if (_selectedBtn.tag==21){
         [businessTool statusesWithSuccess:^(NSArray *statues) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count < 10) {
                 isLoadMore = NO;
                 _footer.hidden = YES;
+                [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
+
             }else
             {
                 isLoadMore = YES;
@@ -210,10 +211,11 @@
     }
     else{
         [businessTool statusesWithSuccess:^(NSArray *statues) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count < 10) {
                 isLoadMore = NO;
                 _footer.hidden = YES;
+                [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
+
             }else
             {
                 isLoadMore = YES;
