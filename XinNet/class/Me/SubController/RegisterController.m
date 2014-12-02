@@ -194,8 +194,20 @@
             //展开条款
         case macroType:
         {
-            ProtocolView *view = [[ProtocolView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-            [view showProtocolView];
+            [httpTool postWithPath:@"getProtocol" params:nil success:^(id JSON) {
+                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                NSDictionary *dict = [result objectForKey:@"response"];
+                int code = [[dict objectForKey:@"code"] intValue];
+                if (code == 100) {
+                    NSString *urlStr = [[dict objectForKey:@"data"] objectForKey:@"wapUrl"];
+                    ProtocolView *protocolView = [[ProtocolView alloc] initWithUrl:urlStr];
+                    [protocolView showProtocolView];
+                }else{
+                    [RemindView showViewWithTitle:@"获取服务条款失败" location:MIDDLE];
+                }
+            } failure:^(NSError *error) {
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            }];
         }
             break;
         //下一步
