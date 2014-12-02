@@ -167,8 +167,8 @@
         if (code == 100) {
             [RemindView showViewWithTitle:@"发布成功" location:MIDDLE];
             //发布成功后 刷新话题广场的tableview
-            if ([self.delegate respondsToSelector:@selector(reloadView)]) {
-                [self.delegate reloadView];
+            if ([self.delegate respondsToSelector:@selector(reloadTableView)]) {
+                [self.delegate reloadTableView];
                 [self.navigationController popViewControllerAnimated:YES];
             }
         }else{
