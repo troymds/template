@@ -125,7 +125,7 @@
     
     
     for (int i=0; i<2; i++) {
-        NSArray *titleArr =@[[NSString stringWithFormat:@"时间:%@",businessModel.create_time],[NSString stringWithFormat:@"数量:%@",businessModel.read_num]];
+        NSArray *titleArr =@[[NSString stringWithFormat:@"%@",businessModel.create_time],[NSString stringWithFormat:@"数量:%@",businessModel.read_num]];
         UILabel *titleLabel =[[UILabel alloc]initWithFrame:CGRectMake(20+i%3*(kWidth/2), 50, kWidth/2-40, 20)];
         titleLabel.text =titleArr[i];
         titleLabel.textAlignment = NSTextAlignmentLeft;
