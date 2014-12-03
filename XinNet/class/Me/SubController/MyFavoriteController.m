@@ -149,8 +149,8 @@
     //编辑
     editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     editBtn.frame = CGRectMake(0, 0, 60, 30);
-    [editBtn setBackgroundImage:[UIImage imageNamed:@"edit1.png"] forState:UIControlStateNormal];
-    [editBtn setBackgroundImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateSelected];
+    [editBtn setBackgroundImage:[UIImage imageNamed:@"edit1"] forState:UIControlStateNormal];
+    [editBtn setBackgroundImage:[UIImage imageNamed:@"delete"] forState:UIControlStateSelected];
     [editBtn addTarget:self action:@selector(edit:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithCustomView:editBtn];
     
