@@ -276,6 +276,7 @@
     }
     SquareUserItem *item = [_dataArray objectAtIndex:indexPath.row];
     [cell setObject:item];
+    cell.line.frame = CGRectMake(0, [self getCellHeight:indexPath]-1,kWidth,1);
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }

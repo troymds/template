@@ -17,23 +17,21 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,0,kWidth-60,self.frame.size.height)];
+        
+        CGFloat height = 62;
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,0,kWidth-60,height)];
         _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.textColor = HexRGB(0x3a3a3a);
         [self.contentView addSubview:_titleLabel];
+        
+        CGFloat imgWidth = 30;
+        CGFloat imgHeight = 30;
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"right_sore.png"]];
+        imageView.frame = CGRectMake(kWidth-imgWidth-5,(height-imgHeight)/2,imgWidth,imgHeight);
+        [self.contentView addSubview:imageView];
+
     }
     return self;
-}
-
-- (void)drawRect:(CGRect)rect
-{
-    CGContextRef content = UIGraphicsGetCurrentContext();
-    CGContextSetStrokeColorWithColor(content,HexRGB(0xd5d5d5).CGColor);
-    CGContextSetLineWidth(content,1);
-    CGContextBeginPath(content);
-    CGContextMoveToPoint(content, rect.origin.x,rect.size.height);
-    CGContextAddLineToPoint(content, rect.size.width, rect.size.height);
-    CGContextStrokePath(content);
 }
 
 

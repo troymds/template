@@ -60,6 +60,7 @@
     //密码输入框
     textField = [[UITextField alloc] initWithFrame:CGRectMake(80, 35,kWidth-80,35)];
     textField.placeholder = @"请输入密码";
+    textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     [self.view addSubview:textField];
     
     UIView *line1 = [[UIView alloc] initWithFrame:CGRectMake(0,69,kWidth, 1)];

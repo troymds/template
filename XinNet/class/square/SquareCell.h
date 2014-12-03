@@ -33,6 +33,7 @@
 @property (nonatomic,strong) UILabel *contentLabel;
 @property (nonatomic,strong) UIImageView *publishImg;
 @property (nonatomic,strong) UILabel *dateLabel;
+@property (nonatomic,strong) UIView *line;
 
 - (void)setObject:(SquareUserItem *)item;
 

@@ -24,6 +24,7 @@
         
         _textField = [[UITextField alloc] init];
         _textField.textColor = [UIColor blackColor];
+        _textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         [self addSubview:_textField];
     }
     return self;

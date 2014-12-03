@@ -33,17 +33,6 @@
     return self;
 }
 
-- (void)drawRect:(CGRect)rect
-{
-    CGContextRef content = UIGraphicsGetCurrentContext();
-    CGContextSetStrokeColorWithColor(content, HexRGB(0xd5d5d5).CGColor);
-    CGContextSetLineWidth(content,1);
-    CGContextBeginPath(content);
-    CGContextMoveToPoint(content, rect.origin.x,rect.size.height);
-    CGContextAddLineToPoint(content, rect.size.width, rect.size.height);
-    CGContextStrokePath(content);
-}
-
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
     

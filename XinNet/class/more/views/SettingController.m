@@ -30,7 +30,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = HexRGB(0xe9f1f6);
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
@@ -43,6 +43,7 @@
 {
     CGFloat height = 50;      //列表高度
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth,height*2)];
+    bgView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:bgView];
     for (int i = 0 ; i < 2; i++) {
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,(i+1)*height-1,kWidth, 1)];
@@ -68,6 +69,7 @@
     versionLabel.textColor = HexRGB(0x3a3a3a);
     versionLabel.textAlignment = NSTextAlignmentRight;
     versionLabel.font = [UIFont systemFontOfSize:12];
+    versionLabel.backgroundColor = [UIColor clearColor];
     NSString *version = [dict objectForKey:(NSString *)kCFBundleVersionKey];
     versionLabel.text = [NSString stringWithFormat:@"当前版本:v%@",version];
     [_updateView addSubview:versionLabel];
@@ -91,6 +93,7 @@
     cachesLabel.textColor = HexRGB(0x3a3a3a);
     cachesLabel.textAlignment = NSTextAlignmentRight;
     cachesLabel.font = [UIFont systemFontOfSize:12];
+    cachesLabel.backgroundColor = [UIColor clearColor];
     [_clearView addSubview:cachesLabel];
     
     NSString *filePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory,NSUserDomainMask, YES) objectAtIndex:0];
@@ -100,6 +103,7 @@
     _exitView = [[MoreListView alloc] initWithFrame:CGRectMake(0,bgView.frame.size.height+15,kWidth,height)];
     _exitView.titleLabel.text = @"退出登陆";
     _exitView.imgView.hidden = YES;
+    _exitView.backgroundColor = [UIColor whiteColor];
     _exitView.titleLabel.frame = CGRectMake(20,0,120,height);
     _exitView.delegate  = self;
     _exitView.tag = ExitType;
@@ -108,6 +112,7 @@
     [self.view addSubview:_exitView];
 
 }
+
 
 //遍历文件夹获得文件夹大小，返回多少M
 - (float ) folderSizeAtPath:(NSString*) folderPath{
