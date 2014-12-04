@@ -24,7 +24,7 @@
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.backgroundColor = HexRGB(0xe9f1f6);
-        _titileLabel = [[TouchLabel alloc] initWithFrame:CGRectZero];
+        _titileLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _titileLabel.backgroundColor = [UIColor clearColor];
         _titileLabel.textColor = HexRGB(0x3a3a3a);
         _titileLabel.font = [UIFont systemFontOfSize:titleFone];

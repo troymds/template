@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TouchLabel.h"
 #import "CommentItem.h"
 #import "AdaptationSize.h"
 
@@ -22,7 +21,7 @@
 
 @interface CommentCell : UITableViewCell
 
-@property (nonatomic,strong) TouchLabel *titileLabel;
+@property (nonatomic,strong) UILabel *titileLabel;
 
 @property (nonatomic,strong) UILabel *commentLabel;
 @property (nonatomic,strong) UIView *line;

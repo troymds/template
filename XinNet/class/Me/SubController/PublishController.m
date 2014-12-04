@@ -230,6 +230,9 @@
                     
                 }else{
                     data = @"修改成功";
+                    if ([self.delegate respondsToSelector:@selector(reloadView)]) {
+                        [self.delegate reloadView];
+                    }
                 }
                 [RemindView showViewWithTitle:data location:MIDDLE];
             }else{

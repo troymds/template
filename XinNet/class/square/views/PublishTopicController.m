@@ -57,26 +57,10 @@
     _textView.layer.borderWidth = 0.5;
     
     
-    //图片
-    UILabel *imgLabel = [[UILabel alloc] initWithFrame:CGRectMake(leftDistance,_textView.frame.origin.y+_textView.frame.size.height+15,75,75)];
-    imgLabel.layer.borderColor = HexRGB(0xd5d5d5).CGColor;
-    imgLabel.layer.borderWidth = 1.0f;
-    imgLabel.text = @"图片";
-    imgLabel.textColor = HexRGB(0xd5d5d5);
-    imgLabel.textAlignment = NSTextAlignmentCenter;
-    [self.view addSubview:imgLabel];
-    
-    _publishImg = [[TJImageView alloc] initWithFrame:CGRectMake(leftDistance,_textView.frame.origin.y+_textView.frame.size.height+15,75,75)];
-    _publishImg.backgroundColor = [UIColor clearColor];
+    _publishImg = [[TJImageView alloc] initWithFrame:CGRectMake(leftDistance,_textView.frame.origin.y+_textView.frame.size.height+15,88,88)];
+    _publishImg.delegate = self;
+    _publishImg.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"addImg.png"]];
     [self.view addSubview:_publishImg];
-    
-    addImgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    addImgBtn.frame = CGRectMake(leftDistance+_publishImg.frame.size.width+9,_publishImg.frame.origin.y,75, 75);
-    addImgBtn.tag = 1000;
-    [addImgBtn addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
-    [addImgBtn setBackgroundImage:[UIImage imageNamed:@"addImg.png"] forState:UIControlStateNormal];
-    [self.view addSubview:addImgBtn];
-    
     
     
     CGFloat width = 100;        //显示输入字体label的宽度
@@ -91,32 +75,31 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"确认发布" forState:UIControlStateNormal];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    button.tag = 1001;
     [button setBackgroundColor:HexRGB(0x9be4aa)];
-
 //    [button setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
 //    [button setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
     button.frame = CGRectMake(10,_publishImg.frame.origin.y+_publishImg.frame.size.height+20,kWidth-10*2,36);
-    [button addTarget:self action:@selector(btnDown:) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(btnDown) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
+}
+
+- (void)imageViewClick:(TJImageView *)view
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"选取图片" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"拍照",@"本地", nil];
+    [alertView show];
 }
 
 
 #pragma mark 发布按钮点击
-- (void)btnDown:(UIButton *)btn
+- (void)btnDown
 {
-    if (btn.tag == 1000) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"选取图片" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"拍照",@"本地", nil];
-        [alertView show];
+    if (content.length == 0) {
+        [RemindView showViewWithTitle:@"说点什么吧" location:MIDDLE];
     }else{
-        if (content.length == 0) {
-            [RemindView showViewWithTitle:@"说点什么吧" location:MIDDLE];
+        if (image) {
+            [self uploadImage:image];
         }else{
-            if (image) {
-                [self uploadImage:image];
-            }else{
-                [self uploadContent:@""];
-            }
+            [self uploadContent:@""];
         }
     }
 }
