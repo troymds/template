@@ -36,10 +36,10 @@
     [self addLoadStatus];
 }
 -(void)addLoadStatus{
-    if ([NSKeyedUnarchiver unarchiveObjectWithFile:aboutUsFilePath]) {
-        abModel = [NSKeyedUnarchiver unarchiveObjectWithFile:aboutUsFilePath];
-        [self addViewWithModel:abModel];
-    }else{
+//    if ([NSKeyedUnarchiver unarchiveObjectWithFile:aboutUsFilePath]) {
+//        abModel = [NSKeyedUnarchiver unarchiveObjectWithFile:aboutUsFilePath];
+//        [self addViewWithModel:abModel];
+//    }else{
         [aboutTool AboutStatusesWithSuccesscategory:^(NSArray *statues) {
             abModel =[[aboutModel alloc]init];
             NSDictionary *dict =[statues objectAtIndex:0];
@@ -52,7 +52,7 @@
             abModel.company_website =[dict objectForKey:@"company_website"];
             abModel.company_weixin =[dict objectForKey:@"company_weixin"];
             
-            [NSKeyedArchiver archiveRootObject:abModel toFile:aboutUsFilePath];
+//            [NSKeyedArchiver archiveRootObject:abModel toFile:aboutUsFilePath];
             
             [self addViewWithModel:abModel];
             
@@ -60,7 +60,7 @@
             
         } ];
 
-    }
+    
 }
 
 - (void)addViewWithModel:(aboutModel *)model

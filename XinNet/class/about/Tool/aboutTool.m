@@ -13,6 +13,7 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
+        NSLog(@"%@",array);
         if (![array isKindOfClass:[NSNull class]]) {
             [statuses addObject:[array objectForKey:@"data"]];
         }

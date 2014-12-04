@@ -302,12 +302,24 @@
 #pragma mark---FailUI
 -(void)addFailbutton:(NSMutableArray *)ImgArray
 {
-    CGFloat leftDistace = 20;                              //第一列图片距离左边的距离
-    CGFloat width = 70;                                    //图片宽高
-    CGFloat distance = (kWidth-width*3-leftDistace*2)/2;   //每行图片的中间距离
-    CGFloat topDistace  = 10;                              //第一列图片距顶部的距离
-    
-    for (int i=0; i<_hotImageArrayOff.count; i++) {
+    CGFloat leftDistace;
+    CGFloat width;
+    CGFloat distance;
+    CGFloat topDistace;
+    if (IsIos7) {
+        leftDistace = 20;                              //第一列图片距离左边的距离
+        width = 70;                                    //图片宽高
+        distance = (kWidth-width*3-leftDistace*2)/2;   //每行图片的中间距离
+        topDistace  = 10;
+    }else{
+        
+        leftDistace = 25;                              //第一列图片距离左边的距离
+        width = 60;                                    //图片宽高
+        distance = (kWidth-width*3-leftDistace*2)/2;   //每行图片的中间距离
+        topDistace  = 0;
+        
+    }
+        for (int i=0; i<_hotImageArrayOff.count; i++) {
         moduleModel *homeMode =[ImgArray objectAtIndex:i];
         UIImageView *MainImage =[[UIImageView alloc]init];
         MainImage.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+130+i/3*(kHeight/3-70),width,width);

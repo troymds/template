@@ -9,5 +9,5 @@
 #import "productDetailModel.h"
 
 @implementation productDetailModel
-
+@synthesize description;
 @end
