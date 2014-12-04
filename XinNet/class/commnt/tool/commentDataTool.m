@@ -13,7 +13,6 @@
 @implementation commentDataTool
 + (void) GetCommentDataWithSuccess:(successBlock)success entityId:(NSString *) entityID entityType:(NSString *)entityType page:(NSString *)page withFailure:(failureBlock)failure
 {
-    NSLog(@"---%@ +++++%@",entityID,entityType);
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:entityID,@"entity_id",entityType,@"entity_type",page,@"page",@"10",@"pagesize", nil];
     
     [httpTool postWithPath:@"getCommentList" params:dic success:^(id JSON) {

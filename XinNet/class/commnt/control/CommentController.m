@@ -82,8 +82,7 @@
 #pragma mark 拉取数据
 - (void) loadCommentData
 {
-    NSLog(@"entity_Id:%@ entity_Type:%@",_entityID,_entityType);
-    self.lastId = [NSString stringWithFormat:@"%d",(_dataList.count % 10) + 1];
+    self.lastId = [NSString stringWithFormat:@"%d",0];
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"正在获取评论数据...";
     isLoading = YES;
@@ -193,7 +192,6 @@
 - (void)btnDown:(UIButton *)btn conent:(NSString *)content
 {
     if (btn.tag == comformType) {// 发布评论
-        NSLog(@"entityType:%@",_entityType);
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.labelText = @"正在发表评论...";
         
