@@ -20,7 +20,7 @@
     self.view.backgroundColor =[UIColor whiteColor];
     self.title =@"企业简介";
     
-    UIWebView *marketWebView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+    UIWebView *marketWebView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
     [self.view addSubview:marketWebView];
     [marketWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_companyIndex]] ];
     

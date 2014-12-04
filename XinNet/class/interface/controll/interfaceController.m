@@ -54,8 +54,8 @@
     _categoryIndex=[[NSString alloc]init];
     _pageNum = 0;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
+    [self addBigCompanyScrollView];
     
-        [self addMBprogressView];
     [self addLoadcategoryStatus];
     
     
@@ -175,6 +175,7 @@
     
     if (_selectedBtn.tag ==21) {
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count==0) {
                 dataLabel.hidden = NO;
                 _allTableView.hidden =YES;
@@ -188,10 +189,14 @@
             _pageNum = _interfaceArray2.count % 10 + 1;
             [self addloadTableView];
         } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             
         }];
     }else if (_selectedBtn.tag==22){
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             if (statues.count==0) {
                 dataLabel.hidden = NO;
                 _allTableView.hidden =YES;
@@ -207,10 +212,13 @@
             [self addloadTableView];
 
         } category_Id:_categoryIndex page:self.page  failure:^(NSError *error) {
-            
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
         }];
     }else{
     [interfaceTool statusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
         if (statues.count==0) {
             dataLabel.hidden = NO;
             _allTableView.hidden =YES;
@@ -226,7 +234,8 @@
         [self addloadTableView];
 
     } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
-        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
     }];
     }
 }
@@ -234,11 +243,20 @@
 -(void)addLoadcategoryStatus{
     
     [categoryLestTool statusesWithSuccess:^(NSArray *statues) {
-        [_categoryArray removeAllObjects];
-        [_categoryArray addObjectsFromArray:statues];
-        [self addBigCompanyScrollView];
-        [self addRefreshViews];
-        [self addbusinessBtn];
+        if (statues.count>0) {
+            [_categoryArray removeAllObjects];
+            [_categoryArray addObjectsFromArray:statues];
+            [self addBigCompanyScrollView];
+            [self addRefreshViews];
+            [self addbusinessBtn];
+            _allTableView.hidden = NO;
+            dataLabel.hidden =YES;
+        }else {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            dataLabel.hidden =NO;
+            _allTableView.hidden = YES;
+        }
+        
         
     } entity_Type:@"7" failure:^(NSError *error) {
         
@@ -248,7 +266,7 @@
 #pragma mark背景scrollview
 -(void)addBigCompanyScrollView
 {
-    _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, YYBORDERH+63, kWidth, kHeight-YYBORDERH-64)];
+    _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, YYBORDERH-1, kWidth, kHeight-YYBORDERH-64)];
     _BigCompanyScrollView.contentSize = CGSizeMake(kWidth*3, _BigCompanyScrollView.frame.size.height);
     _BigCompanyScrollView.showsHorizontalScrollIndicator = NO;
     _BigCompanyScrollView.showsVerticalScrollIndicator = NO;
@@ -275,6 +293,7 @@
     _allTableView.backgroundColor =[UIColor whiteColor];
     _allTableView.delegate =self;
     _allTableView.dataSource = self;
+    _allTableView.hidden =NO;
     
     
     
@@ -441,6 +460,8 @@
         if (!cell) {
             cell=[[interfaceCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
             cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
+            cell.selectionStyle=UITableViewCellSelectionStyleNone;
+
             
             UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
             [cell.contentView addSubview:cellLine];
@@ -458,6 +479,8 @@
         if (!cell) {
             cell=[[interfaceCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
             cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
+            cell.selectionStyle=UITableViewCellSelectionStyleNone;
+
             
             UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
             [cell.contentView addSubview:cellLine];
@@ -475,6 +498,8 @@
         if (!cell) {
             cell=[[interfaceCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
             cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
+            cell.selectionStyle=UITableViewCellSelectionStyleNone;
+
             
             UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
             [cell.contentView addSubview:cellLine];
@@ -491,7 +516,7 @@
 -(void)addbusinessBtn{
     
     
-    companyBackView =[[UIView alloc]initWithFrame:CGRectMake(0, 62, kWidth, YYBORDERH)];
+    companyBackView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, YYBORDERH)];
     [self.view addSubview:companyBackView];
     companyBackView.backgroundColor =HexRGB(0xe1e9e9);
     

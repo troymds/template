@@ -7,6 +7,7 @@
 
 //系统版本
 #define IsIos7 [[[UIDevice currentDevice] systemVersion] floatValue] >=7.0 ? YES : NO
+
 #define isRetina [UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960),[[UIScreen mainScreen] currentMode].size) : NO
 
 #define iPhone5 [UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136),[[UIScreen mainScreen] currentMode].size) : NO
@@ -68,9 +69,9 @@
 
 #define kBaseURL @"http://ebingoo.bingoso.com"
 #define kURL @"http://192.168.1.112"//调试接口
-#define App_key @"D66BAEC30A4AED826BCC2BB3264FC6F6"
-
-
+#define App_key @"949b9b0097e40d3fd7a875a38fe74b4b"
+//949b9b0097e40d3fd7a875a38fe74b4b 汽车
+//D66BAEC30A4AED826BCC2BB3264FC6F6 美女
 // 2.日志输出宏定义
 #ifdef DEBUG
 // 调试状态

@@ -22,6 +22,7 @@
 @interface companyDetailsView ()<YYalertViewDelegate>
 {
         companyDetailsModel *companyModel;
+    UIScrollView *_backScrollView;
 }
 @property (nonatomic, strong)NSString *collectionId;
 
@@ -39,8 +40,24 @@
    
     [self addLoadStatus];
     [self addMBprogressView];
+    }
+-(void)addScrollView{
+    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+    if (IsIos7) {
+        _backScrollView.contentSize =CGSizeMake(kWidth, kHeight-64);
 
-}
+    }else{
+        _backScrollView.contentSize =CGSizeMake(kWidth, kHeight+40);
+ 
+    }
+    _backScrollView.userInteractionEnabled=YES;
+    _backScrollView.backgroundColor=HexRGB(0xededed);
+    [self.view addSubview:_backScrollView];
+    _backScrollView.bounces = NO;
+    _backScrollView.showsVerticalScrollIndicator = NO;
+    _backScrollView.showsHorizontalScrollIndicator = NO;
+    [self addImageView];
+    }
 //收藏
 -(void)addShareBtn{
     
@@ -101,7 +118,7 @@
 
         
         
-        [self addImageView];
+        [self addScrollView];
        
           } company_id:_companyDetailIndex CompanyFailure:^(NSError *error) {
               [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -193,14 +210,14 @@
 
 -(void)addImageView{
     
-    UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(YYBODER, 70, kWidth-YYBODER*2, 100)];
+    UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(YYBODER, 6, kWidth-YYBODER*2, 100)];
     [headerImage setImageWithURL:[NSURL URLWithString:_headerImage] placeholderImage:placeHoderImage3];
     
-    [self.view addSubview:headerImage];
+    [_backScrollView addSubview:headerImage];
     
-    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(YYBODER-1, 179, kWidth-YYBODER*2, 165)];
+    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(YYBODER-1, 115, kWidth-YYBODER*2, 165)];
     line.backgroundColor =HexRGB(0xe6e3e4);
-    [self.view addSubview:line];
+    [_backScrollView addSubview:line];
     
     
     for (int i=0; i<4; i++) {
@@ -218,11 +235,12 @@
         
         
     }
-    
-                UIButton * collectionBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton * collectionBtn;
+   
+        collectionBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         collectionBtn.frame =CGRectMake(kWidth-80, 10,40, 50);
         [collectionBtn setTitle:@"收藏" forState:UIControlStateNormal];
-    [collectionBtn setTitle:@"取消" forState:UIControlStateSelected];
+        [collectionBtn setTitle:@"取消" forState:UIControlStateSelected];
 
         [collectionBtn addTarget:self action:@selector(collectionBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         collectionBtn.imageEdgeInsets =UIEdgeInsetsMake(-10, 0, 30, 0);
@@ -232,21 +250,26 @@
         collectionBtn.backgroundColor =[UIColor clearColor];
         [collectionBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         collectionBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(13)];
-        collectionBtn.titleEdgeInsets=UIEdgeInsetsMake(0, -35, 0, 5);
-        
+    
         UIImageView *failImg =[[UIImageView alloc]initWithFrame:CGRectMake(kWidth-80, 43,40, 30 )];
         [line addSubview:failImg];
         failImg.backgroundColor =[UIColor whiteColor];
         failImg.userInteractionEnabled = YES;
+    if (IsIos7) {
+        collectionBtn.titleEdgeInsets=UIEdgeInsetsMake(0, -35, 0, 5);
         
+    }else{
+        collectionBtn.titleEdgeInsets=UIEdgeInsetsMake(0, -25, 0, 5);
+        
+    }
         
     
     
     
     
-    UIView *line1 =[[UIView alloc]initWithFrame:CGRectMake(YYBODER-1, 350, kWidth-YYBODER*2, 165)];
+    UIView *line1 =[[UIView alloc]initWithFrame:CGRectMake(YYBODER-1, 290, kWidth-YYBODER*2, 165)];
     line1.backgroundColor =HexRGB(0xe6e3e4);
-    [self.view addSubview:line1];
+    [_backScrollView addSubview:line1];
     
     for (int l=0; l<4; l++) {
         NSArray *titleArr1 =@[@"企业简介:",@"产品管理:",@"供求商机:",@"企业招聘:"];
@@ -266,13 +289,11 @@
         contentLable1.tag = 100+l;
     }
     
-    
-
-       
     YYSearchButton *findBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
-    findBtn.frame = CGRectMake(YYBODER, kHeight-40,kWidth-YYBODER*2,30);
+    findBtn.frame = CGRectMake(YYBODER, kHeight-104,kWidth-YYBODER*2,30);
     [findBtn addTarget:self action:@selector(wirteBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [findBtn setTitle:@"  评论" forState:UIControlStateNormal];
+    findBtn .backgroundColor =[UIColor whiteColor];
     [findBtn setImage:[UIImage imageNamed:@"write_pre.png"] forState:UIControlStateNormal];
     findBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
     [findBtn setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
@@ -282,11 +303,12 @@
     
 }
 -(void)collectionBtnClick:(UIButton *)sender{
-     sender.selected=!sender.selected;
     
     if ([sender.titleLabel.text isEqualToString:@"收藏"]) {//收藏
         [collectionHttpTool addCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
             if (code == 100) {
+                sender.selected=!sender.selected;
+
                 [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
                 collectionModel *model = [data objectAtIndex:0];
                 [sender setTitle:@"取消" forState:UIControlStateNormal];

@@ -33,6 +33,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor =HexRGB(0xe9f1f6);
+    [self addWriteBtn];
+
     self.title = @"招聘详情";
     
     _selectedBtn =[[UIButton alloc]init];
@@ -41,8 +43,7 @@
     [self addLoadStatus];
     [self addCollection];
     [self addMBprogressView];
-    [self addWriteBtn];
-
+   
 }
 #pragma  mark ------显示指示器
 -(void)addMBprogressView{
@@ -141,11 +142,11 @@
 #pragma mark ---添加UI
 -(void)addScrollview{
     
-    _bigScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 116, kWidth, kHeight-166)];
+    _bigScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 50, kWidth, kHeight-170)];
     _bigScrollView.contentSize = CGSizeMake(kWidth*2, kHeight-64);
     _bigScrollView.backgroundColor =[UIColor whiteColor];
     _bigScrollView.delegate = self;
-    _bigScrollView.bounces = YES;
+    _bigScrollView.bounces = NO;
     _bigScrollView.showsHorizontalScrollIndicator = NO;
     _bigScrollView.showsVerticalScrollIndicator = NO;
     
@@ -175,12 +176,12 @@
 
 -(void)addWriteBtn{
    
-    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(0, kHeight-50, kWidth, 1)];
+    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(0, kHeight-120, kWidth, 1)];
     [self.view addSubview:line];
     line.backgroundColor =HexRGB(0xe6e3e4);
         YYSearchButton *findBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
-        findBtn.frame = CGRectMake(20, kHeight-40,kWidth-YYBODER*2,30);
-    findBtn.backgroundColor =[UIColor clearColor];
+        findBtn.frame = CGRectMake(20, kHeight-100,kWidth-YYBODER*2,30);
+        findBtn.backgroundColor =[UIColor clearColor];
         [findBtn addTarget:self action:@selector(wirteBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [findBtn setTitle:@"  评论" forState:UIControlStateNormal];
         [findBtn setImage:[UIImage imageNamed:@"write_pre.png"] forState:UIControlStateNormal];
@@ -202,9 +203,12 @@
         
         [chooseBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
         [chooseBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
-        chooseBtn.frame =CGRectMake(20+i%3*((kWidth-35)/2), 70, (kWidth-40)/2, 40);
+        chooseBtn.frame =CGRectMake(20+i%3*((kWidth-35)/2), 6, (kWidth-40)/2, 40);
         [chooseBtn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"company_img%d.png",i]] forState:UIControlStateNormal];
+        [chooseBtn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"company_img%d.png",i]] forState:UIControlStateHighlighted];
+
         [chooseBtn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"company_img_selected%d.png",i]] forState:UIControlStateSelected];
+        [chooseBtn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"company_img_selected%d.png",i]] forState:UIControlStateHighlighted];
 
         [chooseBtn addTarget:self action:@selector(chooseBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         

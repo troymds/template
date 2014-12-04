@@ -36,18 +36,28 @@
     [self addCollectionAndShareSDK];
 
     [self addLoadStatus];
-    
+     [self addMBprogressView];
 
+}
+#pragma  mark ------显示指示器
+-(void)addMBprogressView{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
+    
+    
 }
 #pragma mark----加载数据
 -(void)addLoadStatus{
+   
     [mardetDetailsTool statusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *dict = [statues objectAtIndex:0];
          mardetModel =[[mardetDetailsModel alloc]init];
         mardetModel.wapUrl =[dict objectForKey:@"wapUrl"];
         [self addLabel];
     } newsID:_markIndex failure:^(NSError *error) {
-        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
     }];
 }
 
@@ -79,6 +89,7 @@
 
         collectionBtn.tag = 2000+i;
         [collectionBtn setTitle:titleArr[i] forState:UIControlStateNormal];
+        [collectionBtn setTitleColor:[UIColor colorWithRed:234.0/255.0 green:234.0/255.0 blue:234.0/255.0 alpha:1] forState:UIControlStateNormal];
         [collectionBtn addTarget:self action:@selector(collectionBtn:) forControlEvents:UIControlEventTouchUpInside];
         [backCollectView addSubview:collectionBtn];
     }
@@ -91,14 +102,15 @@
 }
 
 -(void)collectionBtn:(UIButton *)sender{
-    sender.selected=!sender.selected;
-    if (sender.tag == 2001) {
+        if (sender.tag == 2001) {
         [self share];
     }else
     {
         if ([sender.titleLabel.text isEqualToString:@"收藏"]) {//收藏
             [collectionHttpTool addCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
                 if (code == 100) {
+                    sender.selected=!sender.selected;
+
                     [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
                     collectionModel *model = [data objectAtIndex:0];
                     [sender setTitle:@"取消收藏" forState:UIControlStateNormal];

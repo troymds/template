@@ -148,6 +148,8 @@
     UIImageView *navLogoImage =[[UIImageView alloc]initWithFrame:CGRectMake(-60, 0, 60, 30)];
     [_searchImage addSubview:navLogoImage];
     navLogoImage.image =placeHoderImage3;
+    navLogoImage.contentMode = UIViewContentModeScaleAspectFit;
+    
 
     [navLogoImage setImageWithURL:[NSURL URLWithString:_homeModel.logo] placeholderImage:placeHoderImage3];
 }
@@ -171,7 +173,7 @@
     
     [navLogoImage setImageWithURL:[NSURL URLWithString:_logoArrayOff] placeholderImage:placeHoderImage3];
     
-    
+
 }
 -(void)searchBarBtnFail{
     [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
@@ -227,15 +229,29 @@
 #pragma mark---UI
 -(void)addCategorybutton:(NSMutableArray *)btnImgArray
 {
-    CGFloat leftDistace = 20;                              //第一列图片距离左边的距离
-    CGFloat width = 70;                                    //图片宽高
-    CGFloat distance = (kWidth-width*3-leftDistace*2)/2;   //每行图片的中间距离
-    CGFloat topDistace  = 10;                              //第一列图片距顶部的距离
+    CGFloat leftDistace;
+    CGFloat width;
+    CGFloat distance;
+    CGFloat topDistace;
+    if (IsIos7) {
+        leftDistace = 20;                              //第一列图片距离左边的距离
+        width = 70;                                    //图片宽高
+        distance = (kWidth-width*3-leftDistace*2)/2;   //每行图片的中间距离
+        topDistace  = 10;
+    }else{
+
+        leftDistace = 25;                              //第一列图片距离左边的距离
+        width = 60;                                    //图片宽高
+        distance = (kWidth-width*3-leftDistace*2)/2;   //每行图片的中间距离
+        topDistace  = 0;
+
+    }
+                                 //第一列图片距顶部的距离
     
     for (int i=0; i<_moduleArray.count; i++) {
         moduleModel *homeMode =[btnImgArray objectAtIndex:i];
         UIImageView *MainImage =[[UIImageView alloc]init];
-        MainImage.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+130+i/3*(kHeight/3-70),width,width);
+        MainImage.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+130+i/3*(kHeight/3-width),width,width);
         [MainImage setImageWithURL:[NSURL URLWithString:homeMode.image_url] placeholderImage:placeHoderImage1];
         MainImage.backgroundColor =[UIColor clearColor];
         [self.view addSubview:MainImage];
@@ -243,16 +259,16 @@
         
         UIButton *titleBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [self.view addSubview:titleBtn];
-        titleBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+200+i/3*(kHeight/3-70), width, 30);
+        titleBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+130+width+i/3*(kHeight/3-width), width, 30);
         [titleBtn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
         [titleBtn setTitle:homeMode.name forState:UIControlStateNormal];
-        titleBtn.titleLabel.font =[UIFont systemFontOfSize:16];
+        titleBtn.titleLabel.font =[UIFont systemFontOfSize:15];
         [titleBtn setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
         
       
         UIButton *bigBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [self.view addSubview:bigBtn];
-        bigBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+130+i/3*(kHeight/3-70), width, width+35);
+        bigBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+130+i/3*(kHeight/3-width), width, width+35);
         [bigBtn  addTarget:self action:@selector(titbtnClick:) forControlEvents:UIControlEventTouchUpInside];
         bigBtn.backgroundColor =[UIColor clearColor];
        

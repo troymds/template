@@ -71,8 +71,7 @@
 -(void)addMBprogressView{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"加载中...";
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
+    
     
 }
 
@@ -109,6 +108,8 @@
     [self addMBprogressView];
     
     [marketTOOL statusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
         if (statues.count==0) {
             dataLabel.hidden = NO;
             _tableView.hidden=YES;
@@ -198,7 +199,7 @@
     }
 }
 -(void)addTableView{
-    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-64) style:UITableViewStylePlain];
+    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64) style:UITableViewStylePlain];
     _tableView.delegate =self;
     _tableView.dataSource =self;
     _tableView.hidden = NO;
@@ -212,7 +213,7 @@
 #pragma mark---分类
 -(void)addMoreView{
     
-    _moreView =[[UIView alloc]initWithFrame:CGRectMake(kWidth-100, 64, 100, _cagegoryArray.count*31)];
+    _moreView =[[UIView alloc]initWithFrame:CGRectMake(kWidth-100, 0, 100, _cagegoryArray.count*31)];
     _moreView.backgroundColor =[UIColor lightGrayColor];
     [self.view addSubview:_moreView];
     
@@ -314,6 +315,7 @@
         UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
         [cell.contentView addSubview:cellLine];
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
+        cell.selectionStyle=UITableViewCellSelectionStyleNone;
         
     }
     marketModel *markModel =[_marketArray objectAtIndex:indexPath.row];
@@ -338,6 +340,7 @@
         cell.fromLabel.text = markModel.from;
         
     }
+    
     return cell;
 }
 

@@ -21,14 +21,12 @@
     if (self) {
         
         logoImage = [[UIImageView alloc] initWithFrame:CGRectMake(16, 10, 60, 60)];
-        logoImage.image =[UIImage imageNamed:@""];
-        logoImage.backgroundColor =[UIColor cyanColor];
+        logoImage.backgroundColor =[UIColor clearColor];
         [self addSubview:logoImage];
         
         
         
         nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 10, 240, 20)];
-        nameLabel.text = @"企业黄页";
         nameLabel.font =[UIFont systemFontOfSize:PxFont(23)];
         [self addSubview:nameLabel];
         nameLabel.textColor =HexRGB(0x3a3a3a);
@@ -38,7 +36,6 @@
         
         
         addressLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 40, 190, 20)];
-        addressLabel.text = @"公司地址";
         [self addSubview:addressLabel];
         addressLabel.numberOfLines = 0;
         addressLabel.textColor =HexRGB(0x808080);

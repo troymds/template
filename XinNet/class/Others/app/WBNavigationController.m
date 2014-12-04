@@ -17,9 +17,10 @@
     
     // 2.设置导航栏的背景图片
     if (IsIos7) {
-        [bar setBackgroundImage:[UIImage imageNamed:@"nav_bgimge.png"] forBarMetrics:UIBarMetricsDefault];
+        [bar setBackgroundImage:[UIImage imageNamed:@"nav_bgimg.png"] forBarMetrics:UIBarMetricsDefault];
 
     }else{
+        
         [bar setBackgroundImage:[UIImage imageNamed:@"nav_bgimg.png"] forBarMetrics:UIBarMetricsDefault];
 
     }

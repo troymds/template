@@ -71,7 +71,7 @@
     CGFloat imgHeight= 110;   //图片高度
     
     //顶部图片
-    UIImageView *topImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
+    UIImageView *topImg = [[UIImageView alloc] init];
     topImg.frame = CGRectMake((kWidth-imgWidth)/2,topDistance,imgWidth,imgHeight);
     
     [topImg setImageWithURL:[NSURL URLWithString:abModel.company_logo] placeholderImage:placeHoderImage3];
@@ -101,25 +101,7 @@
         [bottomBgView addSubview:listView];
     }
     
-//    _nameView = [[ListView alloc] initWithFrame:CGRectMake(0,0,width,height)];
-//    _nameView.nameLabel.text = [array objectAtIndex:0];
-//    [bottomBgView addSubview:_nameView];
-//    
-//    _addressView = [[ListView alloc] initWithFrame:CGRectMake(0,height,width,height)];
-//    _addressView.nameLabel.text = [array objectAtIndex:1];
-//    [bottomBgView addSubview:_addressView];
-//    
-//    _phoneView = [[ListView alloc] initWithFrame:CGRectMake(0,height*2,width,height)];
-//    _phoneView.nameLabel.text = [array objectAtIndex:2];
-//    [bottomBgView addSubview:_phoneView];
-//    
-//    _emailView = [[ListView alloc] initWithFrame:CGRectMake(0,height*3,width,height)];
-//    _emailView.nameLabel.text = [array objectAtIndex:3];
-//    [bottomBgView addSubview:_emailView];
-//    
-//    _websiteView = [[ListView alloc] initWithFrame:CGRectMake(0,height*4,width,height)];
-//    _websiteView.nameLabel.text = [array objectAtIndex:4];
-//    [bottomBgView addSubview:_websiteView];
+
 
 }
 

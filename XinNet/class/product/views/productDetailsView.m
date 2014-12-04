@@ -156,7 +156,7 @@
 }
 #pragma mark---添加UI
 -(void)addImageView{
-    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 70, kWidth, kHeight-64)];
+    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     _backScrollView.userInteractionEnabled=YES;
     _backScrollView.backgroundColor=HexRGB(0xededed);
     [self.view addSubview:_backScrollView];
