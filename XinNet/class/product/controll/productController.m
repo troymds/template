@@ -299,7 +299,7 @@
 -(void)addBigCompanyScrollView
 {
     _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, YYBORDERH, kWidth, kHeight-YYBORDERH-64)];
-    _BigCompanyScrollView.contentSize = CGSizeMake(kWidth*3, _BigCompanyScrollView.frame.size.height);
+    _BigCompanyScrollView.contentSize = CGSizeMake(kWidth*_categoryArray.count, _BigCompanyScrollView.frame.size.height);
     _BigCompanyScrollView.showsHorizontalScrollIndicator = NO;
     _BigCompanyScrollView.showsVerticalScrollIndicator = NO;
     _BigCompanyScrollView.pagingEnabled = YES;
@@ -384,7 +384,7 @@
             scrollView.contentOffset = CGPointMake(kWidth*2, 0);
         }
         [UIView animateWithDuration:0.01 animations:^{
-            _orangLin.frame = CGRectMake(scrollView.contentOffset.x/3,YYBORDERH-1, kWidth/3, 2);
+            _orangLin.frame = CGRectMake(scrollView.contentOffset.x/_categoryArray.count,YYBORDERH-1, kWidth/_categoryArray.count, 2);
         }];
         if (scrollView.contentOffset.x==0) {
             
@@ -567,11 +567,11 @@
     _orangLin =[[UIView alloc]init];
     [companyBackView addSubview:_orangLin];
     
-    _orangLin.frame =CGRectMake(0, YYBORDERH-1, kWidth/3, 2);
+    _orangLin.frame =CGRectMake(0, YYBORDERH-1, kWidth/_categoryArray.count, 2);
     _orangLin.backgroundColor =HexRGB(0x38c166);
 
     
-    for (int p=0; p<3; p++)
+    for (int p=0; p<_categoryArray.count; p++)
     {
         categoryLestModel *cateModel =[_categoryArray objectAtIndex:p];
         UIButton *companyBtn =[UIButton buttonWithType:UIButtonTypeCustom];
@@ -582,7 +582,7 @@
         
         
         [companyBtn setBackgroundImage:[UIImage imageNamed:@"deleteBtn _selected.png"] forState:UIControlStateHighlighted];
-        companyBtn.frame =CGRectMake(0+p%3*kWidth/3, 0, kWidth/3, YYBORDERH);
+        companyBtn.frame =CGRectMake(0+p%_categoryArray.count*kWidth/_categoryArray.count, 0, kWidth/_categoryArray.count, YYBORDERH);
         companyBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
         [companyBtn setTitle:cateModel.categoryNmae forState:UIControlStateNormal];
         
@@ -596,7 +596,7 @@
         }
         [companyBtn addTarget:self action:@selector(companyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         
-        UIView *yyLine =[[UIView alloc]initWithFrame:CGRectMake(kWidth/3+p%2*(kWidth/3), 10, 1, 24)];
+        UIView *yyLine =[[UIView alloc]initWithFrame:CGRectMake(kWidth/_categoryArray.count+p%2*(kWidth/_categoryArray.count), 10, 1, 24)];
         [companyBackView addSubview:yyLine];
         yyLine.backgroundColor =[UIColor lightGrayColor];
         yyLine.alpha = 0.5;
@@ -612,7 +612,6 @@
         if (statues.count>0) {
             [_categoryArray removeAllObjects];
             [_categoryArray addObjectsFromArray:statues];
-            //成功获得分类数据后，1 加ScrollView和table   2 加刷新控件   3 添加button并获取分类详情数据
             [self addBigCompanyScrollView];
             [self addRefreshViews];
             [self addbusinessBtn];

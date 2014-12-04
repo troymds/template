@@ -60,7 +60,6 @@
 -(void)addMBprogressView{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"加载中...";
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
 }
 
@@ -97,6 +96,8 @@
         _footer.hidden = NO;
     }
     [companyListTool statusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
         if (statues.count ==0) {
             dataLabel.hidden =NO;
             _tableView.hidden = YES;
@@ -122,7 +123,6 @@
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     
     [companyListTool statusesWithSuccess:^(NSArray *statues) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         if (statues.count < 10) {
             isLoadMore = NO;
             _footer.hidden = YES;
@@ -137,7 +137,6 @@
         [_tableView reloadData];
         [refreshView endRefreshing];
     }  keywords_Id:nil page:self.page failure:^(NSError *error) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
     }];
 }

@@ -156,7 +156,7 @@
     
     //更多
     moreBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    moreBtn.frame = CGRectMake(0, 0, 30, 30);
+    moreBtn.frame = CGRectMake(0, 0, 20, 20);
     [moreBtn setBackgroundImage:[UIImage imageNamed:@"more.png"] forState:UIControlStateNormal];
     [moreBtn addTarget:self action:@selector(playMore) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithCustomView:moreBtn];
@@ -384,6 +384,7 @@
 
         
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"%@",result);
         NSDictionary *dic = [result objectForKey:@"response"];
         int code = [[dic objectForKey:@"code"] intValue];
         if (code == 100) {
@@ -536,12 +537,11 @@
                         
                         
                         //把字典中存的数据也要清空
-                        [self deleteData];
+                        [self deleteDictData];
                         
                         [_dataArray removeObjectsInArray:arr];
                         //删除数组中的数据后要重新设置page
                         _page = _dataArray.count%10==0?((int)_dataArray.count/10==0?0:((int)_dataArray.count/10)-1):(int)_dataArray.count/10;
-
                         
                         [_tableView deleteRowsAtIndexPaths:deleteArray withRowAnimation:UITableViewRowAnimationFade];
                         [_tableView setEditing:NO];
@@ -563,7 +563,7 @@
 }
 
 #pragma mark 清空字典中的对应分类数据
-- (void)deleteData
+- (void)deleteDictData
 {
     NSMutableArray *arr = [[NSMutableArray alloc] initWithCapacity:0];
     switch (_type) {

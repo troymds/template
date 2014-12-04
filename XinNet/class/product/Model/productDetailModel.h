@@ -20,7 +20,6 @@
 @property (nonatomic,strong)NSString *price;
 @property (nonatomic, strong)NSString *read_num;//
 @property (nonatomic, strong)NSString *category_id;//
-@property (nonatomic, strong)NSString *wapUrl;//
-
+@property(nonatomic,retain)NSString *description;
 
 @end

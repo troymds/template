@@ -42,7 +42,7 @@
     [super viewDidLoad];
     self.title =@"市场行情";
     self.view.backgroundColor =[UIColor whiteColor];
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"more.png" highlightedSearch:@"more.png" target:(self) action:@selector(categoryBtnClick:)];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"category_Image.png" highlightedSearch:@"category_Image.png" target:(self) action:@selector(categoryBtnClick:)];
     _moreSelectedBtn =[[UIButton alloc]init];
     _marketArray =[[NSMutableArray alloc]init];
     _cagegoryArray=[[NSMutableArray alloc]init];
@@ -212,26 +212,40 @@
 }
 #pragma mark---分类
 -(void)addMoreView{
-    
-    _moreView =[[UIView alloc]initWithFrame:CGRectMake(kWidth-100, 0, 100, _cagegoryArray.count*31)];
-    _moreView.backgroundColor =[UIColor lightGrayColor];
+    _moreView =[[UIView alloc]initWithFrame:CGRectMake(kWidth-150, 0, 150, _cagegoryArray.count*40+40)];
+    _moreView.backgroundColor =[UIColor whiteColor];
     [self.view addSubview:_moreView];
+    
+    UIButton *allMoreBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    allMoreBtn.frame =CGRectMake(1, 0, 150, 40);
+    allMoreBtn .backgroundColor =HexRGB(0xebe7e7);
+    allMoreBtn.contentHorizontalAlignment =UIControlContentHorizontalAlignmentCenter;
+    [allMoreBtn setTitleColor:HexRGB(0x333333) forState:UIControlStateNormal];
+    [allMoreBtn setTitle:@"全部"forState:UIControlStateNormal];
+    [_moreView addSubview:allMoreBtn];
+    allMoreBtn.tag =35;
+    [allMoreBtn addTarget:self action:@selector(allMoreBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    allMoreBtn.selected = _moreSelectedBtn.selected;
+
+    
     
     for (int i=0; i<_cagegoryArray.count; i++) {
         categoryLestModel *categoryModel =[_cagegoryArray objectAtIndex:i];
-
+        
         UIButton *moreBtn =[UIButton buttonWithType:UIButtonTypeCustom];
-        moreBtn.frame =CGRectMake(1, i%6*31, 99, 30);
-        moreBtn .backgroundColor =[UIColor whiteColor];
+        moreBtn.frame =CGRectMake(0, 41+i%6*41, 150, 40);
+        moreBtn .backgroundColor =HexRGB(0xebe7e7);
         moreBtn.contentHorizontalAlignment =UIControlContentHorizontalAlignmentCenter;
-        [moreBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [moreBtn setTitleColor:HexRGB(0x999999) forState:UIControlStateNormal];
         [moreBtn setTitle:categoryModel.categoryNmae forState:UIControlStateNormal];
         [_moreView addSubview:moreBtn];
         [moreBtn addTarget:self action:@selector(moreBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         moreBtn.selected = _moreSelectedBtn.selected;
-       
+        
         moreBtn.tag = 30+i;
     }
+
+    
 }
 
 -(void)addBigButton
@@ -268,12 +282,21 @@
     }
 -(void)bigButtonClick:(UIButton *)big{
     _moreSelectedBtn.selected =!_moreSelectedBtn.selected;
-
     [_moreView removeFromSuperview];
     [_bigButton removeFromSuperview];
+    
 }
 
 //下拉菜单
+
+-(void)allMoreBtnClick:(UIButton *)all{
+    _moreSelectedBtn.selected =!_moreSelectedBtn.selected;
+    _category_Index =0;
+
+    [_bigButton removeFromSuperview];
+    [_moreView removeFromSuperview];
+    [self addLoadStatus];
+}
 -(void)moreBtnClick:(UIButton *)mor{
     categoryLestModel *categoryModel =[_cagegoryArray objectAtIndex:mor.tag-30];
     _category_Index = categoryModel.typeID;

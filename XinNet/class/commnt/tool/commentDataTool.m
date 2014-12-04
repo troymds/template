@@ -23,6 +23,7 @@
         NSString * message = nil;
         if (code == 100) {
             NSDictionary *array = [[dict objectForKey:@"response"] objectForKey:@"data"];
+            
             if (![array isKindOfClass:[NSNull class]]) {
                 for (NSDictionary * d in array) {
                     commentModel *model = [[commentModel alloc] initWithDictionaryForComment:d];

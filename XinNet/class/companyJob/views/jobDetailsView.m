@@ -95,7 +95,7 @@
                 [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
                 collectionModel *model = [data objectAtIndex:0];
                 [sender setTitle:@"取消收藏" forState:UIControlStateNormal];
-                sender.frame =CGRectMake(120, 8, 80, 30);
+                sender.frame =CGRectMake(180, 8, 60, 30);
 
                 self.collectionId = model.data;
             }else
@@ -113,6 +113,7 @@
             
             [RemindView showViewWithTitle:msg location:MIDDLE];
             [sender setTitle:@"收藏" forState:UIControlStateNormal];
+            sender.frame =CGRectMake(200, 8, 40, 30);
         } collectionId:self.collectionId withFailure:^(NSError *error) {
             
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
