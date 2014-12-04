@@ -152,6 +152,7 @@
 		5595EC9A1A25E2CC000D4AB1 /* reture_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5595EC941A25E2CC000D4AB1 /* reture_left@2x.png */; };
 		5595EC9B1A25E2CC000D4AB1 /* write@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5595EC951A25E2CC000D4AB1 /* write@2x.png */; };
 		5595ECA31A25E2DE000D4AB1 /* nav_home_img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5595EC9D1A25E2DE000D4AB1 /* nav_home_img@2x.png */; };
+		55B47A181A2EADFE00A72F66 /* nav_bgimg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B47A161A2EADFE00A72F66 /* nav_bgimg@2x.png */; };
 		55B4DF2E1A2701E200F7AB54 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F8CE4F1A25815F005A7FDE /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		55B4DF451A27125200F7AB54 /* homeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B4DF441A27125200F7AB54 /* homeModel.m */; };
 		55B4DF491A27126F00F7AB54 /* homeTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B4DF481A27126F00F7AB54 /* homeTool.m */; };
@@ -515,6 +516,7 @@
 		5595EC941A25E2CC000D4AB1 /* reture_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reture_left@2x.png"; sourceTree = "<group>"; };
 		5595EC951A25E2CC000D4AB1 /* write@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "write@2x.png"; sourceTree = "<group>"; };
 		5595EC9D1A25E2DE000D4AB1 /* nav_home_img@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_home_img@2x.png"; sourceTree = "<group>"; };
+		55B47A161A2EADFE00A72F66 /* nav_bgimg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_bgimg@2x.png"; sourceTree = "<group>"; };
 		55B4DF431A27125200F7AB54 /* homeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = homeModel.h; sourceTree = "<group>"; };
 		55B4DF441A27125200F7AB54 /* homeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = homeModel.m; sourceTree = "<group>"; };
 		55B4DF471A27126F00F7AB54 /* homeTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = homeTool.h; sourceTree = "<group>"; };
@@ -1876,6 +1878,7 @@
 		55D539211A22C15A007400F6 /* nav_img */ = {
 			isa = PBXGroup;
 			children = (
+				55B47A161A2EADFE00A72F66 /* nav_bgimg@2x.png */,
 				5505E9881A2D96D9006E17A5 /* collect_selected@2x.png */,
 				5505E9891A2D96D9006E17A5 /* collect0@2x.png */,
 				5505E98A1A2D96D9006E17A5 /* collect1@2x.png */,
@@ -2109,7 +2112,7 @@
 				55D015DF1A22D69D00F9D475 /* MJRefresh.bundle in Resources */,
 				55D539351A22C15A007400F6 /* more@2x.png in Resources */,
 				04AAED0A1A1EE0E300B5254B /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
-				04AFC85F1A2EE51300EDEC6C /* personInfo@2x.png in Resources */,
+				55B47A181A2EADFE00A72F66 /* nav_bgimg@2x.png in Resources */,
 				04AEC4791A242AF30030E3E9 /* addImg@2x.png in Resources */,
 				55B617CC1A240FA300088E39 /* myMsg@2x.png in Resources */,
 				5595ECA31A25E2DE000D4AB1 /* nav_home_img@2x.png in Resources */,
@@ -2392,7 +2395,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: wu guixiang (JB4UYV4U6H)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: wu guixiang (DBA88DPK47)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: wu guixiang (JB4UYV4U6H)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

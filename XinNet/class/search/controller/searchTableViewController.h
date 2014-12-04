@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface searchTableViewController : UITableViewController
+@interface searchTableViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,retain)NSString *titleStr;
 @property(nonatomic)NSInteger searchSelectedIndex;
 @property(nonatomic,retain)NSString *keyWordesIndex;
 @property(nonatomic,retain)NSString *allIndex;
+@property(nonatomic,strong)UITableView *tableView;
 @end

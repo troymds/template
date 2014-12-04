@@ -49,7 +49,6 @@
 -(void)addMBprogressView{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"加载中...";
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     
 }
 
@@ -81,7 +80,6 @@
     _pageNum++;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     [companyJobTool statusesWithSuccess:^(NSArray *statues) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         if (statues.count < 10) {
             isLoadMore = NO;
             _footer.hidden = YES;
@@ -124,6 +122,8 @@
     }
     
     [companyJobTool statusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
         if (statues.count ==0) {
             dataLabel.hidden =NO;
             _tableView.hidden = YES;
@@ -137,7 +137,8 @@
 
         [_tableView reloadData];
     } company_Id:nil keywords_Str:nil page:self.page failure:^(NSError *error) {
-        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
     }];
 }
 
@@ -184,6 +185,7 @@
         cell=[[companyJobCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
         UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
         cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
+        cell.selectionStyle=UITableViewCellSelectionStyleNone;
 
         
         [cell.contentView addSubview:cellLine];

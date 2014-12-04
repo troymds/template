@@ -50,9 +50,9 @@
     _pageNum = 0;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     
-    
+   
+
     [self addBigCompanyScrollView];
-    [self addMBprogressView];
     [self addRefreshViews];
     [self addbusinessBtn];
     [self addLoadStatus];
@@ -60,9 +60,9 @@
     
     _orangLin =[[UIView alloc]init];
     [self.view addSubview:_orangLin];
-    _orangLin.frame =CGRectMake(0, 63+YYBODERH, kWidth/3, 2);
+    _orangLin.frame =CGRectMake(0, YYBODERH-1, kWidth/3, 2);
     _orangLin.backgroundColor =HexRGB(0x38c166);
-
+ [self addMBprogressView];
 }
 - (void)addShowNoDataView
 {
@@ -105,16 +105,19 @@
 
 #pragma mark ____加载数据
 -(void)addLoadStatus{
+   
     _pageNum = 0;
-    if (!isLoadMore) {
-        isLoadMore = YES;
-        _footer.hidden = NO;
-    }
-
+//    if (!isLoadMore) {
+//        isLoadMore = YES;
+//        _footer.hidden = NO;
+//    }
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     if (_selectedBtn.tag ==20) {
 
         [businessTool statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+            
             if (statues.count ==0) {
                 _supplyTablView .hidden = YES;
                 dataLabel.hidden = NO;
@@ -124,16 +127,19 @@
                 dataLabel.hidden = YES;
             }
 
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             [_allBusinessArray removeAllObjects];
             [_allBusinessArray addObjectsFromArray:statues];
             _pageNum = _allBusinessArray.count % 10 + 1;
             [self addLoadTableView];
         } type_ID:@"" page:self.page failure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
         }];
         
     }else if (_selectedBtn.tag==21){
         [businessTool statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             if (statues.count ==0) {
                 _supplyTablView .hidden = YES;
                 dataLabel.hidden = NO;
@@ -142,16 +148,19 @@
                 _supplyTablView .hidden = NO;
                 dataLabel.hidden = YES;
             }
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             [_supplyBusinessArray removeAllObjects];
             [_supplyBusinessArray addObjectsFromArray:statues];
             _pageNum = _supplyBusinessArray.count % 10 + 1;
             [self addLoadTableView];
         } type_ID:@"2" page:self.page  failure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
         }];
     }
     else{
         [businessTool statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             if (statues.count ==0) {
                 _supplyTablView .hidden = YES;
                 dataLabel.hidden = NO;
@@ -161,12 +170,13 @@
                 dataLabel.hidden = YES;
             }
 
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             [_demandBusinessArray removeAllObjects];
             [_demandBusinessArray addObjectsFromArray:statues];
             _pageNum = _demandBusinessArray.count % 10 + 1;
             [self addLoadTableView];
         } type_ID:@"1" page:self.page  failure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
         }];
     }
 }
@@ -206,8 +216,9 @@
                 _footer.hidden = NO;
             }
             [_supplyBusinessArray addObjectsFromArray:statues];
-            [refreshView endRefreshing];
+            
             [self addLoadTableView];
+            [refreshView endRefreshing];
         } type_ID:@"2" page:self.page failure:^(NSError *error) {
         }];
     }
@@ -224,8 +235,9 @@
                 _footer.hidden = NO;
             }
             [_demandBusinessArray addObjectsFromArray:statues];
-            [refreshView endRefreshing];
+           
             [self addLoadTableView];
+             [refreshView endRefreshing];
         } type_ID:@"1" page:self.page  failure:^(NSError *error) {
         }];
     }
@@ -234,7 +246,7 @@
 #pragma mark背景scrollview
 -(void)addBigCompanyScrollView
 {
-    _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, YYBODERH+66, kWidth, kHeight-YYBODERH-64)];
+    _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, YYBODERH+2, kWidth, kHeight-YYBODERH-64)];
     _BigCompanyScrollView.contentSize = CGSizeMake(kWidth*3, _BigCompanyScrollView.frame.size.height);
     _BigCompanyScrollView.showsHorizontalScrollIndicator = NO;
     _BigCompanyScrollView.showsVerticalScrollIndicator = NO;
@@ -317,7 +329,7 @@
             scrollView.contentOffset = CGPointMake(kWidth*2, 0);
         }
         [UIView animateWithDuration:0.01 animations:^{
-            _orangLin.frame = CGRectMake(scrollView.contentOffset.x/3,YYBODERH+63, kWidth/3, 2);
+            _orangLin.frame = CGRectMake(scrollView.contentOffset.x/3,YYBODERH-1, kWidth/3, 2);
         }];
         
 
@@ -411,6 +423,9 @@
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
         businessModel *busineModel =[_allBusinessArray objectAtIndex:indexPath.row];
         cell.textLabel.text =busineModel.title;
+        cell.textLabel.backgroundColor =[UIColor clearColor];
+        cell.selectionStyle=UITableViewCellSelectionStyleNone;
+
         if ([busineModel.typeId isEqualToString:@"2"]) {
             cell.imageView.image = [UIImage imageNamed:@"business_imge.png"];
 
@@ -426,6 +441,8 @@
         if (!cell) {
             cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
             cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
+            cell.selectionStyle=UITableViewCellSelectionStyleNone;
+
         }
         UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
         [cell.contentView addSubview:cellLine];
@@ -433,6 +450,9 @@
         businessModel *busineModel =[_supplyBusinessArray objectAtIndex:indexPath.row];
         cell.textLabel.text =busineModel.title;
         cell.imageView.image = [UIImage imageNamed:@"business_imge.png"];
+        cell.textLabel.backgroundColor =[UIColor clearColor];
+        
+
         return cell;
 
     }else{
@@ -441,6 +461,8 @@
         if (!cell) {
             cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
             cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
+            cell.selectionStyle=UITableViewCellSelectionStyleNone;
+
         }
         UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
         [cell.contentView addSubview:cellLine];
@@ -448,6 +470,8 @@
         businessModel *busineModel =[_demandBusinessArray objectAtIndex:indexPath.row];
         cell.textLabel.text =busineModel.title;
         cell.imageView.image = [UIImage imageNamed:@"business_img.png"];
+        cell.textLabel.backgroundColor =[UIColor clearColor];
+
         return cell;
 
     }
@@ -457,7 +481,7 @@
 -(void)addbusinessBtn{
     
     
-    companyBackView =[[UIView alloc]initWithFrame:CGRectMake(0, 64, kWidth, YYBODERH)];
+    companyBackView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, YYBODERH)];
     [self.view addSubview:companyBackView];
     companyBackView.backgroundColor =HexRGB(0xf8f8f8);
     
@@ -499,7 +523,7 @@
 
 -(void)companyBtnClick:(UIButton *)company
 {
-    [self addMBprogressView];
+    
 
     _selectedBtn = company;
     

@@ -157,7 +157,7 @@
 }
 -(void)addLabel{
     
-    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-64)];
+    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     _backScrollView.userInteractionEnabled=YES;
     _backScrollView.backgroundColor=HexRGB(0xededed);
     [self.view addSubview:_backScrollView];
@@ -170,12 +170,16 @@
     titleLabel.font =[UIFont systemFontOfSize:PxFont(23)];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor =HexRGB(0x3a3a3a);
+    titleLabel.backgroundColor =[UIColor clearColor];
     [_backScrollView addSubview:titleLabel];
     
     
     for (int i=0; i<2; i++) {
         NSArray *titleArr =@[[NSString stringWithFormat:@"时间:%@",businessModel.create_time],[NSString stringWithFormat:@"数量:%@",businessModel.read_num]];
-        UILabel *titleLabel =[[UILabel alloc]initWithFrame:CGRectMake(20+i%3*(kWidth/2), 50, kWidth/2-40, 20)];
+        UILabel *titleLabel =[[UILabel alloc]initWithFrame:CGRectMake(20+i%3*(kWidth/2), 50, 200, 20)];
+        if (i==1) {
+            titleLabel.frame =CGRectMake(20+i%3*(kWidth/2), 50, 100, 20);
+        }
         titleLabel.text =titleArr[i];
         titleLabel.textAlignment = NSTextAlignmentLeft;
         titleLabel.backgroundColor =[UIColor clearColor];

@@ -33,6 +33,7 @@
     NSString *_productNstrIndex;
     MJRefreshFooterView *_footer;
     BOOL isLoadMore;//判断是否加载更多
+    UILabel *dataLabel;
 }
 @property(nonatomic ,strong)UIScrollView *BigCompanyScrollView;
 @property (nonatomic,assign) NSInteger pageNum;//页数
@@ -56,13 +57,26 @@
     
     _pageNum = 0;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
-    
-    [self addMBprogressView];
+[self addMBprogressView];
+    [self addBigCompanyScrollView];
 //先拉取分类数据
     [self addLoadcategoryStatus];
-
+   
 }
 
+
+- (void)addShowNoDataView
+{
+    dataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+    dataLabel.textAlignment = NSTextAlignmentCenter;
+    dataLabel.backgroundColor = [UIColor clearColor];
+    dataLabel.text = @"没有数据！";
+    dataLabel.hidden = YES;
+    dataLabel.enabled = NO;
+    [_BigCompanyScrollView addSubview:dataLabel];
+    
+    
+}
 #pragma  mark ------显示指示器
 -(void)addMBprogressView{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -100,7 +114,7 @@
     
     if (_selectedBtn.tag ==21) {
         [productTool statusesWithSuccess:^(NSArray *statues,int code, NSString* message) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
             if (statues.count >0) {
                 if (statues.count < 10) {
                     isLoadMore = NO;
@@ -127,7 +141,6 @@
         }];
     }else if (_selectedBtn.tag==22){
         [productTool statusesWithSuccess:^(NSArray *statues,int code, NSString* message) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count >0) {
                 if (statues.count < 10) {
                     isLoadMore = NO;
@@ -155,7 +168,6 @@
         }];
     }else{
         [productTool statusesWithSuccess:^(NSArray *statues,int code, NSString* message) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count >0) {
                 if (statues.count < 10) {
                     isLoadMore = NO;
@@ -195,65 +207,90 @@
 #pragma mark ----加载数据
 -(void)addLoadStatus
 {
+    
     _pageNum = 0;
 
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
         if (_selectedBtn.tag==21){
         [productTool statusesWithSuccess:^(NSArray *statues,int code, NSString* message) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             if (statues.count > 0) {//有数据
                 isLoadMore = YES;
                 _footer.hidden = NO;
                 [_productArray2 removeAllObjects];
                 [_productArray2 addObjectsFromArray:statues];
+                _supplyTablView.hidden = NO;
+                dataLabel.hidden =YES;
             }else
             {
                 [RemindView showViewWithTitle:message location:MIDDLE];
                 isLoadMore = NO;
                 _footer.hidden = YES;
+                _supplyTablView.hidden =YES;
+                dataLabel.hidden =NO;
+                
             }
 
             // 刷新表格数据
             [self addLodadTableView];
 
         } category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             
         }];
     }else if(_selectedBtn.tag==22){
         [productTool statusesWithSuccess:^(NSArray *statues,int code, NSString* message) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             if (statues.count > 0) {//有数据
                 isLoadMore = YES;
                 _footer.hidden = NO;
                 [_productArray3 removeAllObjects];
                 [_productArray3 addObjectsFromArray:statues];
+                _demandTablView.hidden = NO;
+                dataLabel.hidden = YES;
             }else
             {
                 [RemindView showViewWithTitle:message location:MIDDLE];
                 isLoadMore = NO;
                 _footer.hidden = YES;
+                _demandTablView.hidden = YES;
+                dataLabel.hidden = NO;
             }
             [self addLodadTableView];
 
         }category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             
         }];
     }else if(_selectedBtn.tag==20){
 
     [productTool statusesWithSuccess:^(NSArray *statues,int code, NSString* message) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
         if (statues.count > 0) {//有数据
             isLoadMore = YES;
             _footer.hidden = NO;
             [_productArray removeAllObjects];
             [_productArray addObjectsFromArray:statues];
+            _allTableView.hidden = NO;
+            dataLabel.hidden = YES;
         }else
         {
             [RemindView showViewWithTitle:message location:MIDDLE];
             isLoadMore = NO;
             _footer.hidden = YES;
+            _allTableView.hidden = YES;
+            dataLabel.hidden = NO;
         }
         [self addLodadTableView];
 
     }category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
-        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
     }];
     }
 }
@@ -261,7 +298,7 @@
 #pragma mark背景scrollview
 -(void)addBigCompanyScrollView
 {
-    _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, YYBORDERH+64, kWidth, kHeight-YYBORDERH-64)];
+    _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, YYBORDERH, kWidth, kHeight-YYBORDERH-64)];
     _BigCompanyScrollView.contentSize = CGSizeMake(kWidth*3, _BigCompanyScrollView.frame.size.height);
     _BigCompanyScrollView.showsHorizontalScrollIndicator = NO;
     _BigCompanyScrollView.showsVerticalScrollIndicator = NO;
@@ -269,10 +306,11 @@
     _BigCompanyScrollView.bounces = NO;
     _BigCompanyScrollView.tag = 9999;
     _BigCompanyScrollView.userInteractionEnabled = YES;
-    _BigCompanyScrollView.backgroundColor =HexRGB(0xe6e3e4);
+    _BigCompanyScrollView.backgroundColor =[UIColor whiteColor];
     
     _BigCompanyScrollView.delegate = self;
     [self.view addSubview:_BigCompanyScrollView];
+    [self addShowNoDataView];
     [self addBusinessAllTableview];
 
     [self addBusinessDemandTableview];
@@ -289,6 +327,7 @@
     _allTableView.backgroundColor =[UIColor whiteColor];
     _allTableView.delegate =self;
     _allTableView.dataSource = self;
+    _allTableView.hidden =NO;
 }
 #pragma mark 供应
 -(void)addBusinessSuplyTableview
@@ -450,7 +489,10 @@
         productCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
         if (!cell) {
             cell=[[productCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
+           
+
         }
+         cell.selectionStyle=UITableViewCellSelectionStyleNone;
         UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
         [cell.contentView addSubview:cellLine];
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
@@ -471,6 +513,7 @@
         if (!cell) {
             cell=[[productCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
         }
+         cell.selectionStyle=UITableViewCellSelectionStyleNone;
         UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
         [cell.contentView addSubview:cellLine];
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
@@ -491,6 +534,7 @@
         if (!cell) {
             cell=[[productCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
         }
+         cell.selectionStyle=UITableViewCellSelectionStyleNone;
         UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];            [_productArray removeAllObjects];
 
         [cell.contentView addSubview:cellLine];
@@ -511,7 +555,7 @@
 
 -(void)addbusinessBtn{
     
-    companyBackView =[[UIView alloc]initWithFrame:CGRectMake(0, 62, kWidth, YYBORDERH)];
+    companyBackView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, YYBORDERH)];
     [self.view addSubview:companyBackView];
     companyBackView.backgroundColor =HexRGB(0xe1e9e9);
     
@@ -561,16 +605,28 @@
 }
 #pragma mark ____加载分类数据
 -(void)addLoadcategoryStatus{
+    
     [categoryLestTool statusesWithSuccess:^(NSArray *statues) {
-        [_categoryArray removeAllObjects];
-        [_categoryArray addObjectsFromArray:statues];
-        //成功获得分类数据后，1 加ScrollView和table   2 加刷新控件   3 添加button并获取分类详情数据
-        [self addBigCompanyScrollView];
-        [self addRefreshViews];
-        [self addbusinessBtn];
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+        if (statues.count>0) {
+            [_categoryArray removeAllObjects];
+            [_categoryArray addObjectsFromArray:statues];
+            //成功获得分类数据后，1 加ScrollView和table   2 加刷新控件   3 添加button并获取分类详情数据
+            [self addBigCompanyScrollView];
+            [self addRefreshViews];
+            [self addbusinessBtn];
+            _allTableView.hidden = NO;
+            dataLabel.hidden =YES;
+        }else{
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            _allTableView.hidden = YES;
+            dataLabel.hidden =NO;
+        }
+        
 
     } entity_Type:@"4" failure:^(NSError *error) {
-        
+  
     }];
 }
 -(void)companyBtnClick:(UIButton *)company

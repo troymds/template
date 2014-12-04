@@ -161,7 +161,7 @@
 -(void)addheaderView{
     
     
-    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, kWidth, kHeight-114)];
+    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-114)];
     _backScrollView.userInteractionEnabled=YES;
     _backScrollView.backgroundColor=HexRGB(0xededed);
     [self.view addSubview:_backScrollView];

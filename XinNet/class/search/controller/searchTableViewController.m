@@ -49,20 +49,20 @@
     _companyJobArray =[NSMutableArray array];
     _productArray =[NSMutableArray array];
     _pageNum = 0;
-    self.page = [NSString stringWithFormat:@"%d",_pageNum];
-
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.page = [NSString stringWithFormat:@"%ld",(long)_pageNum];
+    [self addShowNoDataView];
     [self addLoadStatuss];
+    [self addTableView];
     [self addMBprogressView];
     [self addRefreshViews];
-   
+    self.view.backgroundColor =[UIColor whiteColor];
 }
 
 #pragma  mark ------显示指示器
 -(void)addMBprogressView{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"加载中...";
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+   
     
     
 }
@@ -101,12 +101,25 @@
     
     
 }
+-(void)addTableView{
+    _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64) style:UITableViewStylePlain];
+    _tableView.delegate =self;
+    _tableView.dataSource =self;
+    _tableView.hidden = NO;
+    _tableView.backgroundColor =[UIColor whiteColor];
+    _tableView.showsHorizontalScrollIndicator = NO;
+    _tableView.showsVerticalScrollIndicator = NO;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    [self.view addSubview:_tableView];
+}
 #pragma mark---加载数据
 -(void)addLoadStatus:(MJRefreshBaseView *)refershview {
         //更新page
-    _pageNum++;
-    self.page = [NSString stringWithFormat:@"%d",_pageNum];
-    if (_searchSelectedIndex==200) {
+    _pageNum =  _pageNum + 1;
+    
+    self.page = [NSString stringWithFormat:@"%ld",(long)_pageNum];
+       if (_searchSelectedIndex==200) {
         [productTool statusesWithSuccess:^(NSArray *statues) {
             if (statues.count < 10) {
                 isLoadMore = NO;
@@ -122,13 +135,7 @@
             [self.tableView reloadData];
             [self addShowNoDataView];
             
-            if (_productArray.count ==0) {
-                dataLabel.hidden = NO;
-                [self.tableView removeFromSuperview];
-            }else{
-                dataLabel.hidden = YES;
-                self.tableView.hidden = NO;
-            }
+           
             [refershview endRefreshing];
         } company_Id:@"" keywords_Id:_keyWordesIndex category_Id:@"" page:self.page failure:^(NSError *error) {
             
@@ -152,13 +159,7 @@
                     [self.tableView reloadData];
                     [self addShowNoDataView];
                     
-                    if (_businessArray.count ==0) {
-                        dataLabel.hidden = NO;
-                        [self.tableView removeFromSuperview];
-                    }else{
-                        dataLabel.hidden = YES;
-                        self.tableView.hidden = NO;
-                    }
+                    
                     [refershview endRefreshing];
 
                 } keywords_Id:_keyWordesIndex type_ID:@"" company_Id:@"" page:self.page failure:^(NSError *error) {
@@ -183,14 +184,7 @@
             [self.tableView reloadData];
             [self addShowNoDataView];
             
-            if (_companyJobArray.count ==0) {
-                dataLabel.hidden = NO;
-            [self.tableView removeFromSuperview];
-            }else{
-                dataLabel.hidden = YES;
-                self.tableView.hidden = NO;
-            }
-            [refershview endRefreshing];
+                        [refershview endRefreshing];
 
         } company_Id:@"" keywords_Str:_keyWordesIndex page:self.page failure:^(NSError *error) {
             
@@ -204,65 +198,73 @@
         isLoadMore = YES;
         _footer.hidden = NO;
     }
-    self.page = [NSString stringWithFormat:@"%d",_pageNum];
+    self.page = [NSString stringWithFormat:@"%ld",(long)_pageNum];
     
 
     if (_searchSelectedIndex==200) {
         [productTool statusesWithSuccess:^(NSArray *statues) {
+             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            if (statues.count >0) {
+                dataLabel.hidden = YES;
+                _tableView.hidden =NO;
+            }else{
+                dataLabel.hidden = NO;
+                _tableView.hidden = YES;
+            }
+            [_productArray removeAllObjects];
+
             [_productArray addObjectsFromArray: statues];
              _pageNum = _productArray.count % 10 + 1;
             [self.tableView reloadData];
             [self addShowNoDataView];
             
-            if (_productArray.count ==0) {
-                dataLabel.hidden = NO;
-                [self.tableView removeFromSuperview];
-            }else{
-                dataLabel.hidden = YES;
-                self.tableView.hidden = NO;
-            }
         } company_Id:@"" keywords_Id:_keyWordesIndex category_Id:@"" page:self.page failure:^(NSError *error) {
+                        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             
         }   ];
     }else if (_searchSelectedIndex ==201){
         [businessTool statusesWithSuccess:^(NSArray *statues) {
+             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            if (statues.count >0) {
+                dataLabel.hidden = YES;
+                _tableView.hidden =NO;
+            }else{
+                dataLabel.hidden = NO;
+                _tableView.hidden = YES;
+            }
+            [_businessArray removeAllObjects];
             [_businessArray addObjectsFromArray: statues];
-            _pageNum = _businessArray.count % 10 + 1;
+//            _pageNum = _businessArray.count % 10 + 1;
 
             [self.tableView reloadData];
             [self addShowNoDataView];
             
-            if (_businessArray.count ==0) {
-                dataLabel.hidden = NO;
-                [self.tableView removeFromSuperview];
-            }else{
-                dataLabel.hidden = YES;
-                self.tableView.hidden = NO;
-            }
-            
         } keywords_Id:_keyWordesIndex type_ID:@"" company_Id:@"" page:self.page failure:^(NSError *error) {
-            
+             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         }];
         
         
     }else{
         [companyJobTool statusesWithSuccess:^(NSArray *statues) {
+             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            if (statues.count >0) {
+            dataLabel.hidden = YES;
+            _tableView.hidden =NO;
+        }else{
+            dataLabel.hidden = NO;
+            _tableView.hidden = YES;
+        }
+            [_companyJobArray removeAllObjects];
             [_companyJobArray addObjectsFromArray: statues];
             _pageNum = _companyJobArray.count % 10 + 1;
 
             [self.tableView reloadData];
             [self addShowNoDataView];
             
-            if (_companyJobArray.count ==0) {
-                dataLabel.hidden = NO;
-                [self.tableView removeFromSuperview];
-            }else{
-                dataLabel.hidden = YES;
-                self.tableView.hidden = NO;
-            }
             
         } company_Id:@"" keywords_Str:_keyWordesIndex page:self.page  failure:^(NSError *error) {
-            
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES]; 
         }];
     }
 }
@@ -336,6 +338,7 @@
         if (!proCell) {
             proCell =[[productCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:proIndexfierCell];
         }
+         proCell.selectionStyle=UITableViewCellSelectionStyleNone;
         proCell.selectionStyle =UITableViewCellSelectionStyleNone;
         
         productModel *proModel =[_productArray objectAtIndex:indexPath.row];
@@ -357,6 +360,7 @@
         if (!Cell) {
             Cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfierCell];
         }
+         Cell.selectionStyle=UITableViewCellSelectionStyleNone;
         Cell.selectionStyle =UITableViewCellSelectionStyleNone;
         businessModel *busineModel =[_businessArray objectAtIndex:indexPath.row];
         Cell.textLabel.text =busineModel.title;
@@ -369,6 +373,8 @@
         }        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
         [Cell.contentView addSubview:cellLine];
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
+        Cell.textLabel.backgroundColor =[UIColor clearColor];
+
         return Cell;
 
         
@@ -378,6 +384,8 @@
         if (!jobCell) {
             jobCell =[[companyJobCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:jobIndexfierCell];
         }
+        jobCell.selectionStyle=UITableViewCellSelectionStyleNone;
+
         jobCell.selectionStyle =UITableViewCellSelectionStyleNone;
         companyJobModel *jobModel =[_companyJobArray objectAtIndex:indexPath.row];
         jobCell.nameLabel.text =jobModel.title;

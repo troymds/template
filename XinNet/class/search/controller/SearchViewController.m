@@ -45,7 +45,7 @@
 -(void)addChooseClass{
     
     
-   UIView *backClassView =[[UIView alloc]initWithFrame:CGRectMake(YYBODERW, YYBODERY+64, BtnWidth, 45)];
+   UIView *backClassView =[[UIView alloc]initWithFrame:CGRectMake(YYBODERW, YYBODERY, BtnWidth, 45)];
     [self.view addSubview:backClassView];
     backClassView.backgroundColor =[UIColor lightGrayColor];
     
@@ -55,7 +55,7 @@
     [classBtn setTitleColor:HexRGB(0xc3c3c3) forState:UIControlStateNormal];
     classBtn.backgroundColor =[UIColor whiteColor];
     classBtn.contentHorizontalAlignment =UIControlContentHorizontalAlignmentLeft;
-    classBtn.frame =CGRectMake(YYBODERW+1, YYBODERY+65, kWidth-YYBODERW*2-2, 43);
+    classBtn.frame =CGRectMake(YYBODERW+1, YYBODERY+1, kWidth-YYBODERW*2-2, 43);
     [classBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [classBtn setImage:[UIImage imageNamed:@"menu_up_img.png"] forState:UIControlStateNormal];
     [classBtn setImage:[UIImage imageNamed:@"menu_down_img.png"] forState:UIControlStateSelected];
@@ -64,17 +64,20 @@
     classBtn.selected = YES;
     
     
-    UIView *backView =[[UIView alloc]initWithFrame:CGRectMake(kWidth-YYBODERW*2-40 , 5, 1, 35)];
+    UIView *backView =[[UIView alloc]initWithFrame:CGRectMake(BtnWidth-45 , 5, 1, 35)];
     [classBtn addSubview:backView];
     backView.backgroundColor =[UIColor lightGrayColor];
     
-    UIView *backLineField =[[UIView alloc]initWithFrame:CGRectMake(YYBODERW-1, 131, BtnWidth+2, 45)];
+    UIView *backLineField =[[UIView alloc]initWithFrame:CGRectMake(YYBODERW-1, 91, BtnWidth+2, 45)];
     [self.view addSubview:backLineField];
     backLineField.backgroundColor =[UIColor lightGrayColor];
     
-     keyText =[[UITextField alloc]initWithFrame:CGRectMake(YYBODERW, 132, BtnWidth, 43)];
+     keyText =[[UITextField alloc]initWithFrame:CGRectMake(YYBODERW, 92, BtnWidth, 43)];
     [self.view addSubview:keyText];
     keyText.delegate =self;
+//    keyText.textAlignment = NSTextAlignmentCenter;
+    keyText.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+
     keyText.borderStyle =UITextBorderStyleNone;
     keyText.backgroundColor =HexRGB(0xffffff);
     keyText.placeholder =@"   请输入关键词";
@@ -87,7 +90,7 @@
     [self.view addSubview:searchBtn];
     searchBtn.backgroundColor =HexRGB(0x9be4aa);
     searchBtn.contentHorizontalAlignment =UIControlContentHorizontalAlignmentCenter;
-    searchBtn.frame =CGRectMake(YYBODERW, 270, kWidth-YYBODERW*2, 42);
+    searchBtn.frame =CGRectMake(YYBODERW, 200, kWidth-YYBODERW*2, 42);
     [searchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [searchBtn addTarget:self action:@selector(searchBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -122,7 +125,7 @@
 -(void)addclassMenu{
     
     
-     backMenuView =[[UIView alloc]initWithFrame:CGRectMake(YYBODERW, YYBODERY+110, kWidth-YYBODERW*2, 91)];
+     backMenuView =[[UIView alloc]initWithFrame:CGRectMake(YYBODERW, YYBODERY+46, kWidth-YYBODERW*2, 91)];
     [self.view addSubview:backMenuView];
     backMenuView.backgroundColor =[UIColor lightGrayColor];
     
