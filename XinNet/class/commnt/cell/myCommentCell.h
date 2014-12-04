@@ -21,7 +21,7 @@
 #define useNameH 20
 #define detailContentH 35
 #define dateContentH 20
-#define detailFontSize 12
+#define detailFontSize 14
 #define KdetailW kWidth - leftSpace - leftSpace - avatarW - nameBwnavata
 
 @interface myCommentCell : UITableViewCell

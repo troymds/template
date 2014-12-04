@@ -22,7 +22,7 @@
 
 @end
 
-@interface YYalertView : UIView<UITextFieldDelegate>
+@interface YYalertView : UIView<UITextFieldDelegate,UITextViewDelegate>
 {
     UIImageView *bgView;
     YYSearchButton *findBtn;
