@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04AA81B61A2FFAEC00245C7A /* modify@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AA81B51A2FFAEC00245C7A /* modify@2x.png */; };
 		04AAECBF1A1ED11800B5254B /* MoreListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AAECBD1A1ED11800B5254B /* MoreListView.m */; };
 		04AAECC41A1ED14700B5254B /* SettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AAECC11A1ED14700B5254B /* SettingController.m */; };
 		04AAECC51A1ED14700B5254B /* AdviceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AAECC31A1ED14700B5254B /* AdviceController.m */; };
@@ -272,6 +273,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04AA81B51A2FFAEC00245C7A /* modify@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "modify@2x.png"; sourceTree = "<group>"; };
 		04AAECBC1A1ED11800B5254B /* MoreListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreListView.h; sourceTree = "<group>"; };
 		04AAECBD1A1ED11800B5254B /* MoreListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreListView.m; sourceTree = "<group>"; };
 		04AAECC01A1ED14700B5254B /* SettingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingController.h; sourceTree = "<group>"; };
@@ -1654,6 +1656,7 @@
 			isa = PBXGroup;
 			children = (
 				04AFC81A1A2E95BB00EDEC6C /* publish@2x.png */,
+				04AA81B51A2FFAEC00245C7A /* modify@2x.png */,
 				04AEC4821A242CDF0030E3E9 /* box@2x.png */,
 				04AEC4831A242CDF0030E3E9 /* boxSelected@2x.png */,
 				04AEC4801A242CA20030E3E9 /* mySubscirp@2x.png */,
@@ -2139,6 +2142,7 @@
 				55B617CD1A240FA300088E39 /* mySubscrip@2x.png in Resources */,
 				55C5365A1A2C6E0200172230 /* fail_image2@2x.png in Resources */,
 				04AEC4811A242CA20030E3E9 /* mySubscirp@2x.png in Resources */,
+				04AA81B61A2FFAEC00245C7A /* modify@2x.png in Resources */,
 				04AEC4841A242CDF0030E3E9 /* box@2x.png in Resources */,
 				5505E98D1A2D96D9006E17A5 /* collect1@2x.png in Resources */,
 			);

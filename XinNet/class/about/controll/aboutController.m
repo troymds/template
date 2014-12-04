@@ -59,16 +59,15 @@
         } AboutFailure:^(NSError *error) {
             
         } ];
-
     }
 }
 
 - (void)addViewWithModel:(aboutModel *)model
 {
-        
+    CGFloat leftDistance = 10;    //左边距
     CGFloat topDistance = 10;  //图片距离顶部的距离
-    CGFloat imgWidth = kWidth-30;   //图片宽度
-    CGFloat imgHeight= 110;   //图片高度
+    CGFloat imgWidth = kWidth-leftDistance*2;   //图片宽度
+    CGFloat imgHeight= 134;   //图片高度
     
     //顶部图片
     UIImageView *topImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
@@ -77,7 +76,6 @@
     [topImg setImageWithURL:[NSURL URLWithString:abModel.company_logo] placeholderImage:placeHoderImage3];
     [self.view addSubview:topImg];
     
-    CGFloat leftDistance = 10;    //左边距
     CGFloat width = kWidth - leftDistance*2;    //列表宽度
     CGFloat height = 35;   //列表高度
     

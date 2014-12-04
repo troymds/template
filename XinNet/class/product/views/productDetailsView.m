@@ -93,7 +93,7 @@
                 [RemindView showViewWithTitle:msg location:MIDDLE];
             }
             
-        } entityId:_productIndex entityType:@"1" withFailure:^(NSError *error) {
+        } entityId:_productIndex entityType:@"4" withFailure:^(NSError *error) {
             
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         }];

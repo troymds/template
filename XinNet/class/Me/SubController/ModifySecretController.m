@@ -53,18 +53,21 @@
     _originField = [[TextListView alloc] initWithFrame:CGRectMake(0,44*0, kWidth-11*2, 44)];
     [_originField setTitle:@"原密码:"];
     _originField.textField.delegate = self;
+    _originField.textField.secureTextEntry = YES;
     _originField.textField.placeholder = @"请输入您的初始密码";
     [bgView addSubview:_originField];
     
     _newField = [[TextListView alloc] initWithFrame:CGRectMake(0,44*1, kWidth-11*2, 44)];
     [_newField setTitle:@"新密码:"];
     _newField.textField.delegate = self;
+    _newField.textField.secureTextEntry = YES;
     _newField.textField.placeholder = @"6-20为字母、数字结合";
     [bgView addSubview:_newField];
 
     _repeatField = [[TextListView alloc] initWithFrame:CGRectMake(0,44*2, kWidth-11*2, 44)];
     [_repeatField setTitle:@"重复密码:"];
     _repeatField.textField.delegate = self;
+    _repeatField.textField.secureTextEntry = YES;
     _repeatField.textField.placeholder = @"6-20为字母、数字结合";
     [bgView addSubview:_repeatField];
     

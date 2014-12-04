@@ -10,9 +10,10 @@
 #import "PublishController.h"
 #import "businessDetailsTool.h"
 #import "businessDetailsModel.h"
+#import "ReloadViewDelegate.h"
 
 #define YYBODERW 16
-@interface DemandDetailController ()<UIWebViewDelegate>
+@interface DemandDetailController ()<UIWebViewDelegate,ReloadViewDelegate>
 {
     businessDetailsModel *businessModel;
     UIWebView *marketWebView;
@@ -21,14 +22,6 @@
 @end
 
 @implementation DemandDetailController
-
-
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self addLoadStatus];
-}
 
 
 - (void)viewDidLoad {
@@ -40,20 +33,23 @@
     self.title =@"求购详情";
     
     [self addRightBarButton];
+    
+    [self loadData];
 }
 
 
-//添加导航栏右侧按钮
+#pragma mark 添加导航栏右侧按钮
 - (void)addRightBarButton
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(0, 0,30, 30);
-    [button setBackgroundImage:[UIImage imageNamed:@"edit.png"] forState:UIControlStateNormal];
+    button.frame = CGRectMake(0, 0,60, 30);
+    [button setBackgroundImage:[UIImage imageNamed:@"modify"] forState:UIControlStateNormal];
     [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(rightBarButtonDown) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
 }
 
+#pragma mark 右导航按钮点击
 - (void)rightBarButtonDown
 {
     PublishController *pc = [[PublishController alloc] init];
@@ -64,7 +60,8 @@
 }
 
 
--(void)addLoadStatus{
+#pragma mark  请求数据
+-(void)loadData{
     [businessDetailsTool statusesWithSuccess:^(NSArray *statues) {
         NSDictionary *dict =[statues objectAtIndex:0];
         businessModel =[[businessDetailsModel alloc]init];
@@ -75,22 +72,14 @@
         
         
         
-        [self addLabel];
+        [self addViewWithData];
         
     } opportunity_Id:_businessDetailIndex failure:^(NSError *error) {
         
     }];
 }
-//收藏
--(void)collectClick:(UIButton *)collect{
-    
-}
+
 #pragma mark webViewDelegate
--(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{
-    
-    return YES;
-}
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     
@@ -101,12 +90,10 @@
     if (80+webheight+10>kHeight-64) {
         _backScrollView.contentSize = CGSizeMake(kWidth,80+webheight+10);
     }
-    
-    
-    
-    
 }
--(void)addLabel{
+
+
+-(void)addViewWithData{
     
     _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0,0, kWidth, kHeight-64)];
     _backScrollView.userInteractionEnabled=YES;
@@ -149,8 +136,12 @@
     marketWebView.backgroundColor =[UIColor redColor];
     [_backScrollView addSubview:marketWebView];
     
-    
-    
+}
+
+#pragma mark reloadView_delegate
+- (void)reloadView
+{
+    [self loadData];
 }
 
 
