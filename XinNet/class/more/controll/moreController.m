@@ -31,7 +31,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor =[UIColor whiteColor];
+    self.view.backgroundColor = HexRGB(0xe9f1f6);
     self.title = @"更多内容";
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
@@ -42,6 +42,7 @@
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kWidth,kHeight-64) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    _tableView.backgroundColor = HexRGB(0xe9f1f6);
     _tableView.separatorColor = [UIColor clearColor];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.scrollEnabled = NO;
@@ -62,6 +63,10 @@
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.descLabel.text = [_dataArray objectAtIndex:indexPath.row];
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,49,kWidth, 1)];
+    line.backgroundColor = HexRGB(0xd5d5d5);
+    [cell.contentView addSubview:line];
+    cell.backgroundColor = [UIColor whiteColor];
     return cell;
 }
 

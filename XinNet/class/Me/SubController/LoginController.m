@@ -91,6 +91,7 @@
     
     _userNameField = [[UITextField alloc] initWithFrame:CGRectMake(60,0,width-60,height)];
     _userNameField.placeholder = @"请输入邮箱地址";
+    _userNameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     [bgView addSubview:_userNameField];
     
     
@@ -102,6 +103,7 @@
     
     _secretField = [[UITextField alloc] initWithFrame:CGRectMake(60,height,width-60-40,height)];
     _secretField.secureTextEntry = YES;
+    _secretField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     _secretField.placeholder = @"请输入密码";
     [bgView addSubview:_secretField];
     

@@ -153,8 +153,8 @@
         cell = [[CommentCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
     }
     CommentItem *item = [_dataArray objectAtIndex:indexPath.row];
-    cell.titileLabel.text = item.title;
-    cell.commentLabel.text = item.content;
+    [cell setObject:item];
+    cell.line.frame = CGRectMake(0, [self getCellHeight:indexPath]-1,kWidth,1);
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
@@ -220,7 +220,18 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 120;
+    return [self getCellHeight:indexPath];
+}
+
+- (CGFloat)getCellHeight:(NSIndexPath *)indexPath
+{
+    CGFloat height;
+    CommentItem *item = [_dataArray objectAtIndex:indexPath.row];
+    CGSize size = [AdaptationSize getSizeFromString:item.content Font:[UIFont systemFontOfSize:contentFont] withHight:CGFLOAT_MAX withWidth:commentWidth];
+    
+    height = topDistance+25+5+space*2+size.height+10;
+    NSLog(@"%f",size.height);
+    return height;
 }
 
 

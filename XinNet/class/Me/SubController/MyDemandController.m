@@ -170,7 +170,10 @@
     DemandItem *item = [_dataArray objectAtIndex:indexPath.row];
     cell.titleLabel.text = item.title;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 61, kWidth, 1)];
+    line.backgroundColor = HexRGB(0xd5d5d5);
+    [cell.contentView addSubview:line];
+    
     return cell;
 }
 

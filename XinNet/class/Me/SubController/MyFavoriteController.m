@@ -148,9 +148,9 @@
 {
     //编辑
     editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    editBtn.frame = CGRectMake(0, 0, 60, 30);
-    [editBtn setBackgroundImage:[UIImage imageNamed:@"edit1.png"] forState:UIControlStateNormal];
-    [editBtn setBackgroundImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateSelected];
+    editBtn.frame = CGRectMake(0, 0, 30, 30);
+    [editBtn setBackgroundImage:[UIImage imageNamed:@"edit"] forState:UIControlStateNormal];
+    [editBtn setBackgroundImage:[UIImage imageNamed:@"delete"] forState:UIControlStateSelected];
     [editBtn addTarget:self action:@selector(edit:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithCustomView:editBtn];
     
@@ -280,6 +280,7 @@
         {
             if (![downLoadDict objectForKey:display]) {
                 _page = 0;
+                isFirstLoad = YES;
                 [self loadDataWithType:7];
             }else{
                 [_dataArray removeAllObjects];
@@ -303,6 +304,7 @@
         {
             if (![downLoadDict objectForKey:manager]) {
                 _page = 0;
+                isFirstLoad = YES;
                 [self loadDataWithType:4];
             }else{
                 [_dataArray removeAllObjects];
@@ -628,10 +630,12 @@
     return UITableViewCellEditingStyleDelete | UITableViewCellEditingStyleInsert;
 }
 
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _dataArray.count;
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -642,6 +646,9 @@
     }
     FavoriteItem *item =  [_dataArray objectAtIndex:indexPath.row];
     cell.titleLabel.text =item.title;
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 61,kWidth,1)];
+    line.backgroundColor = HexRGB(0xd5d5d5);
+    [cell addSubview:line];
     return cell;
 }
 

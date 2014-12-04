@@ -136,7 +136,10 @@
     NSString *s = [GTMBase64 stringByEncodingData:data];
     NSString *string = [NSString stringWithFormat:@"data:image/%@;base64,%@",str,s];
     NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:string,@"image", nil];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"上传中...";
     [httpTool postWithPath:@"uploadImage" params:param success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
         int code = [[dic objectForKey:@"code"]intValue];
@@ -147,7 +150,7 @@
             [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
         }
     } failure:^(NSError *error) {
-
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }
@@ -160,7 +163,10 @@
     if (data.length !=0) {
         [param setObject:data forKey:@"image"];
     }
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"上传中...";
     [httpTool postWithPath:@"addTopic" params:param success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic =[result objectForKey:@"response"];
         int code = [[dic objectForKey:@"code"]intValue];
@@ -176,6 +182,7 @@
             [RemindView showViewWithTitle:msg location:MIDDLE];
         }
     } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }

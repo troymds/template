@@ -18,7 +18,7 @@
 #define RenrenAppId @"272485"
 #define RenrenAppKey @"6789fb614d8941a1a64add0dbb8b70ae"
 #define RenrenAppSecret @"3d2a59b71ad145e8b7a5f14256a3be55"
-#define WXAppId @"wx0c00b06c27d5ac8b"
+#define WXAppId @"wx4868b35061f87885"
 #define WXAppSecret @"b18295032d38ad3da43acad2539b56a7"
 
 

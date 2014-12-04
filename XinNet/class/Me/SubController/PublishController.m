@@ -151,6 +151,7 @@
     titleField = [[UITextField alloc] initWithFrame:CGRectMake(60,0,width-60,height)];
     titleField.delegate= self;
     titleField.tag = 1000;
+    titleField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     titleField.placeholder = @"请填写标题,30字以内";
     [bgView addSubview:titleField];
     
@@ -165,6 +166,7 @@
     numField = [[UITextField alloc] initWithFrame:CGRectMake(60,height,width-60,height)];
     numField.delegate = self;
     numField.tag = 1001;
+    numField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     numField.keyboardType = UIKeyboardTypeNumberPad;
     [bgView addSubview:numField];
     
