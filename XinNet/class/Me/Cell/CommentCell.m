@@ -23,7 +23,7 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.backgroundColor = HexRGB(0xe9f1f6);
+        self.backgroundColor = HexRGB(0xededed);
         _titileLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _titileLabel.backgroundColor = [UIColor clearColor];
         _titileLabel.textColor = HexRGB(0x3a3a3a);
@@ -31,7 +31,7 @@
         [self.contentView addSubview:_titileLabel];
         
         bgView = [[UIView alloc] initWithFrame:CGRectZero];
-        bgView.backgroundColor = [UIColor whiteColor];
+        bgView.backgroundColor = HexRGB(0xffffff);
         bgView.layer.cornerRadius = 3.0f;
         bgView.layer.masksToBounds = YES;
         [self.contentView addSubview:bgView];
@@ -53,7 +53,7 @@
 
 - (void)setObject:(CommentItem *)obj
 {
-    _titileLabel.frame = CGRectMake(leftDistance,topDistance,bgWidth,25);
+    _titileLabel.frame = CGRectMake(leftDistance+5,topDistance,bgWidth-10,25);
     _titileLabel.text = obj.title;
     
     CGSize size = [AdaptationSize getSizeFromString:obj.content Font:[UIFont systemFontOfSize:contentFont] withHight:CGFLOAT_MAX withWidth:commentWidth];

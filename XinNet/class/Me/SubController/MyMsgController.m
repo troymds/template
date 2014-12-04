@@ -45,7 +45,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = HexRGB(0xe9f1f6);
+    self.view.backgroundColor = HexRGB(0xededed);
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout  = UIRectEdgeNone;
     }
@@ -99,7 +99,7 @@
     
     _systemTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0,kWidth,kHeight-64)];
     _systemTableView.tag = systemType;
-    _systemTableView.backgroundColor = HexRGB(0xe9f1f6);
+    _systemTableView.backgroundColor = HexRGB(0xededed);
     _systemTableView.delegate = self;
     _systemTableView.dataSource = self;
     _systemTableView.separatorColor = [UIColor clearColor];

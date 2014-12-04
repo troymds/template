@@ -37,7 +37,7 @@
         [self.contentView addSubview:_contentLabel];
         
         //发布图片
-        _publishImg = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _publishImg = [[TJImageView alloc] initWithFrame:CGRectZero];
         [self.contentView addSubview:_publishImg];
         
         //日期

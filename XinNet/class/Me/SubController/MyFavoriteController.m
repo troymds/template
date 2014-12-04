@@ -646,15 +646,16 @@
     }
     FavoriteItem *item =  [_dataArray objectAtIndex:indexPath.row];
     cell.titleLabel.text =item.title;
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 61,kWidth,1)];
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 49,kWidth,1)];
     line.backgroundColor = HexRGB(0xd5d5d5);
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
     [cell addSubview:line];
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 62;
+    return 50;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

@@ -31,7 +31,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = HexRGB(0xe9f1f6);
+    self.view.backgroundColor = HexRGB(0xededed);
     self.title = @"更多内容";
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
@@ -42,7 +42,7 @@
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kWidth,kHeight-64) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    _tableView.backgroundColor = HexRGB(0xe9f1f6);
+    _tableView.backgroundColor = HexRGB(0xededed);
     _tableView.separatorColor = [UIColor clearColor];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.scrollEnabled = NO;

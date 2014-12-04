@@ -29,7 +29,7 @@
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    self.view.backgroundColor =HexRGB(0xffffff);
+    self.view.backgroundColor =HexRGB(0xededed);
     self.title = @"寻找密码";
 
     [self addView];
