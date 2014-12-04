@@ -25,7 +25,7 @@
         [self addSubview:interfaceImage];
         
         
-        nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 11, 240, 20)];
+        nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 11, 220, 20)];
         nameLabel.text = @"展会名称";
         nameLabel.font =[UIFont systemFontOfSize:PxFont(23)];
         [self addSubview:nameLabel];
@@ -34,12 +34,6 @@
         
         
         
-//        companyLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 32, 190, 20)];
-//        companyLabel.text = @"来源";
-//        [self addSubview:companyLabel];
-//        companyLabel.numberOfLines = 0;
-//        companyLabel.font =[UIFont systemFontOfSize:PxFont(18)];
-//        companyLabel.textColor=HexRGB(0x808080);
         
         
         timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 42, 150, 20)];
