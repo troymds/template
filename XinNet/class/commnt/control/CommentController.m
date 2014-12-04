@@ -24,6 +24,7 @@
 @interface CommentController ()<UITableViewDataSource,UITableViewDelegate,YYalertViewDelegate,UITextFieldDelegate>
 {
     BOOL isLoadMore;//是否需要加载更多
+    BOOL isLoading; //是否正在加载
 }
 
 @property (nonatomic, strong) UITableView *table;// 评论table
@@ -40,17 +41,17 @@
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     self.title = @"评论详情";
+    isLoading = NO;
     //背景颜色
     self.view.backgroundColor = HexRGB(0xe6e3e4);
     _dataList = [NSMutableArray array];
     isLoadMore = NO;
     //创建表
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kWidth, KAppH - commentBtnBackH - 44) style:UITableViewStylePlain];
+    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kWidth, KAppH - commentBtnBackH -44) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-//    [table setRowHeight:RowH];
+
     [self.view addSubview:table];
     _table = table;
     //拉取数据
@@ -70,7 +71,7 @@
     commentBtn.contentHorizontalAlignment =UIControlContentVerticalAlignmentCenter;
     [commentBtn setTitle:@"  写评论" forState:UIControlStateNormal];
     [commentBtn setImage:[UIImage imageNamed:@"write.png"] forState:UIControlStateNormal];
-
+    
     commentBtn.backgroundColor =[UIColor whiteColor];
     [commentBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     commentBtn.titleLabel.font =[UIFont systemFontOfSize:20];
@@ -81,13 +82,13 @@
 #pragma mark 拉取数据
 - (void) loadCommentData
 {
-    self.lastId = [NSString stringWithFormat:@"%d",(_dataList.count % 10) + 1];
+    self.lastId = [NSString stringWithFormat:@"%d",0];
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"正在获取评论数据...";
-    
+    isLoading = YES;
     [commentDataTool GetCommentDataWithSuccess:^(NSArray *data,int code, NSString* message) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        
+        isLoading = NO;
         if (code == 100) {
             int count = data.count;
             if (count < 10) {
@@ -120,10 +121,6 @@
         myCommentCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId];
         if (!cell) {
             cell = [[myCommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-            
-//            UIView* cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, RowH - 1, kWidth, 1)];
-//            [cell.contentView addSubview:cellLine];
-//            cellLine.backgroundColor =HexRGB(0xe6e3e4);
         }
         //设置cell数据并刷新
         CGFloat cellH = [self getCellHeight:indexPath.row];
@@ -144,7 +141,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
-
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -199,10 +196,10 @@
         hud.labelText = @"正在发表评论...";
         
         [commentPublished publishCommentWithSuccess:^(NSArray *data, int code, NSString *msg) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [RemindView showViewWithTitle:msg location:MIDDLE];
-        //刷新评论数据
-        
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:msg location:MIDDLE];
+            //刷新评论数据
+            
         } entityID:_entityID entityType:@"1" content:content failure:^(NSError *error) {
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         }];
@@ -213,25 +210,28 @@
 - (void) loadMoreCommentData
 {
     self.lastId = [NSString stringWithFormat:@"%d",[self.lastId intValue] + 1];
-    
+    isLoading = YES;
     [commentDataTool GetCommentDataWithSuccess:^(NSArray *data, int code, NSString *msg) {
+        isLoading = NO;
         if (code == 100) {
             if (data.count > 0) {
                 [_dataList addObjectsFromArray:data];
-                if (data.count == 10) {
-                    isLoadMore = YES;
+                if (data.count < 10) {
+                    isLoadMore = NO;
                 }else
                 {
-                    isLoadMore = NO;
+                    isLoadMore = YES;
                 }
-                
-                [_table reloadData];
+            }else
+            {
+                isLoadMore = NO;
+                [RemindView showViewWithTitle:@"数据加载完毕" location:MIDDLE];
             }
         }else
         {
             isLoadMore = NO;
         }
-        
+        [_table reloadData];
     } entityId:_entityID entityType:@"1" page:self.lastId withFailure:^(NSError *error) {
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
@@ -247,7 +247,9 @@
         NSIndexPath * indexpath = [NSIndexPath indexPathForRow:moreIndex inSection:0];
         if ([[_table cellForRowAtIndexPath:indexpath] isKindOfClass:[morecell class]]) {
             if (scrollView.contentSize.height-scrollView.contentOffset.y<=scrollView.frame.size.height) {
-                [self loadMoreCommentData];
+                if (!isLoading) {
+                    [self loadMoreCommentData];
+                }
             }
         }
     }

@@ -48,7 +48,7 @@
         _userField.keyboardType = UIKeyboardTypeDefault;
         [bgView addSubview:_userField];
         _userField.font =[UIFont systemFontOfSize:25];
-        
+        _userField.delegate = self;
         line1 = [[UIView alloc] initWithFrame:CGRectMake(0,165,kWidth-40, 1)];
         line1.backgroundColor = [UIColor lightGrayColor];
         [bgView addSubview:line1];
@@ -120,6 +120,23 @@
     }
 }
 
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    CGRect frame = bgView.frame;
+    frame.origin.y -= 80;
+    [UIView animateWithDuration:0.3 animations:^{
+        bgView.frame = CGRectMake(frame.origin.x,frame.origin.y, frame.size.width, frame.size.height);
+    }];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    CGRect frame = bgView.frame;
+    frame.origin.y += 80;
+    [UIView animateWithDuration:0.3 animations:^{
+        bgView.frame = CGRectMake(frame.origin.x,frame.origin.y, frame.size.width, frame.size.height);
+    }];
+}
 
 - (void)showView{
     if (bgView.frame.origin.y == kHeight) {

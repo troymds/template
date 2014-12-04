@@ -20,6 +20,8 @@
 @interface markertDetailsView ()<YYalertViewDelegate>
 {
     mardetDetailsModel *mardetModel;
+    UIButton *_collectBtn;//收藏
+    UIButton *_shareBtn;//分享
 }
 @property (nonatomic, strong)NSString *collectionId;
 @end
@@ -34,30 +36,26 @@
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     [self addCollectionAndShareSDK];
-
     [self addLoadStatus];
-     [self addMBprogressView];
-
-}
-#pragma  mark ------显示指示器
--(void)addMBprogressView{
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"加载中...";
     
     
 }
 #pragma mark----加载数据
 -(void)addLoadStatus{
-   
     [mardetDetailsTool statusesWithSuccess:^(NSArray *statues) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *dict = [statues objectAtIndex:0];
-         mardetModel =[[mardetDetailsModel alloc]init];
+        mardetModel =[[mardetDetailsModel alloc]init];
         mardetModel.wapUrl =[dict objectForKey:@"wapUrl"];
+        self.collectionId = [dict objectForKey:@"collection_id"];
+        if ([self.collectionId intValue] != 0) {
+            [ _collectBtn setImage:[UIImage imageNamed:@"collect_selected.png"] forState:UIControlStateNormal];
+        }else
+        {
+            [ _collectBtn setImage:[UIImage imageNamed:@"collect0.png"] forState:UIControlStateNormal];
+        }
         [self addLabel];
     } newsID:_markIndex failure:^(NSError *error) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
+        
     }];
 }
 
@@ -76,76 +74,64 @@
     [backCollectView addSubview:titiLabel];
     titiLabel.backgroundColor =[UIColor clearColor];
     
-    for (int i=0; i<2; i++) {
-        NSArray *titleArr =@[@"收藏",@"分享"];
-        UIButton * collectionBtn =[UIButton buttonWithType:UIButtonTypeCustom];
-        collectionBtn.frame =CGRectMake(160+i%3*40, 8, 40, 30);
-        collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
-        [collectionBtn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"collect%d",i]] forState:UIControlStateNormal];
-        if (i==0) {
-            [collectionBtn setImage:[UIImage imageNamed:@"collect_selected.png"] forState:UIControlStateSelected];
-
-        }
-
-        collectionBtn.tag = 2000+i;
-        [collectionBtn setTitle:titleArr[i] forState:UIControlStateNormal];
-        [collectionBtn setTitleColor:[UIColor colorWithRed:234.0/255.0 green:234.0/255.0 blue:234.0/255.0 alpha:1] forState:UIControlStateNormal];
-        [collectionBtn addTarget:self action:@selector(collectionBtn:) forControlEvents:UIControlEventTouchUpInside];
-        [backCollectView addSubview:collectionBtn];
-    }
+    UIButton * collectionBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    collectionBtn.frame =CGRectMake(160+0%3*40, 8, 40, 30);
     
-   
+    collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
+    [collectionBtn addTarget:self action:@selector(collectionBtn) forControlEvents:UIControlEventTouchUpInside];
+    [backCollectView addSubview:collectionBtn];
+    _collectBtn = collectionBtn;
     
-   
-    
-
+    UIButton * shareBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    shareBtn.frame =CGRectMake(160+1%3*40, 8, 40, 30);
+    [shareBtn setImage:[UIImage imageNamed:@"collect1.png"] forState:UIControlStateNormal];
+    [shareBtn addTarget:self action:@selector(shareBtnBtn) forControlEvents:UIControlEventTouchUpInside];
+    [backCollectView addSubview:shareBtn];
+    _shareBtn = shareBtn;
 }
 
--(void)collectionBtn:(UIButton *)sender{
-        if (sender.tag == 2001) {
-        [self share];
-    }else
+-(void)shareBtnBtn
+{
+    [self share];
+}
+
+-(void)collectionBtn{
+    
+    if ([self.collectionId intValue] == 0 && self.collectionId) {//收藏
+        [collectionHttpTool addCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
+            if (code == 100) {
+                [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
+                collectionModel *model = [data objectAtIndex:0];
+                [_collectBtn setImage:[UIImage imageNamed:@"collect_selected.png"] forState:UIControlStateNormal];
+                
+                self.collectionId = model.data;
+            }else
+            {
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+            }
+            
+        } entityId:_markIndex entityType:@"1" withFailure:^(NSError *error) {
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
+    }else//取消收藏
     {
-        if ([sender.titleLabel.text isEqualToString:@"收藏"]) {//收藏
-            [collectionHttpTool addCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
-                if (code == 100) {
-                    sender.selected=!sender.selected;
-
-                    [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
-                    collectionModel *model = [data objectAtIndex:0];
-                    [sender setTitle:@"取消收藏" forState:UIControlStateNormal];
-                    [sender setImage:[UIImage imageNamed:@"collect_selected.png"] forState:UIControlStateSelected];
-
-                    self.collectionId = model.data;
-                }else
-                {
-                    [RemindView showViewWithTitle:msg location:MIDDLE];
-                }
+        [collectionHttpTool cancleCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
+            if (code == 100) {
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+                [_collectBtn setImage:[UIImage imageNamed:@"collect0.png"] forState:UIControlStateNormal];
                 
-            } entityId:_markIndex entityType:@"1" withFailure:^(NSError *error) {
-                
-                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-            }];
-        }else//取消收藏
-        {
-            [collectionHttpTool cancleCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
-                if (code == 100) {
-                    [RemindView showViewWithTitle:msg location:MIDDLE];
-                    [sender setTitle:@"收藏" forState:UIControlStateNormal];
-                    [sender setImage:[UIImage imageNamed:@"collect.png"] forState:UIControlStateSelected];
-
-                }else
-                {
-                    [RemindView showViewWithTitle:msg location:MIDDLE];
-                }
-
-            } collectionId:self.collectionId withFailure:^(NSError *error) {
-                
-                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-            }];
-        }
-
+            }else
+            {
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+            }
+            
+        } collectionId:self.collectionId withFailure:^(NSError *error) {
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
     }
+    
 }
 
 - (void)share
@@ -236,7 +222,7 @@
     [marketWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:mardetModel.wapUrl]] ];
     [self.view addSubview:marketWebView];
     marketWebView.backgroundColor =[UIColor clearColor];
-
+    
     
     UIView *line =[[UIView alloc]initWithFrame:CGRectMake(0, kHeight-120, kWidth, 1)];
     [self.view addSubview:line];
@@ -251,7 +237,7 @@
     [writeBtn setTitle:@"  评论" forState:UIControlStateNormal];
     writeBtn.backgroundColor =[UIColor whiteColor];
     [writeBtn setImage:[UIImage imageNamed:@"write_pre.png"] forState:UIControlStateNormal];
-
+    
     [writeBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     writeBtn.titleLabel.font =[UIFont systemFontOfSize:20];
     
@@ -263,7 +249,7 @@
     
 }
 -(void)writeBtnClick:(UIButton *)write{
-
+    
     
     CommentController *ctl = [[CommentController alloc] init];
     ctl.entityID = _markIndex;
