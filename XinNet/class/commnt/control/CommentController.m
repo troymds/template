@@ -81,6 +81,7 @@
 #pragma mark 拉取数据
 - (void) loadCommentData
 {
+    NSLog(@"entity_Id:%@ entity_Type:%@",_entityID,_entityType);
     self.lastId = [NSString stringWithFormat:@"%d",(_dataList.count % 10) + 1];
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"正在获取评论数据...";
@@ -107,7 +108,7 @@
         {
             [RemindView showViewWithTitle:message location:MIDDLE];
         }
-    } entityId:_entityID entityType:@"1" page:self.lastId withFailure:^(NSError *error) {
+    } entityId:_entityID entityType:_entityType page:self.lastId withFailure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
@@ -195,6 +196,7 @@
 - (void)btnDown:(UIButton *)btn conent:(NSString *)content
 {
     if (btn.tag == comformType) {// 发布评论
+        NSLog(@"entityType:%@",_entityType);
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.labelText = @"正在发表评论...";
         
@@ -203,7 +205,7 @@
         [RemindView showViewWithTitle:msg location:MIDDLE];
         //刷新评论数据
         
-        } entityID:_entityID entityType:@"1" content:content failure:^(NSError *error) {
+        } entityID:_entityID entityType:_entityType content:content failure:^(NSError *error) {
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         }];
     }
@@ -232,7 +234,7 @@
             isLoadMore = NO;
         }
         
-    } entityId:_entityID entityType:@"1" page:self.lastId withFailure:^(NSError *error) {
+    } entityId:_entityID entityType:_entityType page:self.lastId withFailure:^(NSError *error) {
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }

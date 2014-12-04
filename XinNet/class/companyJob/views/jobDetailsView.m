@@ -193,6 +193,7 @@
 -(void)wirteBtnClick:(UIButton *)write{
     CommentController *ctl = [[CommentController alloc] init];
     ctl.entityID = _jobDetailsIndex;
+    ctl.entityType = @"6";
     [self.navigationController pushViewController:ctl animated:YES];
 }
 

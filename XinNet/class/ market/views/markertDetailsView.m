@@ -267,6 +267,7 @@
     
     CommentController *ctl = [[CommentController alloc] init];
     ctl.entityID = _markIndex;
+    ctl.entityType = @"1";
     [self.navigationController pushViewController:ctl animated:YES];
     
 }

@@ -201,6 +201,7 @@
 -(void)wirteBtnClick:(UIButton *)write{
     CommentController *ctl = [[CommentController alloc] init];
     ctl.entityID = _productIndex;
+    ctl.entityType = @"4";
     [self.navigationController pushViewController:ctl animated:YES];
 }
 

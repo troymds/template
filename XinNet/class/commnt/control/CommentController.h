@@ -10,4 +10,6 @@
 
 @interface CommentController : UIViewController
 @property (nonatomic, strong) NSString *entityID;
+@property (nonatomic,strong) NSString *entityType;
+
 @end
