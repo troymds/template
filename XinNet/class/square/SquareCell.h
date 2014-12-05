@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SquareUserItem.h"
 #import "AdaptationSize.h"
+#import "TJImageView.h"
 
 #define LeftSpace 10
 #define TopSapce 10
@@ -31,7 +32,7 @@
 @property (nonatomic,strong) UIImageView *iconImg;
 @property (nonatomic,strong) UILabel *userNameLabel;
 @property (nonatomic,strong) UILabel *contentLabel;
-@property (nonatomic,strong) UIImageView *publishImg;
+@property (nonatomic,strong) TJImageView *publishImg;
 @property (nonatomic,strong) UILabel *dateLabel;
 @property (nonatomic,strong) UIView *line;
 

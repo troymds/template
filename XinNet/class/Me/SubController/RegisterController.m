@@ -85,7 +85,7 @@
     
     _secretField = [[UITextField alloc] initWithFrame:CGRectMake(60,height,width-60-40,height)];
     _secretField.secureTextEntry = YES;
-    _secretField.placeholder = @"请输入密码";
+    _secretField.placeholder = @"6-20位数字、字母组合";
     _secretField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     [bgView addSubview:_secretField];
     

@@ -18,7 +18,7 @@
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
-        self.backgroundColor = HexRGB(0xe9f1f6);
+        self.backgroundColor = HexRGB(0xededed);
         _bgView = [[UIView alloc] initWithFrame:CGRectZero];
         _bgView.backgroundColor = HexRGB(0xffffff);
         _bgView.layer.cornerRadius = 4;

@@ -27,7 +27,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = HexRGB(0xededed);
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
@@ -50,6 +50,7 @@
     _textView.layer.masksToBounds = YES;
     _textView.layer.cornerRadius = 4.0f;
     _textView.delegate = self;
+    _textView.backgroundColor = HexRGB(0xffffff);
     _textView.font = [UIFont systemFontOfSize:14];
     _textView.text = placeHoldeStr;
     _textView.textColor = HexRGB(0xcdcdcd);

@@ -18,7 +18,7 @@
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
-        CGFloat height = 62;
+        CGFloat height = 50;
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,0,kWidth-60,height)];
         _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.textColor = HexRGB(0x3a3a3a);

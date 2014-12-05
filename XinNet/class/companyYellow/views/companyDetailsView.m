@@ -368,6 +368,7 @@
 -(void)wirteBtnClick:(UIButton *)write{
     CommentController *ctl = [[CommentController alloc] init];
     ctl.entityID = _companyDetailIndex;
+    ctl.entityType = @"2";
     [self.navigationController pushViewController:ctl animated:YES];
 }
 

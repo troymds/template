@@ -27,7 +27,7 @@
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    self.view.backgroundColor =HexRGB(0xe9f1f6);
+    self.view.backgroundColor =HexRGB(0xededed);
     self.title = @"修改密码";
     
     [self addView];

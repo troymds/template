@@ -34,7 +34,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = HexRGB(0xe9f1f6);
+    self.view.backgroundColor = HexRGB(0xededed);
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout  = UIRectEdgeNone;
     }
@@ -56,7 +56,7 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.scrollEnabled = NO;
-    _tableView.backgroundColor = HexRGB(0xe9f1f6);
+    _tableView.backgroundColor = HexRGB(0xededed);
     _tableView.separatorColor = [UIColor clearColor];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
@@ -125,7 +125,7 @@
 {
     if (section == 1) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 10)];
-        view.backgroundColor = HexRGB(0xe9f1f6);
+        view.backgroundColor = HexRGB(0xededed);
         return view;
     }
     return nil;

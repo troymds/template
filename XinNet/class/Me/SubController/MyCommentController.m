@@ -37,7 +37,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = HexRGB(0xe9f1f6);
+    self.view.backgroundColor = HexRGB(0xededed);
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout  = UIRectEdgeNone;
     }
@@ -51,7 +51,7 @@
     _tableView.delegate =self;
     _tableView.dataSource = self;
     _tableView.separatorColor = [UIColor clearColor];
-    _tableView.backgroundColor =HexRGB(0xe9f1f6);
+    _tableView.backgroundColor =HexRGB(0xededed);
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
     
@@ -102,7 +102,10 @@
     }
     NSString *page = [NSString stringWithFormat:@"%d",_page];
     [param setObject:page forKey:@"page"];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
     [httpTool postWithPath:@"getCommentList" params:param success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
         int code = [[dic objectForKey:@"code"] intValue];
@@ -135,6 +138,7 @@
             [RemindView showViewWithTitle:msg location:MIDDLE];
         }
     } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }

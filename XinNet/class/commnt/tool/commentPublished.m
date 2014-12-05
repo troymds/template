@@ -12,7 +12,7 @@
 
 + (void) publishCommentWithSuccess:(successBlock) success entityID:(NSString *)entityId entityType:(NSString *)entityType content:(NSString *)content failure:(failureBlock) failure
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:content,@"content", entityId,@"entity_id",entityType,@"entity_type",@"ios",@"os", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:content,@"content", entityId,@"entity_id",entityType,@"entity_type", nil];
     
     [httpTool postWithPath:@"addComment" params:dic success:^(id JSON) {
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];

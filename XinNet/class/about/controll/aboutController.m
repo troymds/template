@@ -31,7 +31,7 @@
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     self.title = @"关于我们";
-    self.view.backgroundColor =[UIColor whiteColor];
+    self.view.backgroundColor = HexRGB(0xededed);
   
     [self addLoadStatus];
 }
@@ -84,8 +84,11 @@
     NSArray *detailArray = [NSArray arrayWithObjects:model.name,model.company_address,model.company_tel,model.company_email,model.company_website, nil];
     
     UIView *bottomBgView = [[UIView alloc] initWithFrame:CGRectMake(leftDistance,topImg.frame.origin.y+topImg.frame.size.height+10,width,array.count*height)];
+    bottomBgView.backgroundColor = HexRGB(0xffffff);
     bottomBgView.layer.borderColor = HexRGB(0xd5d5d5).CGColor;
     bottomBgView.layer.borderWidth= 1;
+    bottomBgView.layer.cornerRadius = 3.0f;
+    bottomBgView.layer.masksToBounds = YES;
     for (int i = 1 ; i < array.count; i++) {
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,height*i,width,1)];
         line.backgroundColor = HexRGB(0xd5d5d5);

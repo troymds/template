@@ -29,6 +29,8 @@
     MJRefreshFooterView *refreshFootView;
     MJRefreshHeaderView *refreshHeadView;
     SquareHeadView *headView;
+    
+    UIView *panelView;  //图片放大后的背景
 }
 @end
 
@@ -62,6 +64,10 @@
     [self addRefreshView];
     [self loadHeadViewData];
 
+    panelView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth,kHeight)];
+    panelView.backgroundColor = [UIColor clearColor];
+    panelView.alpha = 0;
+    [[UIApplication sharedApplication].keyWindow addSubview:panelView];
 }
 
 
@@ -131,6 +137,7 @@
 {
     headView = [[SquareHeadView alloc] initWithFrame:CGRectMake(0, 0, kWidth,154)];
     headView.iconImg.image = [UIImage imageNamed:@"user_default.png"];
+    headView.iconImg.tag = 999;
     headView.iconImg.delegate = self;
     [headView.loginBtn addTarget:self action:@selector(loginBtnDown) forControlEvents:UIControlEventTouchUpInside];
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,headView.frame.size.height-1,kWidth,1)];
@@ -176,12 +183,16 @@
 #pragma mark 个人头像点击
 - (void)imageViewClick:(TJImageView *)view
 {
-    if (![SystemConfig sharedInstance].isUserLogin) {
-        [RemindView showViewWithTitle:@"您还未登陆,请先登录" location:MIDDLE];
+    if (view.tag == 999) {
+        if (![SystemConfig sharedInstance].isUserLogin) {
+            [RemindView showViewWithTitle:@"您还未登陆,请先登录" location:MIDDLE];
+        }else{
+            PersonalController *pc = [[PersonalController alloc] init];
+            pc.delegate = self;
+            [self.navigationController pushViewController:pc animated:YES];
+        }
     }else{
-        PersonalController *pc = [[PersonalController alloc] init];
-        pc.delegate = self;
-        [self.navigationController pushViewController:pc animated:YES];
+        NSLog(@"%f,%f",view.image.size.width,view.image.size.height);
     }
 }
 
@@ -199,10 +210,8 @@
     }
     NSString *page = [NSString stringWithFormat:@"%d",_page];
     [param setObject:page forKey:@"page"];
-    NSLog(@"page:%@",page);
     [httpTool postWithPath:@"getTopicList" params:param success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"result:%@",result);
         NSDictionary *dic = [result objectForKey:@"response"];
         int code = [[dic objectForKey:@"code"]intValue];
         if (code ==100) {
@@ -274,6 +283,8 @@
     }
     SquareUserItem *item = [_dataArray objectAtIndex:indexPath.row];
     [cell setObject:item];
+    cell.publishImg.delegate = self;
+    cell.publishImg.tag = 1000+indexPath.row;
     cell.line.frame = CGRectMake(0, [self getCellHeight:indexPath]-1,kWidth,1);
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;

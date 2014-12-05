@@ -13,10 +13,11 @@
 @implementation commentDataTool
 + (void) GetCommentDataWithSuccess:(successBlock)success entityId:(NSString *) entityID entityType:(NSString *)entityType page:(NSString *)page withFailure:(failureBlock)failure
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:entityID,@"entity_id",entityType,@"entity_type",page,@"page",@"10",@"pagesize",@"ios",@"os", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:entityID,@"entity_id",entityType,@"entity_type",page,@"page",@"10",@"pagesize", nil];
     
     [httpTool postWithPath:@"getCommentList" params:dic success:^(id JSON) {
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"%@",dict);
         NSMutableArray *statuses =[NSMutableArray array];
         
         int code = [[[dict objectForKey:@"response"] objectForKey:@"code"] intValue];

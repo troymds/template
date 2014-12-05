@@ -111,7 +111,7 @@
         {
             [RemindView showViewWithTitle:message location:MIDDLE];
         }
-    } entityId:_entityID entityType:@"1" page:self.lastId withFailure:^(NSError *error) {
+    } entityId:_entityID entityType:_entityType page:self.lastId withFailure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
@@ -261,8 +261,8 @@
         {
             isLoadMore = NO;
         }
-        [_table reloadData];
-    } entityId:_entityID entityType:@"1" page:self.lastId withFailure:^(NSError *error) {
+        
+    } entityId:_entityID entityType:_entityType page:self.lastId withFailure:^(NSError *error) {
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }

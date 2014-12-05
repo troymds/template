@@ -14,7 +14,6 @@
     
     
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",page,@"page",keywords,@"keywords",category_id,@"category_id" ,nil];
-
     
     [httpTool postWithPath:@"getNewsList" params:dic success:^(id JSON) {
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
