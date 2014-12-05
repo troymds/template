@@ -120,6 +120,7 @@
             if (code == 100) {
                 [RemindView showViewWithTitle:msg location:MIDDLE];
                 [_collectBtn setImage:[UIImage imageNamed:@"collect0.png"] forState:UIControlStateNormal];
+                self.collectionId = @"0";
                 
             }else
             {
