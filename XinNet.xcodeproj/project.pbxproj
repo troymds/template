@@ -39,6 +39,7 @@
 		04AAED0F1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 04AAECFC1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.bundle */; };
 		04AAED101A1EE0E300B5254B /* ShareSDKFlatShareViewUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AAECFD1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.framework */; };
 		04AAED111A1EE0E300B5254B /* ShareSDKShareActionSheet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AAECFE1A1EE0E300B5254B /* ShareSDKShareActionSheet.framework */; };
+		04ABF8F31A3133E200D2D96D /* MagnifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ABF8F21A3133E200D2D96D /* MagnifyView.m */; };
 		04AC927E1A27088900FDEFDD /* user_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AC927D1A27088900FDEFDD /* user_default@2x.png */; };
 		04AC92821A272BDA00FDEFDD /* FindPasswordController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AC92811A272BDA00FDEFDD /* FindPasswordController.m */; };
 		04ADFE3C1A2D41490000B0CC /* CategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ADFE3B1A2D41490000B0CC /* CategoryView.m */; };
@@ -316,6 +317,8 @@
 		04AAECFC1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ShareSDKFlatShareViewUI.bundle; sourceTree = "<group>"; };
 		04AAECFD1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKFlatShareViewUI.framework; sourceTree = "<group>"; };
 		04AAECFE1A1EE0E300B5254B /* ShareSDKShareActionSheet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKShareActionSheet.framework; sourceTree = "<group>"; };
+		04ABF8F11A3133E200D2D96D /* MagnifyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagnifyView.h; sourceTree = "<group>"; };
+		04ABF8F21A3133E200D2D96D /* MagnifyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagnifyView.m; sourceTree = "<group>"; };
 		04AC927D1A27088900FDEFDD /* user_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user_default@2x.png"; sourceTree = "<group>"; };
 		04AC92801A272BDA00FDEFDD /* FindPasswordController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindPasswordController.h; sourceTree = "<group>"; };
 		04AC92811A272BDA00FDEFDD /* FindPasswordController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindPasswordController.m; sourceTree = "<group>"; };
@@ -1566,6 +1569,8 @@
 				04AEC4721A2429130030E3E9 /* TouchLabel.m */,
 				04AEC4741A2429C00030E3E9 /* ProtocolView.h */,
 				04AEC4751A2429C00030E3E9 /* ProtocolView.m */,
+				04ABF8F11A3133E200D2D96D /* MagnifyView.h */,
+				04ABF8F21A3133E200D2D96D /* MagnifyView.m */,
 				04AEC4701A24290A0030E3E9 /* View */,
 				55B617701A240CDA00088E39 /* Cell */,
 				55B6177D1A240CDA00088E39 /* Model */,
@@ -2319,6 +2324,7 @@
 				55D015D61A22D69D00F9D475 /* AFImageRequestOperation.m in Sources */,
 				55B6179A1A240CDA00088E39 /* CommentCell.m in Sources */,
 				556526581A28510B00281504 /* aboutTool.m in Sources */,
+				04ABF8F31A3133E200D2D96D /* MagnifyView.m in Sources */,
 				55B617B81A240F2800088E39 /* GlobalInstance.m in Sources */,
 				F34D52731A25B733001947B0 /* morecell.m in Sources */,
 				556526551A28510B00281504 /* YYSearchButton.m in Sources */,

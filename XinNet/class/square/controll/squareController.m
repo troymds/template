@@ -18,8 +18,9 @@
 #import "UIImageView+WebCache.h"
 #import "MJRefresh.h"
 #import "LoginController.h"
+#import "MagnifyView.h"
 
-@interface squareController ()<UITableViewDataSource,UITableViewDelegate,TJImageViewDelegate,MJRefreshBaseViewDelegate,ReloadViewDelegate>
+@interface squareController ()<UITableViewDataSource,UITableViewDelegate,TJImageViewDelegate,MJRefreshBaseViewDelegate,ReloadViewDelegate,ManifyViewDelegate>
 {
     UITableView *_tableView;
     NSMutableArray *_dataArray;
@@ -192,7 +193,9 @@
             [self.navigationController pushViewController:pc animated:YES];
         }
     }else{
-        NSLog(@"%f,%f",view.image.size.width,view.image.size.height);
+        MagnifyView *magnifyView = [[MagnifyView alloc] initWithImageView:view];
+        magnifyView.delegate  = self;
+        [magnifyView show];
     }
 }
 
