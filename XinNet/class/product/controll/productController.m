@@ -499,7 +499,7 @@
         productModel *proModel =[_productArray objectAtIndex:indexPath.row];
         [cell.hearderImage setImageWithURL:[NSURL URLWithString:proModel.cover] placeholderImage:placeHoderImage2];
         cell.nameLabel.text= proModel.name;
-        cell.companyLabel.text =proModel.name;
+        cell.companyLabel.text =[NSString stringWithFormat:@"所属公司:%@元",proModel.company_name];
         cell.old_priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.old_price];
         cell.priceLabel.text =[NSString stringWithFormat:@"%@元",proModel.price ];
         CGFloat  OldWidth =[proModel.old_price sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(80, 20)].width;

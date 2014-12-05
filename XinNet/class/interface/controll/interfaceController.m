@@ -57,7 +57,7 @@
     [self addBigCompanyScrollView];
     
     [self addLoadcategoryStatus];
-    
+    [self addMBprogressView];
     
 }
 - (void)addShowNoDataView
@@ -109,7 +109,6 @@
     if (_selectedBtn.tag ==21) {
         
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count < 10) {
                 isLoadMore = NO;
                 _footer.hidden = YES;
@@ -128,10 +127,11 @@
         
     }else if (_selectedBtn.tag==22){
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count < 10) {
                 isLoadMore = NO;
                 _footer.hidden = YES;
+                [RemindView showViewWithTitle:@"数据加载完毕" location:BELLOW];
+
             }else
             {
                 isLoadMore = YES;
@@ -145,10 +145,11 @@
         }];
     }else{
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count < 10) {
                 isLoadMore = NO;
                 _footer.hidden = YES;
+                [RemindView showViewWithTitle:@"数据加载完毕" location:BELLOW];
+
             }else
             {
                 isLoadMore = YES;
@@ -158,7 +159,7 @@
             [self addloadTableView];
             [refreshView endRefreshing];
         } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
-            
+
         }];
     }
 }
