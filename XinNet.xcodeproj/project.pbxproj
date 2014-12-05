@@ -146,6 +146,7 @@
 		558954961A31482C008AD588 /* TYMyLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 558954951A31482C008AD588 /* TYMyLabel.m */; };
 		558954991A318A95008AD588 /* delete_img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 558954971A318A95008AD588 /* delete_img@2x.png */; };
 		5589549A1A318A95008AD588 /* sure_img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 558954981A318A95008AD588 /* sure_img@2x.png */; };
+		5589549B1A319F7C008AD588 /* personInfo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AFC85D1A2EE51300EDEC6C /* personInfo@2x.png */; };
 		5595EC8C1A25E299000D4AB1 /* company_img_selected0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5595EC881A25E299000D4AB1 /* company_img_selected0@2x.png */; };
 		5595EC8D1A25E299000D4AB1 /* company_img_selected1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5595EC891A25E299000D4AB1 /* company_img_selected1@2x.png */; };
 		5595EC8E1A25E299000D4AB1 /* company_img0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5595EC8A1A25E299000D4AB1 /* company_img0@2x.png */; };
@@ -2099,6 +2100,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5589549B1A319F7C008AD588 /* personInfo@2x.png in Resources */,
 				55B617C91A240FA300088E39 /* myComment@2x.png in Resources */,
 				04AAED061A1EE0E300B5254B /* ShareSDKLocalizable.strings in Resources */,
 				55B617D01A240FA300088E39 /* right_sore@2x.png in Resources */,
