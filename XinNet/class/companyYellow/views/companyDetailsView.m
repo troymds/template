@@ -18,12 +18,17 @@
 #import "CommentController.h"
 #import "companyDetailTool.h"
 #import "companyDetailsModel.h"
+#import "LoginController.h"
+#import "companyDetailsModel.h"
+#import "ShareView.h"
+#import "YYSearchButton.h"
 #define YYBODER 16
-@interface companyDetailsView ()<YYalertViewDelegate>
+@interface companyDetailsView ()<YYalertViewDelegate,ReloadViewDelegate>
 {
-        companyDetailsModel *companyModel;
+    companyDetailsModel   *companyModel;
     UIScrollView *_backScrollView;
-}
+    UIButton *_collectBtn;
+    }
 @property (nonatomic, strong)NSString *collectionId;
 
 @end
@@ -36,8 +41,8 @@
 
     self.view.backgroundColor =HexRGB(0xe9f1f6);
     
-    [self addShareBtn];
-   
+    
+    [self addCollectionAndShareSDK];
     [self addLoadStatus];
     [self addMBprogressView];
     }
@@ -58,8 +63,8 @@
     _backScrollView.showsHorizontalScrollIndicator = NO;
     [self addImageView];
     }
-//收藏
--(void)addShareBtn{
+//收藏与分享
+-(void)addCollectionAndShareSDK{
     
     
     UIView *backCollectView =[[UIView alloc]init];
@@ -67,27 +72,76 @@
     backCollectView.backgroundColor =[UIColor clearColor];
     self.navigationItem.titleView = backCollectView;
     
-    UILabel *titiLabel =[[UILabel alloc]initWithFrame:CGRectMake(60, 0, 100, 44)];
+    UILabel *titiLabel =[[UILabel alloc]initWithFrame:CGRectMake(63, 0, 100, 44)];
     titiLabel.text =@"企业详情";
     titiLabel.font =[UIFont systemFontOfSize:PxFont(23)];
     [backCollectView addSubview:titiLabel];
     titiLabel.backgroundColor =[UIColor clearColor];
     
+    UIButton * collectionBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    collectionBtn.frame =CGRectMake(180+0%3*30, 8, 30, 30);
     
-    YYSearchButton * collectionBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
-    collectionBtn.frame =CGRectMake(200, 8, 40, 30);
     collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
-    [collectionBtn setTitle:@"分享" forState:UIControlStateNormal];
-    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateHighlighted];
-    
-    
-    
-    [collectionBtn addTarget:self action:@selector(shareBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [collectionBtn addTarget:self action:@selector(collectionBtn) forControlEvents:UIControlEventTouchUpInside];
     [backCollectView addSubview:collectionBtn];
+    _collectBtn = collectionBtn;
+    
+    UIButton * shareBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    shareBtn.frame =CGRectMake(180+1%3*30, 8, 30, 30);
+    [shareBtn setImage:[UIImage imageNamed:@"collect1.png"] forState:UIControlStateNormal];
+    [shareBtn addTarget:self action:@selector(shareBtnBtn) forControlEvents:UIControlEventTouchUpInside];
+    [backCollectView addSubview:shareBtn];
+    
 }
--(void)shareBtnClick:(UIButton *)shar{
-    [self addShare];
+
+-(void)shareBtnBtn{
+    [ShareView showViewWithTitle:@"分享" content:nil description:nil url:nil delegate:self];
+
 }
+-(void)collectionBtn{
+    
+    if ([self.collectionId intValue] == 0 && self.collectionId) {//收藏
+        [collectionHttpTool addCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
+            if (code == 100) {
+                [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
+                collectionModel *model = [data objectAtIndex:0];
+                [_collectBtn setImage:[UIImage imageNamed:@"collect_selected.png"] forState:UIControlStateNormal];
+                
+                self.collectionId = model.data;
+            }else
+            {
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+                LoginController *loginView =[[LoginController alloc]init];
+                loginView.delegate =self;
+                [self.navigationController pushViewController:loginView animated:YES];
+                
+            }
+            
+        } entityId:_companyDetailIndex entityType:@"2" withFailure:^(NSError *error) {
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
+    }else//取消收藏
+    {
+        [collectionHttpTool cancleCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
+            if (code == 100) {
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+                [_collectBtn setImage:[UIImage imageNamed:@"collect0.png"] forState:UIControlStateNormal];
+                self.collectionId = @"0";
+            }else
+            {
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+            }
+            
+        } collectionId:self.collectionId withFailure:^(NSError *error) {
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
+    }
+    
+}
+
+
 #pragma  mark ------显示指示器
 -(void)addMBprogressView{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -114,10 +168,14 @@
         companyModel.city =[dict objectForKey:@"city"];
         companyModel.is_delete =[dict objectForKey:@"is_delete"];
         companyModel.indexID =[dict objectForKey:@"id"];
+        self.collectionId = [dict objectForKey:@"collection_id"];
+        if ([self.collectionId intValue] != 0) {
+            [ _collectBtn setImage:[UIImage imageNamed:@"collect_selected.png"] forState:UIControlStateNormal];
+        }else
+        {
+            [ _collectBtn setImage:[UIImage imageNamed:@"collect0.png"] forState:UIControlStateNormal];
+        }
 
-
-        
-        
         [self addScrollView];
        
           } company_id:_companyDetailIndex CompanyFailure:^(NSError *error) {
@@ -126,87 +184,6 @@
     }];
 }
 
-- (void)addShare
-{
-    //分享的 底ViewControoler
-    id<ISSContainer> container = [ShareSDK container];
-    
-    [container setIPhoneContainerWithViewController:self];
-    
-    NSArray *shareList = [ShareSDK getShareListWithType:
-                          ShareTypeSinaWeibo,
-                          ShareTypeQQ,
-                          ShareTypeQQSpace,
-                          ShareTypeWeixiSession,
-                          ShareTypeWeixiTimeline,
-                          ShareTypeWeixiFav,
-                          ShareTypeSMS,
-                          nil];
-    
-    //分享的内容
-    id<ISSContent> publishContent = nil;
-    NSString *contentString = @"这是一段分享内容";
-    NSString *urlString     = @"www.ebingoo.com";
-    NSString *description   = @"这是一段分享内容";
-    
-    SSPublishContentMediaType shareType = SSPublishContentMediaTypeText;
-    
-    publishContent = [ShareSDK content:contentString
-                        defaultContent:@""
-                                 image:nil
-                                 title:@"易宾购"
-                                   url:urlString
-                           description:description
-                             mediaType:shareType];
-    
-    id<ISSShareOptions> shareOptions =
-    [ShareSDK defaultShareOptionsWithTitle:@""
-                           oneKeyShareList:shareList
-                        cameraButtonHidden:YES
-                       mentionButtonHidden:NO
-                         topicButtonHidden:NO
-                            qqButtonHidden:NO
-                     wxSessionButtonHidden:NO
-                    wxTimelineButtonHidden:NO
-                      showKeyboardOnAppear:NO
-                         shareViewDelegate:nil
-                       friendsViewDelegate:nil
-                     picViewerViewDelegate:nil];
-    
-    //弹出分享菜单
-    [ShareSDK showShareActionSheet:container
-                         shareList:shareList
-                           content:publishContent
-                     statusBarTips:YES
-                       authOptions:nil
-                      shareOptions:shareOptions
-                            result:^(ShareType type,
-                                     SSResponseState state,
-                                     id<ISSPlatformShareInfo> statusInfo,
-                                     id<ICMErrorInfo> error, BOOL end)
-     {
-         if (state == SSPublishContentStateSuccess)
-         {
-             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功!" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-             [alertView show];
-         }
-         else if (state == SSPublishContentStateFail)
-         {
-             if ([error errorCode] == -22003) {
-                 if ([error errorCode] == -22003) {
-                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:@"尚未安装微信,请安装后重试！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                     [alertView show];
-                 }
-             }else if ([error errorCode] == -24002){
-                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:@"尚未安装QQ,请安装后重试！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                 [alertView show];
-             }else if ([error errorCode] == -6004){
-                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:@"尚未安装QQ或者QQ空间客户端，请安装后重试！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                 [alertView show];
-             }
-         }
-     }];
-}
 
 -(void)addImageView{
     
@@ -235,34 +212,6 @@
         
         
     }
-    UIButton * collectionBtn;
-   
-        collectionBtn =[UIButton buttonWithType:UIButtonTypeCustom];
-        collectionBtn.frame =CGRectMake(kWidth-80, 10,40, 50);
-        [collectionBtn setTitle:@"收藏" forState:UIControlStateNormal];
-        [collectionBtn setTitle:@"取消" forState:UIControlStateSelected];
-
-        [collectionBtn addTarget:self action:@selector(collectionBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-        collectionBtn.imageEdgeInsets =UIEdgeInsetsMake(-10, 0, 30, 0);
-        [collectionBtn setImage:[UIImage imageNamed:@"collect0"] forState:UIControlStateNormal];
-        [collectionBtn setImage:[UIImage imageNamed:@"collect_selected.png"] forState:UIControlStateSelected];
-        [line addSubview:collectionBtn];
-        collectionBtn.backgroundColor =[UIColor clearColor];
-        [collectionBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        collectionBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(13)];
-    
-        UIImageView *failImg =[[UIImageView alloc]initWithFrame:CGRectMake(kWidth-80, 43,40, 30 )];
-        [line addSubview:failImg];
-        failImg.backgroundColor =[UIColor whiteColor];
-        failImg.userInteractionEnabled = YES;
-    if (IsIos7) {
-        collectionBtn.titleEdgeInsets=UIEdgeInsetsMake(0, -35, 0, 5);
-        
-    }else{
-        collectionBtn.titleEdgeInsets=UIEdgeInsetsMake(0, -25, 0, 5);
-        
-    }
-        
     
     
     
@@ -302,40 +251,6 @@
     
     
 }
--(void)collectionBtnClick:(UIButton *)sender{
-    
-    if ([sender.titleLabel.text isEqualToString:@"收藏"]) {//收藏
-        [collectionHttpTool addCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
-            if (code == 100) {
-                sender.selected=!sender.selected;
-
-                [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
-                collectionModel *model = [data objectAtIndex:0];
-                [sender setTitle:@"取消" forState:UIControlStateNormal];
-                self.collectionId = model.data;
-            }else
-            {
-                [RemindView showViewWithTitle:msg location:MIDDLE];
-            }
-            
-        } entityId:_companyDetailIndex entityType:@"2" withFailure:^(NSError *error) {
-            
-            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-        }];
-    }else//取消收藏
-    {
-        [collectionHttpTool cancleCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
-            
-            [RemindView showViewWithTitle:msg location:MIDDLE];
-            [sender setTitle:@"收藏" forState:UIControlStateNormal];
-        } collectionId:self.collectionId withFailure:^(NSError *error) {
-            
-            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-        }];
-    }
-    
-    
-}
 
 
 -(void)contentBtnClick:(UIButton *)content{
@@ -368,7 +283,6 @@
 -(void)wirteBtnClick:(UIButton *)write{
     CommentController *ctl = [[CommentController alloc] init];
     ctl.entityID = _companyDetailIndex;
-    ctl.entityType = @"2";
     [self.navigationController pushViewController:ctl animated:YES];
 }
 

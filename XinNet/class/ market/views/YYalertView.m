@@ -9,8 +9,7 @@
 #import "YYalertView.h"
 #import "markertWriteSucess.h"
 #import "RemindView.h"
-#define BGHEIGHT  150
-#define BGHEIGHTw  150//463
+//#define kHeight-208  360
 
 #define BGViewHeight 200
 #define YYborder 20
@@ -26,6 +25,7 @@
         view.backgroundColor = [UIColor blackColor];
         view.alpha = 0.1;
         [self addSubview:view];
+//        NSLog(@"%f",kHeight);
         
         tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDown)];
         [view addGestureRecognizer:tap];
@@ -47,7 +47,7 @@
 
         _userField.keyboardType = UIKeyboardTypeDefault;
         [bgView addSubview:_userField];
-        _userField.font =[UIFont systemFontOfSize:25];
+        _userField.font =[UIFont systemFontOfSize:18];
         _userField.delegate = self;
         line1 = [[UIView alloc] initWithFrame:CGRectMake(0,165,kWidth-40, 1)];
         line1.backgroundColor = [UIColor lightGrayColor];
@@ -66,27 +66,27 @@
         writeLabel.text =@"写评论";
         
                 
-        findBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
-        findBtn.frame = CGRectMake(20, 10,50,20);
+        findBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        findBtn.frame = CGRectMake(20, 10,30,30);
         findBtn.tag = cancleType;
         [findBtn addTarget:self action:@selector(buttonDown:) forControlEvents:UIControlEventTouchUpInside];
-        [findBtn setTitle:@"取消" forState:UIControlStateNormal];
+        [findBtn setImage:[UIImage imageNamed:@"delete_img.png"] forState:UIControlStateNormal];
         findBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
         [findBtn setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
         [bgView addSubview:findBtn];
         
-        registerBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
-        registerBtn.frame = CGRectMake(kWidth-110, 10, 50, 20);
+        registerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        registerBtn.frame = CGRectMake(kWidth-90, 10, 30, 30);
         registerBtn.tag = comformType;
+        [registerBtn setImage:[UIImage imageNamed:@"sure_img.png"] forState:UIControlStateNormal];
         [registerBtn addTarget:self action:@selector(buttonDown:) forControlEvents:UIControlEventTouchUpInside];
-        [registerBtn setTitle:@"确定" forState:UIControlStateNormal];
         registerBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
         [registerBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [bgView addSubview:registerBtn];
         [self addSubview:bgView];
         
         [UIView animateWithDuration:0.3 animations:^{
-            bgView.frame = CGRectMake(YYborder,BGHEIGHT,  kWidth-40,BGViewHeight);
+            bgView.frame = CGRectMake(YYborder,kHeight-208,  kWidth-40,BGViewHeight);
         }];
         NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
         if ([user valueForKey:@"userName"]) {
@@ -114,7 +114,7 @@
             [subView  resignFirstResponder];
             CGRect frame = bgView.frame;
             [UIView animateWithDuration:0.3 animations:^{
-                bgView.frame = CGRectMake(frame.origin.x,BGHEIGHT, frame.size.width, frame.size.height);
+                bgView.frame = CGRectMake(frame.origin.x,kHeight-208, frame.size.width, frame.size.height);
             }];
         }
     }
@@ -123,7 +123,13 @@
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
     CGRect frame = bgView.frame;
-    frame.origin.y -= 80;
+    if (IsIos7) {
+        frame.origin.y -= kHeight-318;
+
+    }else{
+        frame.origin.y -= 220;
+
+    }
     [UIView animateWithDuration:0.3 animations:^{
         bgView.frame = CGRectMake(frame.origin.x,frame.origin.y, frame.size.width, frame.size.height);
     }];
@@ -141,7 +147,7 @@
 - (void)showView{
     if (bgView.frame.origin.y == kHeight) {
         [UIView animateWithDuration:0.3 animations:^{
-            bgView.frame = CGRectMake(YYborder,BGHEIGHT,  kWidth-40,BGViewHeight);
+            bgView.frame = CGRectMake(YYborder,kHeight-208,  kWidth-40,BGViewHeight);
         }];
     }
     [[[UIApplication sharedApplication] keyWindow] addSubview:self];
@@ -179,7 +185,7 @@
     
     [textField resignFirstResponder];
     [UIView animateWithDuration:0.3 animations:^{
-        bgView.frame = CGRectMake(YYborder,BGHEIGHT, kWidth-40,BGViewHeight);
+        bgView.frame = CGRectMake(YYborder,kHeight-208, kWidth-40,BGViewHeight);
     }];
     return YES;
 }

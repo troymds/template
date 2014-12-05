@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "YYSearchButton.h"
 #define cancleType 2001
 #define comformType 2002
 #define USERNAME_TYPE 5000
@@ -25,8 +24,8 @@
 @interface YYalertView : UIView<UITextFieldDelegate,UITextViewDelegate>
 {
     UIImageView *bgView;
-    YYSearchButton *findBtn;
-    YYSearchButton *registerBtn;
+    UIButton *findBtn;
+    UIButton *registerBtn;
     UITapGestureRecognizer *tap;
     UITapGestureRecognizer *tap1;
     UIView *line1;

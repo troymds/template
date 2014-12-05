@@ -57,7 +57,7 @@
     
     _pageNum = 0;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
-[self addMBprogressView];
+    [self addMBprogressView];
     [self addBigCompanyScrollView];
 //先拉取分类数据
     [self addLoadcategoryStatus];
@@ -207,7 +207,6 @@
 #pragma mark ----加载数据
 -(void)addLoadStatus
 {
-    
     _pageNum = 0;
 
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
@@ -605,7 +604,6 @@
 }
 #pragma mark ____加载分类数据
 -(void)addLoadcategoryStatus{
-    
     [categoryLestTool statusesWithSuccess:^(NSArray *statues) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 

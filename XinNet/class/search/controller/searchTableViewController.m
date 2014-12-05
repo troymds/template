@@ -257,8 +257,7 @@
         }
             [_companyJobArray removeAllObjects];
             [_companyJobArray addObjectsFromArray: statues];
-            _pageNum = _companyJobArray.count % 10 + 1;
-
+           
             [self.tableView reloadData];
             [self addShowNoDataView];
             

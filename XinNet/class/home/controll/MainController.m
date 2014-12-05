@@ -319,10 +319,12 @@
         topDistace  = 0;
         
     }
-        for (int i=0; i<_hotImageArrayOff.count; i++) {
+    //第一列图片距顶部的距离
+    
+    for (int i=0; i<_hotImageArrayOff.count; i++) {
         moduleModel *homeMode =[ImgArray objectAtIndex:i];
         UIImageView *MainImage =[[UIImageView alloc]init];
-        MainImage.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+130+i/3*(kHeight/3-70),width,width);
+        MainImage.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+130+i/3*(kHeight/3-width),width,width);
         [MainImage setImageWithURL:[NSURL URLWithString:homeMode.image_url] placeholderImage:placeHoderImage1];
         MainImage.backgroundColor =[UIColor clearColor];
         [self.view addSubview:MainImage];
@@ -330,16 +332,16 @@
         
         UIButton *titleBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [self.view addSubview:titleBtn];
-        titleBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+200+i/3*(kHeight/3-70), width, 30);
+        titleBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+130+width+i/3*(kHeight/3-width), width, 30);
         [titleBtn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
         [titleBtn setTitle:homeMode.name forState:UIControlStateNormal];
-        titleBtn.titleLabel.font =[UIFont systemFontOfSize:16];
+        titleBtn.titleLabel.font =[UIFont systemFontOfSize:15];
         [titleBtn setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
         
         
         UIButton *bigBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [self.view addSubview:bigBtn];
-        bigBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+130+i/3*(kHeight/3-70), width, width+35);
+        bigBtn.frame =CGRectMake(leftDistace+i%3*(width+distance), topDistace+130+i/3*(kHeight/3-width), width, width+35);
         [bigBtn  addTarget:self action:@selector(titbtnFailClick:) forControlEvents:UIControlEventTouchUpInside];
         bigBtn.backgroundColor =[UIColor clearColor];
         

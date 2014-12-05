@@ -16,8 +16,8 @@
 #import "collectionModel.h"
 #import "collectionHttpTool.h"
 #import "RemindView.h"
-
-@interface markertDetailsView ()<YYalertViewDelegate>
+#import "LoginController.h"
+@interface markertDetailsView ()<YYalertViewDelegate,ReloadViewDelegate>
 {
     mardetDetailsModel *mardetModel;
     UIButton *_collectBtn;//收藏
@@ -75,7 +75,7 @@
     titiLabel.backgroundColor =[UIColor clearColor];
     
     UIButton * collectionBtn =[UIButton buttonWithType:UIButtonTypeCustom];
-    collectionBtn.frame =CGRectMake(160+0%3*40, 8, 40, 30);
+    collectionBtn.frame =CGRectMake(180+0%3*30, 8, 30, 30);
     
     collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
     [collectionBtn addTarget:self action:@selector(collectionBtn) forControlEvents:UIControlEventTouchUpInside];
@@ -83,7 +83,7 @@
     _collectBtn = collectionBtn;
     
     UIButton * shareBtn =[UIButton buttonWithType:UIButtonTypeCustom];
-    shareBtn.frame =CGRectMake(160+1%3*40, 8, 40, 30);
+    shareBtn.frame =CGRectMake(180+1%3*30, 8, 30, 30);
     [shareBtn setImage:[UIImage imageNamed:@"collect1.png"] forState:UIControlStateNormal];
     [shareBtn addTarget:self action:@selector(shareBtnBtn) forControlEvents:UIControlEventTouchUpInside];
     [backCollectView addSubview:shareBtn];
@@ -108,6 +108,9 @@
             }else
             {
                 [RemindView showViewWithTitle:msg location:MIDDLE];
+                LoginController *logionVc=[[LoginController alloc]init];
+                logionVc.delegate =self;
+                [self.navigationController pushViewController:logionVc animated:YES];
             }
             
         } entityId:_markIndex entityType:@"1" withFailure:^(NSError *error) {

@@ -142,6 +142,9 @@
 		556EB0F21A1B598F006D5E0F /* WBNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 556EB0CA1A1B598F006D5E0F /* WBNavigationController.m */; };
 		556EB0F61A1B598F006D5E0F /* nav_code@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 556EB0D71A1B598F006D5E0F /* nav_code@2x.png */; };
 		556EB0F91A1B598F006D5E0F /* nav_searchhome@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 556EB0DA1A1B598F006D5E0F /* nav_searchhome@2x.png */; };
+		558954961A31482C008AD588 /* TYMyLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 558954951A31482C008AD588 /* TYMyLabel.m */; };
+		558954991A318A95008AD588 /* delete_img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 558954971A318A95008AD588 /* delete_img@2x.png */; };
+		5589549A1A318A95008AD588 /* sure_img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 558954981A318A95008AD588 /* sure_img@2x.png */; };
 		5595EC8C1A25E299000D4AB1 /* company_img_selected0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5595EC881A25E299000D4AB1 /* company_img_selected0@2x.png */; };
 		5595EC8D1A25E299000D4AB1 /* company_img_selected1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5595EC891A25E299000D4AB1 /* company_img_selected1@2x.png */; };
 		5595EC8E1A25E299000D4AB1 /* company_img0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5595EC8A1A25E299000D4AB1 /* company_img0@2x.png */; };
@@ -507,6 +510,10 @@
 		556EB0CA1A1B598F006D5E0F /* WBNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBNavigationController.m; sourceTree = "<group>"; };
 		556EB0D71A1B598F006D5E0F /* nav_code@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_code@2x.png"; sourceTree = "<group>"; };
 		556EB0DA1A1B598F006D5E0F /* nav_searchhome@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_searchhome@2x.png"; sourceTree = "<group>"; };
+		558954941A31482C008AD588 /* TYMyLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYMyLabel.h; sourceTree = "<group>"; };
+		558954951A31482C008AD588 /* TYMyLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYMyLabel.m; sourceTree = "<group>"; };
+		558954971A318A95008AD588 /* delete_img@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "delete_img@2x.png"; sourceTree = "<group>"; };
+		558954981A318A95008AD588 /* sure_img@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sure_img@2x.png"; sourceTree = "<group>"; };
 		5595EC881A25E299000D4AB1 /* company_img_selected0@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "company_img_selected0@2x.png"; sourceTree = "<group>"; };
 		5595EC891A25E299000D4AB1 /* company_img_selected1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "company_img_selected1@2x.png"; sourceTree = "<group>"; };
 		5595EC8A1A25E299000D4AB1 /* company_img0@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "company_img0@2x.png"; sourceTree = "<group>"; };
@@ -1340,6 +1347,8 @@
 		5565263F1A28510B00281504 /* views */ = {
 			isa = PBXGroup;
 			children = (
+				558954941A31482C008AD588 /* TYMyLabel.h */,
+				558954951A31482C008AD588 /* TYMyLabel.m */,
 				5565268E1A28561100281504 /* productDetailsView.h */,
 				5565268F1A28561100281504 /* productDetailsView.m */,
 				556526401A28510B00281504 /* ListView.h */,
@@ -1865,6 +1874,8 @@
 		55D539101A22C15A007400F6 /* home_img */ = {
 			isa = PBXGroup;
 			children = (
+				558954971A318A95008AD588 /* delete_img@2x.png */,
+				558954981A318A95008AD588 /* sure_img@2x.png */,
 				55B47A1F1A2FF73C00A72F66 /* category_Image@2x.png */,
 				55C5365D1A2D3E1500172230 /* home_banner_off@2x.png */,
 				55C5365E1A2D3E1500172230 /* home_banner_on@2x.png */,
@@ -2096,6 +2107,7 @@
 				04AC927E1A27088900FDEFDD /* user_default@2x.png in Resources */,
 				04AEC4921A247D470030E3E9 /* catebusiness@2x.png in Resources */,
 				55B617CF1A240FA300088E39 /* on@2x.png in Resources */,
+				558954991A318A95008AD588 /* delete_img@2x.png in Resources */,
 				5595EC8D1A25E299000D4AB1 /* company_img_selected1@2x.png in Resources */,
 				04AEC4941A247D470030E3E9 /* catemanager@2x.png in Resources */,
 				55B47A1E1A2FE73300A72F66 /* Images.xcassets in Resources */,
@@ -2115,6 +2127,7 @@
 				55D015DF1A22D69D00F9D475 /* MJRefresh.bundle in Resources */,
 				55D539351A22C15A007400F6 /* more@2x.png in Resources */,
 				04AAED0A1A1EE0E300B5254B /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
+				5589549A1A318A95008AD588 /* sure_img@2x.png in Resources */,
 				55B47A181A2EADFE00A72F66 /* nav_bgimg@2x.png in Resources */,
 				04AEC4791A242AF30030E3E9 /* addImg@2x.png in Resources */,
 				55B617CC1A240FA300088E39 /* myMsg@2x.png in Resources */,
@@ -2317,6 +2330,7 @@
 				556526661A28510B00281504 /* companyYellowController.m in Sources */,
 				556526561A28510B00281504 /* aboutController.m in Sources */,
 				556EB0EC1A1B598F006D5E0F /* MainController.m in Sources */,
+				558954961A31482C008AD588 /* TYMyLabel.m in Sources */,
 				04AEC4621A2423830030E3E9 /* SubscribItem.m in Sources */,
 				5565267B1A28510B00281504 /* productDetailTool.m in Sources */,
 				5565264B1A28510B00281504 /* categoryLestModel.m in Sources */,
@@ -2466,8 +2480,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: wu guixiang (JB4UYV4U6H)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: wu guixiang (JB4UYV4U6H)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/XinNet/class/Others/ShareSDK/Connection",
@@ -2501,7 +2515,7 @@
 					"$(PROJECT_DIR)/XinNet/class/Others/ShareSDK/Extend/WeChatSDK",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "4046d8dd-c240-4aae-bbbe-c2d12b3cd6d3";
 			};
 			name = Debug;
 		};
@@ -2509,8 +2523,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: wu guixiang (JB4UYV4U6H)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: wu guixiang (JB4UYV4U6H)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/XinNet/class/Others/ShareSDK/Connection",
@@ -2544,7 +2558,7 @@
 					"$(PROJECT_DIR)/XinNet/class/Others/ShareSDK/Extend/WeChatSDK",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "4046d8dd-c240-4aae-bbbe-c2d12b3cd6d3";
 			};
 			name = Release;
 		};

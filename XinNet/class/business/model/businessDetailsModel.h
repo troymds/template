@@ -19,7 +19,8 @@
 @property (nonatomic,strong)NSString *is_delete;//
 @property (nonatomic,strong)NSString *read_num;//
 @property (nonatomic,strong)NSString *position;//
-//- (instancetype)initWithDictionaryForBusiness:(NSDictionary *)dict;
+@property (nonatomic,strong)NSString *num;//
+
 
 
 

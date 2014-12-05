@@ -14,12 +14,16 @@
 #import "collectionModel.h"
 #import "collectionHttpTool.h"
 #import "CommentController.h"
+#import "LoginController.h"
+#import "ShareView.h"
 #define YYBODER 16
-@interface interfaceDetailsView ()<YYalertViewDelegate,UIWebViewDelegate>
+@interface interfaceDetailsView ()<YYalertViewDelegate,UIWebViewDelegate,ReloadViewDelegate>
 {
     UIScrollView *_backScrollView;
     UIWebView *interfaceWebView;
     interfaceDetailModel *interfaceModel;
+    CGFloat headerLabelHeight;
+    UIButton *_collectBtn;
 }
 @property (nonatomic, strong)NSString *collectionId;
 
@@ -30,13 +34,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor =HexRGB(0xe9f1f6);
-    self.title =@"展会详情";
     
-    [self addCollection];
+    [self addCollectionAndShareSDK];
     
     [self addWriteBtn];
     [self addLoadStatus];
     [self addMBprogressView];
+    
     
 }
 #pragma  mark ------显示指示器
@@ -47,8 +51,8 @@
     
 }
 
-//收藏
--(void)addCollection{
+//收藏与分享
+-(void)addCollectionAndShareSDK{
     
     
     UIView *backCollectView =[[UIView alloc]init];
@@ -56,69 +60,74 @@
     backCollectView.backgroundColor =[UIColor clearColor];
     self.navigationItem.titleView = backCollectView;
     
-    UILabel *titiLabel =[[UILabel alloc]initWithFrame:CGRectMake(60, 0, 100, 44)];
-    titiLabel.text =@"展会详情";
+    UILabel *titiLabel =[[UILabel alloc]initWithFrame:CGRectMake(63, 0, 100, 44)];
+    titiLabel.text =@"展会信息";
     titiLabel.font =[UIFont systemFontOfSize:PxFont(23)];
     [backCollectView addSubview:titiLabel];
     titiLabel.backgroundColor =[UIColor clearColor];
     
+    UIButton * collectionBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    collectionBtn.frame =CGRectMake(180+0%3*30, 8, 30, 30);
     
-        YYSearchButton * collectionBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
-        collectionBtn.frame =CGRectMake(200, 8, 40, 30);
-        collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
-        [collectionBtn setTitle:@"收藏" forState:UIControlStateNormal];
-        [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateHighlighted];
+    collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
+    [collectionBtn addTarget:self action:@selector(collectionBtn) forControlEvents:UIControlEventTouchUpInside];
+    [backCollectView addSubview:collectionBtn];
+    _collectBtn = collectionBtn;
+    
+    UIButton * shareBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    shareBtn.frame =CGRectMake(180+1%3*30, 8, 30, 30);
+    [shareBtn setImage:[UIImage imageNamed:@"collect1.png"] forState:UIControlStateNormal];
+    [shareBtn addTarget:self action:@selector(shareBtnBtn) forControlEvents:UIControlEventTouchUpInside];
+    [backCollectView addSubview:shareBtn];
+    
+}
 
-        [collectionBtn addTarget:self action:@selector(collectionBtn:) forControlEvents:UIControlEventTouchUpInside];
-        [backCollectView addSubview:collectionBtn];
-    }
+-(void)shareBtnBtn{
+    [ShareView showViewWithTitle:@"分享" content:nil description:nil url:nil delegate:self];
     
+}
+-(void)collectionBtn{
     
-    
-    
-    
-    
-
-
--(void)collectionBtn:(UIButton *)sender{
-    
-        
-            if ([sender.titleLabel.text isEqualToString:@"收藏"]) {//收藏
-                [collectionHttpTool addCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
-                    if (code == 100) {
-                        [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
-                        collectionModel *model = [data objectAtIndex:0];
-                        [sender setTitle:@"取消收藏" forState:UIControlStateNormal];
-                        [sender setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateNormal];
-
-                        sender.frame =CGRectMake(180, 8, 60, 30);
-                        self.collectionId = model.data;
-                    }else
-                    {
-                        [RemindView showViewWithTitle:msg location:MIDDLE];
-                    }
-                    
-                } entityId:_interfaceIndex entityType:@"7" withFailure:^(NSError *error) {
-                    
-                    [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-                }];
-            }else//取消收藏
+    if ([self.collectionId intValue] == 0 && self.collectionId) {//收藏
+        [collectionHttpTool addCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
+            if (code == 100) {
+                [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
+                collectionModel *model = [data objectAtIndex:0];
+                [_collectBtn setImage:[UIImage imageNamed:@"collect_selected.png"] forState:UIControlStateNormal];
+                
+                self.collectionId = model.data;
+            }else
             {
-                [collectionHttpTool cancleCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
-                    
-                    [RemindView showViewWithTitle:msg location:MIDDLE];
-                     [sender setTitle:@"收藏" forState:UIControlStateNormal];
-                    sender.frame =CGRectMake(200, 8, 40, 30);
-                    [sender setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
-
-                } collectionId:self.collectionId withFailure:^(NSError *error) {
-                    
-                    [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-                }];
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+                LoginController *loginView =[[LoginController alloc]init];
+                loginView.delegate =self;
+                [self.navigationController pushViewController:loginView animated:YES];
+                
             }
             
-        
+        } entityId:_interfaceIndex entityType:@"7" withFailure:^(NSError *error) {
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
+    }else//取消收藏
+    {
+        [collectionHttpTool cancleCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
+            if (code == 100) {
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+                [_collectBtn setImage:[UIImage imageNamed:@"collect0.png"] forState:UIControlStateNormal];
+                self.collectionId = @"0";
+            }else
+            {
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+            }
+            
+        } collectionId:self.collectionId withFailure:^(NSError *error) {
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
     }
+    
+}
 
 
 -(void)addLoadStatus{
@@ -134,6 +143,14 @@
         interfaceModel.wapUrl =[dict objectForKey:@"wapUrl"];
         interfaceModel.indexId =[dict objectForKey:@"id"];
         interfaceModel.start_time = [dict objectForKey:@"start_time"];
+        self.collectionId = [dict objectForKey:@"collection_id"];
+        if ([self.collectionId intValue] != 0) {
+            [ _collectBtn setImage:[UIImage imageNamed:@"collect_selected.png"] forState:UIControlStateNormal];
+        }else
+        {
+            [ _collectBtn setImage:[UIImage imageNamed:@"collect0.png"] forState:UIControlStateNormal];
+        }
+
         [self addheaderView];
         
     } company_id:_interfaceIndex CompanyFailure:^(NSError *error) {
@@ -152,9 +169,9 @@
     
     float  webheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
     
-    interfaceWebView.frame = CGRectMake(0, 90, kWidth, webheight);
+    interfaceWebView.frame = CGRectMake(0, 60+headerLabelHeight, kWidth, webheight);
     
-    _backScrollView.contentSize = CGSizeMake(kWidth,webheight+100);
+    _backScrollView.contentSize = CGSizeMake(kWidth,webheight+70+headerLabelHeight);
     
 }
 #pragma mark--添加UI
@@ -169,14 +186,15 @@
     _backScrollView.showsVerticalScrollIndicator = NO;
     _backScrollView.showsHorizontalScrollIndicator = NO;
     
-    UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(YYBODER, 5, 65, 65)];
+    UIImageView *headerImage =[[UIImageView alloc]initWithFrame:CGRectMake(YYBODER, 10, 65, 70)];
     [_backScrollView addSubview:headerImage];
     [headerImage setImageWithURL:[NSURL URLWithString:interfaceModel.cover] placeholderImage:placeHoderImage2];
     
-    
-    UILabel *headerLabel =[[UILabel alloc]initWithFrame:CGRectMake(YYBODER+80, 5, kWidth-YYBODER*2-80, 30)];
+     headerLabelHeight =[interfaceModel.title sizeWithFont:[UIFont systemFontOfSize:PxFont(23)] constrainedToSize:CGSizeMake(kWidth-YYBODER*2-80, MAXFLOAT)].height;
+    UILabel *headerLabel =[[UILabel alloc]initWithFrame:CGRectMake(YYBODER+80, 5, kWidth-YYBODER*2-80, headerLabelHeight)];
     headerLabel.text =interfaceModel.title;
     headerLabel.textAlignment = NSTextAlignmentLeft;
+    headerLabel.numberOfLines = 0;
     headerLabel.backgroundColor =[UIColor clearColor];
     headerLabel.textColor=HexRGB(0x3a3a3a);
     headerLabel.font =[UIFont systemFontOfSize:PxFont(23)];
@@ -184,7 +202,7 @@
     
     for (int i=0; i<2; i++) {
         NSArray *titleArr =@[[NSString stringWithFormat:@"时间:%@",interfaceModel.start_time],[NSString stringWithFormat:@"来源:%@",interfaceModel.from]];
-        UILabel *titleLabel =[[UILabel alloc]initWithFrame:CGRectMake(YYBODER+80, 35+i%3*(20),kWidth-YYBODER*2-80, 20)];
+        UILabel *titleLabel =[[UILabel alloc]initWithFrame:CGRectMake(YYBODER+80,5+ headerLabelHeight+i%3*(20),kWidth-YYBODER*2-80, 20)];
         titleLabel.text =titleArr[i];
         titleLabel.textAlignment = NSTextAlignmentLeft;
         titleLabel.backgroundColor =[UIColor clearColor];
@@ -193,7 +211,7 @@
         [_backScrollView addSubview:titleLabel];
         
     }
-    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(0, 89, kWidth, 1)];
+    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(0, 59+headerLabelHeight, kWidth, 1)];
     [_backScrollView addSubview:line];
     line.backgroundColor =HexRGB(0xe6e3e4);
 
@@ -209,11 +227,11 @@
 }
 -(void)addWriteBtn{
     
-    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(0, kHeight-50, kWidth, 1)];
+    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(0, kHeight-114, kWidth, 1)];
     [self.view addSubview:line];
     line.backgroundColor =HexRGB(0xe6e3e4);
     YYSearchButton *findBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
-    findBtn.frame = CGRectMake(20, kHeight-40,kWidth-YYBODER*2,30);
+    findBtn.frame = CGRectMake(20, kHeight-100,kWidth-YYBODER*2,30);
     findBtn.backgroundColor =[UIColor clearColor];
     [findBtn addTarget:self action:@selector(wirteBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [findBtn setTitle:@"  评论" forState:UIControlStateNormal];
@@ -225,7 +243,6 @@
 -(void)wirteBtnClick:(UIButton *)write{
     CommentController *ctl = [[CommentController alloc] init];
     ctl.entityID = _interfaceIndex;
-    ctl.entityType = @"7";
     [self.navigationController pushViewController:ctl animated:YES];
 }
 

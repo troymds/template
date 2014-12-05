@@ -14,14 +14,17 @@
 #import "jobDetailTool.h"
 #import "jobDetailModel.h"
 #import "CommentController.h"
+#import "ShareView.h"
+#import "LoginController.h"
 #define YYBODER 16
-@interface jobDetailsView ()<UIScrollViewDelegate,YYalertViewDelegate>
+@interface jobDetailsView ()<UIScrollViewDelegate,YYalertViewDelegate,ReloadViewDelegate>
 {
     UIScrollView *_bigScrollView;
    
     UIButton *_selectedBtn;
     jobDetailModel *jobModel;
     
+    UIButton *_collectBtn;
     
 }
 @property (nonatomic, strong)NSString *collectionId;
@@ -35,13 +38,13 @@
     self.view.backgroundColor =HexRGB(0xe9f1f6);
     [self addWriteBtn];
 
-    self.title = @"招聘详情";
+//    self.title = @"招聘详情";
     
     _selectedBtn =[[UIButton alloc]init];
     [self addChooseBtn];
     
     [self addLoadStatus];
-    [self addCollection];
+    [self addCollectionAndShareSDK];
     [self addMBprogressView];
    
 }
@@ -52,55 +55,60 @@
     
     
 }
-//收藏
--(void)addCollection{
+//收藏与分享
+-(void)addCollectionAndShareSDK{
     
     
     UIView *backCollectView =[[UIView alloc]init];
     backCollectView.frame = CGRectMake(0, 20, 300, 44);
     backCollectView.backgroundColor =[UIColor clearColor];
+    backCollectView.alpha=0;
     self.navigationItem.titleView = backCollectView;
-    
     UILabel *titiLabel =[[UILabel alloc]initWithFrame:CGRectMake(60, 0, 100, 44)];
     titiLabel.text =@"招聘详情";
+   
     titiLabel.font =[UIFont systemFontOfSize:PxFont(23)];
     [backCollectView addSubview:titiLabel];
     titiLabel.backgroundColor =[UIColor clearColor];
-    
-    
-    YYSearchButton * collectionBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
-    collectionBtn.frame =CGRectMake(200, 8, 40, 30);
-    collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
-    
-    [collectionBtn setTitle:@"收藏" forState:UIControlStateNormal];
-    [collectionBtn addTarget:self action:@selector(collectionBtn:) forControlEvents:UIControlEventTouchUpInside];
-    [backCollectView addSubview:collectionBtn];
-    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateHighlighted];
 
+    
+    UIButton * collectionBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    collectionBtn.frame =CGRectMake(180+0%3*30, 8, 30, 30);
+    
+    collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
+    [collectionBtn addTarget:self action:@selector(collectionBtn) forControlEvents:UIControlEventTouchUpInside];
+    [backCollectView addSubview:collectionBtn];
+    _collectBtn = collectionBtn;
+    
+    UIButton * shareBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    shareBtn.frame =CGRectMake(180+1%3*30, 8, 30, 30);
+    [shareBtn setImage:[UIImage imageNamed:@"collect1.png"] forState:UIControlStateNormal];
+    [shareBtn addTarget:self action:@selector(shareBtnBtn) forControlEvents:UIControlEventTouchUpInside];
+    [backCollectView addSubview:shareBtn];
+    
 }
 
-
-
-
-
-
-
-
--(void)collectionBtn:(UIButton *)sender{
+-(void)shareBtnBtn{
+    [ShareView showViewWithTitle:@"分享" content:nil description:nil url:nil delegate:self];
     
+}
+-(void)collectionBtn{
     
-    if ([sender.titleLabel.text isEqualToString:@"收藏"]) {//收藏
+    if ([self.collectionId intValue] == 0 && self.collectionId) {//收藏
         [collectionHttpTool addCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
             if (code == 100) {
                 [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
                 collectionModel *model = [data objectAtIndex:0];
-                [sender setTitle:@"取消收藏" forState:UIControlStateNormal];
-                sender.frame =CGRectMake(180, 8, 60, 30);
-
+                [_collectBtn setImage:[UIImage imageNamed:@"collect_selected.png"] forState:UIControlStateNormal];
+                
                 self.collectionId = model.data;
             }else
             {
                 [RemindView showViewWithTitle:msg location:MIDDLE];
+                LoginController *loginView =[[LoginController alloc]init];
+                loginView.delegate =self;
+                [self.navigationController pushViewController:loginView animated:YES];
+                
             }
             
         } entityId:_jobDetailsIndex entityType:@"6" withFailure:^(NSError *error) {
@@ -110,16 +118,20 @@
     }else//取消收藏
     {
         [collectionHttpTool cancleCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
+            if (code == 100) {
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+                [_collectBtn setImage:[UIImage imageNamed:@"collect0.png"] forState:UIControlStateNormal];
+                self.collectionId = @"0";
+            }else
+            {
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+            }
             
-            [RemindView showViewWithTitle:msg location:MIDDLE];
-            [sender setTitle:@"收藏" forState:UIControlStateNormal];
-            sender.frame =CGRectMake(200, 8, 40, 30);
         } collectionId:self.collectionId withFailure:^(NSError *error) {
             
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         }];
     }
-    
     
 }
 
@@ -133,6 +145,13 @@
         jobModel.company_url=[dict objectForKey:@"company_url"];
         jobModel.job_url=[dict objectForKey:@"job_url"];
         jobModel.indexId=[dict objectForKey:@"id"];
+        self.collectionId = [dict objectForKey:@"collection_id"];
+        if ([self.collectionId intValue] != 0) {
+            [ _collectBtn setImage:[UIImage imageNamed:@"collect_selected.png"] forState:UIControlStateNormal];
+        }else
+        {
+            [ _collectBtn setImage:[UIImage imageNamed:@"collect0.png"] forState:UIControlStateNormal];
+        }
 
         [self addScrollview];
     } company_id:_jobDetailsIndex CompanyFailure:^(NSError *error) {
@@ -147,7 +166,7 @@
     _bigScrollView.contentSize = CGSizeMake(kWidth*2, kHeight-64);
     _bigScrollView.backgroundColor =[UIColor whiteColor];
     _bigScrollView.delegate = self;
-    _bigScrollView.bounces = NO;
+//    _bigScrollView.bounces = YES;
     _bigScrollView.showsHorizontalScrollIndicator = NO;
     _bigScrollView.showsVerticalScrollIndicator = NO;
     
@@ -193,7 +212,6 @@
 -(void)wirteBtnClick:(UIButton *)write{
     CommentController *ctl = [[CommentController alloc] init];
     ctl.entityID = _jobDetailsIndex;
-    ctl.entityType = @"6";
     [self.navigationController pushViewController:ctl animated:YES];
 }
 
@@ -205,7 +223,7 @@
         
         [chooseBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
         [chooseBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
-        chooseBtn.frame =CGRectMake(20+i%3*((kWidth-35)/2), 6, (kWidth-40)/2, 40);
+        chooseBtn.frame =CGRectMake(20+i%3*((kWidth-40)/2), 6, (kWidth-40)/2, 40);
         [chooseBtn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"company_img%d.png",i]] forState:UIControlStateNormal];
         [chooseBtn setImage:[UIImage imageNamed:[NSString stringWithFormat:@"company_img%d.png",i]] forState:UIControlStateHighlighted];
 

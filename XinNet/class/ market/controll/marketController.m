@@ -16,6 +16,7 @@
 #import "categoryLestTool.h"
 #import "categoryLestModel.h"
 
+#define KStartBtnTag 30
 @interface marketController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     UITableView *_tableView;
@@ -29,6 +30,8 @@
     NSString *_category_Index;
     MJRefreshFooterView *_footer;
     BOOL isLoadMore;//判断是否加载更多
+    BOOL isShowPopView;//是否显示弹出菜单
+    BOOL isFirstLoadPopView;//是否第一次显示弹出菜单栏
 }
 
 @property (nonatomic,assign) NSInteger pageNum;//页数
@@ -42,15 +45,17 @@
     [super viewDidLoad];
     self.title =@"市场行情";
     self.view.backgroundColor =[UIColor whiteColor];
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"category_Image.png" highlightedSearch:@"category_Image.png" target:(self) action:@selector(categoryBtnClick:)];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"more.png" highlightedSearch:@"more.png" target:(self) action:@selector(categoryBtnClick:)];
     _moreSelectedBtn =[[UIButton alloc]init];
     _marketArray =[[NSMutableArray alloc]init];
     _cagegoryArray=[[NSMutableArray alloc]init];
     _category_Index = [[NSString alloc]init];
-    
+    isShowPopView = NO;
     _pageNum = 0;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     [self addShowNoDataView];
+    isFirstLoadPopView = YES;
+    
     [self addTableView];
     [self addRefreshViews];
     [self addLoadStatus];
@@ -78,7 +83,6 @@
 #pragma mark 集成刷新控件
 - (void)addRefreshViews
 {
-       
     // 2.上拉加载更多
     MJRefreshFooterView *footer = [MJRefreshFooterView footer];
     footer.scrollView = _tableView;
@@ -120,7 +124,6 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [_marketArray removeAllObjects];
         [_marketArray addObjectsFromArray:statues];
-        _pageNum = _marketArray.count % 10 + 1;
         [_tableView reloadData];
     }  keywords_Id:@"" category_Id:_category_Index page:self.page failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -136,7 +139,7 @@
     _pageNum++;
     self.page = [NSString stringWithFormat:@"%d",_pageNum];
     
-    if (_moreSelectedBtn.tag ==30) {
+    if (_moreSelectedBtn.tag ==31) {
         [marketTOOL statusesWithSuccess:^(NSArray *statues) {
             if (statues.count < 10) {
                 isLoadMore = NO;
@@ -155,7 +158,7 @@
         }  keywords_Id:@"" category_Id:_category_Index page:self.page  failure:^(NSError *error) {
 
         }];
-    }else if (_moreSelectedBtn.tag==31){
+    }else if (_moreSelectedBtn.tag==32){
         [marketTOOL statusesWithSuccess:^(NSArray *statues) {
             if (statues.count < 10) {
                 isLoadMore = NO;
@@ -216,36 +219,35 @@
     _moreView.backgroundColor =[UIColor whiteColor];
     [self.view addSubview:_moreView];
     
-    UIButton *allMoreBtn =[UIButton buttonWithType:UIButtonTypeCustom];
-    allMoreBtn.frame =CGRectMake(1, 0, 150, 40);
-    allMoreBtn .backgroundColor =HexRGB(0xebe7e7);
-    allMoreBtn.contentHorizontalAlignment =UIControlContentHorizontalAlignmentCenter;
-    [allMoreBtn setTitleColor:HexRGB(0x333333) forState:UIControlStateNormal];
-    [allMoreBtn setTitle:@"全部"forState:UIControlStateNormal];
-    [_moreView addSubview:allMoreBtn];
-    allMoreBtn.tag =35;
-    [allMoreBtn addTarget:self action:@selector(allMoreBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    allMoreBtn.selected = _moreSelectedBtn.selected;
-
-    
-    
-    for (int i=0; i<_cagegoryArray.count; i++) {
-        categoryLestModel *categoryModel =[_cagegoryArray objectAtIndex:i];
-        
-        UIButton *moreBtn =[UIButton buttonWithType:UIButtonTypeCustom];
-        moreBtn.frame =CGRectMake(0, 41+i%6*41, 150, 40);
-        moreBtn .backgroundColor =HexRGB(0xebe7e7);
-        moreBtn.contentHorizontalAlignment =UIControlContentHorizontalAlignmentCenter;
-        [moreBtn setTitleColor:HexRGB(0x999999) forState:UIControlStateNormal];
-        [moreBtn setTitle:categoryModel.categoryNmae forState:UIControlStateNormal];
-        [_moreView addSubview:moreBtn];
-        [moreBtn addTarget:self action:@selector(moreBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-        moreBtn.selected = _moreSelectedBtn.selected;
-        
-        moreBtn.tag = 30+i;
+    for (int i=0; i<_cagegoryArray.count + 1; i++) {
+        if (i == 0) {
+            UIButton *allMoreBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+            allMoreBtn.frame =CGRectMake(1, 0, 150, 40);
+            
+            allMoreBtn.backgroundColor = HexRGB(0xebe7e7);
+            allMoreBtn.contentHorizontalAlignment =UIControlContentHorizontalAlignmentCenter;
+            [allMoreBtn setTitleColor:HexRGB(0x333333) forState:UIControlStateNormal];
+            [allMoreBtn setTitle:@"全部"forState:UIControlStateNormal];
+            [_moreView addSubview:allMoreBtn];
+            allMoreBtn.tag = KStartBtnTag + i;
+            [allMoreBtn addTarget:self action:@selector(moreBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+            _moreSelectedBtn = allMoreBtn;
+            _moreSelectedBtn.selected = YES;
+            
+        }else
+        {
+            categoryLestModel *categoryModel =[_cagegoryArray objectAtIndex:i-1];
+            UIButton *moreBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+            moreBtn.frame =CGRectMake(0, 41+(i-1)%6*41, 150, 40);
+            moreBtn .backgroundColor =HexRGB(0xebe7e7);
+            moreBtn.contentHorizontalAlignment =UIControlContentHorizontalAlignmentCenter;
+            [moreBtn setTitleColor:HexRGB(0x999999) forState:UIControlStateNormal];
+            [moreBtn setTitle:categoryModel.categoryNmae forState:UIControlStateNormal];
+            [_moreView addSubview:moreBtn];
+            [moreBtn addTarget:self action:@selector(moreBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+            moreBtn.tag = KStartBtnTag + i;
+        }
     }
-
-    
 }
 
 -(void)addBigButton
@@ -257,54 +259,65 @@
     _bigButton.alpha = 0.1;
     
     [_bigButton addTarget:self action:@selector(bigButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+
 }
 #pragma mark--分类加载数据
 -(void)categoryBtnClick:(UIButton *)more{
+    isShowPopView =  !isShowPopView;
+    
     [categoryLestTool statusesWithSuccess:^(NSArray *statues) {
         [_cagegoryArray removeAllObjects];
         [_cagegoryArray addObjectsFromArray:statues];
         
-        if (_moreSelectedBtn.selected ==YES) {
-            [self addBigButton];
-            [self addMoreView];
+        if (isShowPopView == YES) {
+            if (isFirstLoadPopView) {
+                [self addBigButton];
+                [self addMoreView];
+                isFirstLoadPopView = ! isFirstLoadPopView;
+            }else
+            {
+                _moreView.hidden = NO;
+                _bigButton.hidden = NO;
+            }
             
         }else{
-            [_moreView removeFromSuperview];
-            
-            [_bigButton removeFromSuperview];
+            _moreView.hidden = YES;
+            _bigButton.hidden = YES;
         }
 
     } entity_Type:@"1" failure:^(NSError *error) {
         
     }];
-    
-    _moreSelectedBtn.selected =!_moreSelectedBtn.selected;
-    }
+}
+
 -(void)bigButtonClick:(UIButton *)big{
-    _moreSelectedBtn.selected =!_moreSelectedBtn.selected;
-    [_moreView removeFromSuperview];
-    [_bigButton removeFromSuperview];
+    isShowPopView = !isShowPopView;
+    _moreView.hidden = YES;
+    _bigButton.hidden = YES;
     
 }
 
-//下拉菜单
-
--(void)allMoreBtnClick:(UIButton *)all{
-    _moreSelectedBtn.selected =!_moreSelectedBtn.selected;
-    _category_Index =0;
-
-    [_bigButton removeFromSuperview];
-    [_moreView removeFromSuperview];
-    [self addLoadStatus];
-}
 -(void)moreBtnClick:(UIButton *)mor{
-    categoryLestModel *categoryModel =[_cagegoryArray objectAtIndex:mor.tag-30];
-    _category_Index = categoryModel.typeID;
-    _moreSelectedBtn.tag = mor.tag;
-    _moreSelectedBtn.selected =!_moreSelectedBtn.selected;
-    [_bigButton removeFromSuperview];
-    [_moreView removeFromSuperview];
-    [self addLoadStatus];
+    if (_moreSelectedBtn != mor) {
+        //未选中的颜色变灰，选中的颜色变黑
+        [_moreSelectedBtn setTitleColor:HexRGB(0x999999) forState:UIControlStateNormal];
+        [mor setTitleColor:HexRGB(0x333333) forState:UIControlStateNormal];
+        _moreSelectedBtn = mor;
+        
+        if (mor.tag == KStartBtnTag) {// 点击的全部
+            _category_Index =0;
+            
+        }else
+        {
+            categoryLestModel *categoryModel =[_cagegoryArray objectAtIndex:mor.tag-(KStartBtnTag + 1)];
+            _category_Index = categoryModel.typeID;
+        }
+        
+        _moreView.hidden = YES;
+        _bigButton.hidden = YES;
+        isShowPopView = !isShowPopView;
+        [self addLoadStatus];
+    }
 }
 
 #pragma mark---TableViewDelegate

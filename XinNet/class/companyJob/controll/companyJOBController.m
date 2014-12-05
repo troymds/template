@@ -133,7 +133,7 @@
         }
         [_companyJobArray removeAllObjects];
         [_companyJobArray addObjectsFromArray:statues];
-        _pageNum = _companyJobArray.count % 10 + 1;
+      
 
         [_tableView reloadData];
     } company_Id:nil keywords_Str:nil page:self.page failure:^(NSError *error) {

@@ -12,12 +12,17 @@
 #import "YYSearchButton.h"
 #import "collectionModel.h"
 #import "collectionHttpTool.h"
+#import "LoginController.h"
+#import "ShareView.h"
+
 #define YYBODERW 16
-@interface businessDetailsView ()<UIWebViewDelegate>
+@interface businessDetailsView ()<UIWebViewDelegate,ReloadViewDelegate>
 {
     businessDetailsModel *businessModel;
     UIWebView *marketWebView;
     UIScrollView *_backScrollView;
+    CGFloat titleLabelHeight;
+    UIButton * _collectBtn;
 }
 @property (nonatomic, strong)NSString *collectionId;
 
@@ -31,8 +36,8 @@
     self.title =@"详情";
    
     [self addLoadStatus];
-    [self addCollection];
     [self addMBprogressView];
+    [self addCollectionAndShareSDK];
     
 }
 #pragma  mark ------显示指示器
@@ -42,8 +47,8 @@
     
     
 }
-//收藏
--(void)addCollection{
+//收藏与分享
+-(void)addCollectionAndShareSDK{
     
     
     UIView *backCollectView =[[UIView alloc]init];
@@ -51,47 +56,49 @@
     backCollectView.backgroundColor =[UIColor clearColor];
     self.navigationItem.titleView = backCollectView;
     
-    UILabel *titiLabel =[[UILabel alloc]initWithFrame:CGRectMake(60, 0, 100, 44)];
+    UILabel *titiLabel =[[UILabel alloc]initWithFrame:CGRectMake(75, 0, 100, 44)];
     titiLabel.text =@"详情";
     titiLabel.font =[UIFont systemFontOfSize:PxFont(23)];
     [backCollectView addSubview:titiLabel];
     titiLabel.backgroundColor =[UIColor clearColor];
     
+    UIButton * collectionBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    collectionBtn.frame =CGRectMake(180+0%3*30, 8, 30, 30);
     
-    YYSearchButton * collectionBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
-    collectionBtn.frame =CGRectMake(200, 8, 40, 30);
     collectionBtn. titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
-    [collectionBtn setTitle:@"收藏" forState:UIControlStateNormal];
-    [collectionBtn setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateHighlighted];
-
-
-    [collectionBtn addTarget:self action:@selector(collectionBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [collectionBtn addTarget:self action:@selector(collectionBtn) forControlEvents:UIControlEventTouchUpInside];
     [backCollectView addSubview:collectionBtn];
+    _collectBtn = collectionBtn;
+    
+    UIButton * shareBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    shareBtn.frame =CGRectMake(180+1%3*30, 8, 30, 30);
+    [shareBtn setImage:[UIImage imageNamed:@"collect1.png"] forState:UIControlStateNormal];
+    [shareBtn addTarget:self action:@selector(shareBtnBtn) forControlEvents:UIControlEventTouchUpInside];
+    [backCollectView addSubview:shareBtn];
+    
 }
 
-
-
-
-
-
-
-
--(void)collectionBtn:(UIButton *)sender{
+-(void)shareBtnBtn{
+    [ShareView showViewWithTitle:@"分享" content:nil description:nil url:nil delegate:self];
     
+}
+-(void)collectionBtn{
     
-    if ([sender.titleLabel.text isEqualToString:@"收藏"]) {//收藏
+    if ([self.collectionId intValue] == 0 && self.collectionId) {//收藏
         [collectionHttpTool addCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
             if (code == 100) {
                 [RemindView showViewWithTitle:@"收藏成功" location:MIDDLE];
                 collectionModel *model = [data objectAtIndex:0];
-                [sender setTitle:@"取消收藏" forState:UIControlStateNormal];
-                sender.frame =CGRectMake(180, 8, 60, 30);
-                [sender setBackgroundImage:[UIImage imageNamed:@"nav_back_img.png"] forState:UIControlStateNormal];
-
+                [_collectBtn setImage:[UIImage imageNamed:@"collect_selected.png"] forState:UIControlStateNormal];
+                
                 self.collectionId = model.data;
             }else
             {
                 [RemindView showViewWithTitle:msg location:MIDDLE];
+                LoginController *loginView =[[LoginController alloc]init];
+                loginView.delegate =self;
+                [self.navigationController pushViewController:loginView animated:YES];
+                
             }
             
         } entityId:_businessDetailIndex entityType:@"3" withFailure:^(NSError *error) {
@@ -101,20 +108,29 @@
     }else//取消收藏
     {
         [collectionHttpTool cancleCollectionWithSuccess:^(NSArray *data, int code, NSString *msg) {
+            if (code == 100) {
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+                [_collectBtn setImage:[UIImage imageNamed:@"collect0.png"] forState:UIControlStateNormal];
+                self.collectionId = @"0";
+            }else
+            {
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+            }
             
-            [RemindView showViewWithTitle:msg location:MIDDLE];
-            [sender setTitle:@"收藏" forState:UIControlStateNormal];
-            sender.frame =CGRectMake(200, 8, 40, 30);
-            [sender setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
-
         } collectionId:self.collectionId withFailure:^(NSError *error) {
             
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         }];
     }
     
-    
 }
+
+
+
+
+
+
+
 
 -(void)addLoadStatus{
     [businessDetailsTool statusesWithSuccess:^(NSArray *statues) {
@@ -126,10 +142,21 @@
         businessModel.title =[dict objectForKey:@"title"];
         businessModel.read_num =[dict objectForKey:@"read_num"];
         businessModel.create_time =[dict objectForKey:@"create_time"];
+        businessModel.num =[dict objectForKey:@"num"];
+        self.collectionId = [dict objectForKey:@"collection_id"];
+        self.collectionId = [dict objectForKey:@"collection_id"];
+        if ([self.collectionId intValue] != 0) {
+            [ _collectBtn setImage:[UIImage imageNamed:@"collect_selected.png"] forState:UIControlStateNormal];
+        }else
+        {
+            [ _collectBtn setImage:[UIImage imageNamed:@"collect0.png"] forState:UIControlStateNormal];
+        }
+
 
 
         
         [self addLabel];
+
 
     } opportunity_Id:_businessDetailIndex failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -149,33 +176,40 @@
     
     float  webheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
     
-    marketWebView.frame = CGRectMake(1, 80, kWidth, webheight);
+    marketWebView.frame = CGRectMake(1, 60+titleLabelHeight, kWidth, webheight);
     
-    _backScrollView.contentSize = CGSizeMake(kWidth,webheight+350);
+    _backScrollView.contentSize = CGSizeMake(kWidth,webheight+80+titleLabelHeight);
     
     
 }
 -(void)addLabel{
-    
+    titleLabelHeight =[businessModel.title sizeWithFont:[UIFont systemFontOfSize:PxFont(23)] constrainedToSize:CGSizeMake(kWidth-30, MAXFLOAT)].height;
     _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     _backScrollView.userInteractionEnabled=YES;
-    _backScrollView.backgroundColor=HexRGB(0xededed);
+    _backScrollView.backgroundColor=[UIColor colorWithRed:248.0/255.0 green:247.0/255.0 blue:245.0/255.0 alpha:1];
+
     [self.view addSubview:_backScrollView];
     _backScrollView.bounces = NO;
     _backScrollView.showsVerticalScrollIndicator = NO;
     _backScrollView.showsHorizontalScrollIndicator = NO;
-
-    UILabel *titleLabel =[[UILabel alloc]initWithFrame:CGRectMake(0, 10, kWidth, 20)];
+    
+    UIView *backLineW=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 90)];
+    backLineW.backgroundColor=HexRGB(0xededed);
+    [_backScrollView addSubview:backLineW];
+    
+    UILabel *titleLabel =[[UILabel alloc]initWithFrame:CGRectMake(15, 10, kWidth-30, titleLabelHeight)];
+    
     titleLabel.text =businessModel.title;
+    titleLabel.numberOfLines = 0;
     titleLabel.font =[UIFont systemFontOfSize:PxFont(23)];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor =HexRGB(0x3a3a3a);
     titleLabel.backgroundColor =[UIColor clearColor];
-    [_backScrollView addSubview:titleLabel];
+    [backLineW addSubview:titleLabel];
     
     
     for (int i=0; i<2; i++) {
-        NSArray *titleArr =@[[NSString stringWithFormat:@"时间:%@",businessModel.create_time],[NSString stringWithFormat:@"数量:%@",businessModel.read_num]];
+        NSArray *titleArr =@[[NSString stringWithFormat:@"时间:%@",businessModel.create_time],[NSString stringWithFormat:@"数量:%@",businessModel.num]];
         UILabel *titleLabel =[[UILabel alloc]initWithFrame:CGRectMake(20+i%3*(kWidth/2), 50, 200, 20)];
         if (i==1) {
             titleLabel.frame =CGRectMake(20+i%3*(kWidth/2), 50, 100, 20);
@@ -189,7 +223,7 @@
         }
         titleLabel.textColor=HexRGB(0x808080);
         titleLabel.font =[UIFont systemFontOfSize:PxFont(16)];
-        [_backScrollView addSubview:titleLabel];
+        [backLineW addSubview:titleLabel];
 
     }
     
