@@ -35,21 +35,22 @@
         imgView.userInteractionEnabled = YES;
         image = imageView.image;
         imgView.image = image;
-        [bgView addSubview:imgView];
-        
-        
-        tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDown)];
-        [bgView addGestureRecognizer:tap];
         
         [self addSubview:bgView];
+        [self addSubview:imgView];
         
+        tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDown)];
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
+        view.backgroundColor = [UIColor clearColor];
+        [view addGestureRecognizer:tap];
+        [self addSubview:view];
     }
     return self;
 }
 
 - (void)tapDown
 {
-    [UIView animateWithDuration:0.4 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
         bgView.alpha = 0;
         imgView.frame = defaultRect;
     } completion:^(BOOL finished) {
@@ -59,7 +60,7 @@
 
 - (void)show
 {
-    [UIView animateWithDuration:0.4 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
         bgView.alpha = 1;
         imgView.frame = CGRectMake(0,(kHeight-image.size.height*(kWidth/image.size.width))/2,kWidth,image.size.height*(kWidth/image.size.width));
     }];
