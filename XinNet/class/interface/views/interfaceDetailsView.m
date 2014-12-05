@@ -83,7 +83,7 @@
 }
 
 -(void)shareBtnBtn{
-    [ShareView showViewWithTitle:@"分享" content:nil description:nil url:nil delegate:self];
+    [ShareView showViewWithTitle:@"分享" content:@"这是一段分享内容" description:@"这是一段分享内容" url:@"www.ebingoo.com" delegate:self];
     
 }
 -(void)collectionBtn{

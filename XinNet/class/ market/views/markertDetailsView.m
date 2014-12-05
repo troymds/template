@@ -17,6 +17,7 @@
 #import "collectionHttpTool.h"
 #import "RemindView.h"
 #import "LoginController.h"
+#import "ShareView.h"
 @interface markertDetailsView ()<YYalertViewDelegate,ReloadViewDelegate>
 {
     mardetDetailsModel *mardetModel;
@@ -92,7 +93,8 @@
 
 -(void)shareBtnBtn
 {
-    [self share];
+    [ShareView showViewWithTitle:@"分享" content:@"这是一段分享内容" description:@"这是一段分享内容" url:@"www.ebingoo.com" delegate:self];
+
 }
 
 -(void)collectionBtn{
@@ -138,87 +140,6 @@
     
 }
 
-- (void)share
-{
-    //分享的 底ViewControoler
-    id<ISSContainer> container = [ShareSDK container];
-    
-    [container setIPhoneContainerWithViewController:self];
-    
-    NSArray *shareList = [ShareSDK getShareListWithType:
-                          ShareTypeSinaWeibo,
-                          ShareTypeQQ,
-                          ShareTypeQQSpace,
-                          ShareTypeWeixiSession,
-                          ShareTypeWeixiTimeline,
-                          ShareTypeWeixiFav,
-                          ShareTypeSMS,
-                          nil];
-    
-    //分享的内容
-    id<ISSContent> publishContent = nil;
-    NSString *contentString = @"这是一段分享内容";
-    NSString *urlString     = @"www.ebingoo.com";
-    NSString *description   = @"这是一段分享内容";
-    
-    SSPublishContentMediaType shareType = SSPublishContentMediaTypeText;
-    
-    publishContent = [ShareSDK content:contentString
-                        defaultContent:@""
-                                 image:nil
-                                 title:@"易宾购"
-                                   url:urlString
-                           description:description
-                             mediaType:shareType];
-    
-    id<ISSShareOptions> shareOptions =
-    [ShareSDK defaultShareOptionsWithTitle:@""
-                           oneKeyShareList:shareList
-                        cameraButtonHidden:YES
-                       mentionButtonHidden:NO
-                         topicButtonHidden:NO
-                            qqButtonHidden:NO
-                     wxSessionButtonHidden:NO
-                    wxTimelineButtonHidden:NO
-                      showKeyboardOnAppear:NO
-                         shareViewDelegate:nil
-                       friendsViewDelegate:nil
-                     picViewerViewDelegate:nil];
-    
-    //弹出分享菜单
-    [ShareSDK showShareActionSheet:container
-                         shareList:shareList
-                           content:publishContent
-                     statusBarTips:YES
-                       authOptions:nil
-                      shareOptions:shareOptions
-                            result:^(ShareType type,
-                                     SSResponseState state,
-                                     id<ISSPlatformShareInfo> statusInfo,
-                                     id<ICMErrorInfo> error, BOOL end)
-     {
-         if (state == SSPublishContentStateSuccess)
-         {
-             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功!" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-             [alertView show];
-         }
-         else if (state == SSPublishContentStateFail)
-         {
-             if ([error errorCode] == -22003) {
-                 if ([error errorCode] == -22003) {
-                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:@"尚未安装微信,请安装后重试！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                     [alertView show];
-                 }
-             }else if ([error errorCode] == -24002){
-                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:@"尚未安装QQ,请安装后重试！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                 [alertView show];
-             }else if ([error errorCode] == -6004){
-                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:@"尚未安装QQ或者QQ空间客户端，请安装后重试！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                 [alertView show];
-             }
-         }
-     }];
-}
 
 -(void)addLabel{
     UIWebView *marketWebView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-120)];
