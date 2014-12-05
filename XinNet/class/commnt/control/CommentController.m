@@ -224,7 +224,7 @@
                     [_table scrollToRowAtIndexPath:index atScrollPosition:UITableViewScrollPositionTop animated:YES];
                 }
                 
-            } entityID:_entityID entityType:@"1" content:content failure:^(NSError *error) {
+            } entityID:_entityID entityType:_entityType content:content failure:^(NSError *error) {
                 [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
             }];
         }else
@@ -261,7 +261,7 @@
         {
             isLoadMore = NO;
         }
-        
+        [_table reloadData];
     } entityId:_entityID entityType:_entityType page:self.lastId withFailure:^(NSError *error) {
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
