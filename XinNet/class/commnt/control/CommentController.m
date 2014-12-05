@@ -17,6 +17,9 @@
 #import "commentPublished.h"
 #import "morecell.h"
 #import "AdaptationSize.h"
+#import "SystemConfig.h"
+#import "LoginController.h"
+#import "UserItem.h"
 
 #define RowH 80.0 // cell高度
 #define commentBtnBackH 44 //下面评论按钮背景高度
@@ -192,17 +195,44 @@
 - (void)btnDown:(UIButton *)btn conent:(NSString *)content
 {
     if (btn.tag == comformType) {// 发布评论
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.labelText = @"正在发表评论...";
-        
-        [commentPublished publishCommentWithSuccess:^(NSArray *data, int code, NSString *msg) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [RemindView showViewWithTitle:msg location:MIDDLE];
-        //刷新评论数据
-        
-        } entityID:_entityID entityType:_entityType content:content failure:^(NSError *error) {
-            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-        }];
+        if ([SystemConfig sharedInstance].isUserLogin) {//已经登录
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.labelText = @"正在发表评论...";
+            
+            [commentPublished publishCommentWithSuccess:^(NSArray *data, int code, NSString *msg) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [RemindView showViewWithTitle:msg location:MIDDLE];
+                //刷新评论数据
+                // 拿到用户名，头像，发表评论时间，内容
+                if ([SystemConfig sharedInstance].userItem) {
+                    UserItem *item = [SystemConfig sharedInstance].userItem;
+                    commentModel *publishData = [[commentModel alloc] init];
+                    publishData.uid = item.uid;
+                    publishData.userAvata = item.avatar;
+                    publishData.userName = item.user_name;
+                    publishData.content = content;
+                    //实例化一个NSDateFormatter对象
+                    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                    NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
+                    publishData.createTime = currentDateStr;
+                // 插入到数组最前面
+                    [_dataList insertObject:publishData atIndex:0];
+                    [_table reloadData];
+               //滚动到第一行
+                    NSIndexPath * index = [NSIndexPath indexPathForRow:0 inSection:0];
+                    [_table scrollToRowAtIndexPath:index atScrollPosition:UITableViewScrollPositionTop animated:YES];
+                }
+                
+            } entityID:_entityID entityType:_entityType content:content failure:^(NSError *error) {
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            }];
+        }else
+        {
+            [RemindView showViewWithTitle:@"您还没有注册或登陆哦" location:MIDDLE];
+            LoginController *login = [[LoginController alloc] init];
+            [self.navigationController pushViewController:login animated:YES];
+        }
     }
 }
 
@@ -231,7 +261,7 @@
         {
             isLoadMore = NO;
         }
-        
+        [_table reloadData];
     } entityId:_entityID entityType:_entityType page:self.lastId withFailure:^(NSError *error) {
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
