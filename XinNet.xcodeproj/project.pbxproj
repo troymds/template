@@ -39,6 +39,8 @@
 		04AAED0F1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 04AAECFC1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.bundle */; };
 		04AAED101A1EE0E300B5254B /* ShareSDKFlatShareViewUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AAECFD1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.framework */; };
 		04AAED111A1EE0E300B5254B /* ShareSDKShareActionSheet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AAECFE1A1EE0E300B5254B /* ShareSDKShareActionSheet.framework */; };
+		04AB6B921A3591430092C5CA /* save@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AB6B911A3591430092C5CA /* save@2x.png */; };
+		04AB6B941A35920C0092C5CA /* square_headBg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AB6B931A35920C0092C5CA /* square_headBg@2x.png */; };
 		04ABF8F31A3133E200D2D96D /* MagnifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ABF8F21A3133E200D2D96D /* MagnifyView.m */; };
 		04AC927E1A27088900FDEFDD /* user_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AC927D1A27088900FDEFDD /* user_default@2x.png */; };
 		04AC92821A272BDA00FDEFDD /* FindPasswordController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AC92811A272BDA00FDEFDD /* FindPasswordController.m */; };
@@ -330,6 +332,8 @@
 		04AAECFC1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ShareSDKFlatShareViewUI.bundle; sourceTree = "<group>"; };
 		04AAECFD1A1EE0E300B5254B /* ShareSDKFlatShareViewUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKFlatShareViewUI.framework; sourceTree = "<group>"; };
 		04AAECFE1A1EE0E300B5254B /* ShareSDKShareActionSheet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKShareActionSheet.framework; sourceTree = "<group>"; };
+		04AB6B911A3591430092C5CA /* save@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "save@2x.png"; sourceTree = "<group>"; };
+		04AB6B931A35920C0092C5CA /* square_headBg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "square_headBg@2x.png"; sourceTree = "<group>"; };
 		04ABF8F11A3133E200D2D96D /* MagnifyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagnifyView.h; sourceTree = "<group>"; };
 		04ABF8F21A3133E200D2D96D /* MagnifyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagnifyView.m; sourceTree = "<group>"; };
 		04AC927D1A27088900FDEFDD /* user_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user_default@2x.png"; sourceTree = "<group>"; };
@@ -1709,6 +1713,8 @@
 		55B617BB1A240FA300088E39 /* me_Images */ = {
 			isa = PBXGroup;
 			children = (
+				04AB6B931A35920C0092C5CA /* square_headBg@2x.png */,
+				04AB6B911A3591430092C5CA /* save@2x.png */,
 				04AFC81A1A2E95BB00EDEC6C /* publish@2x.png */,
 				04AA81B51A2FFAEC00245C7A /* modify@2x.png */,
 				04AEC4821A242CDF0030E3E9 /* box@2x.png */,
@@ -2165,6 +2171,7 @@
 				55B617C81A240FA300088E39 /* finish_pre@2x.png in Resources */,
 				04AAED0C1A1EE0E300B5254B /* WeiboSDK.bundle in Resources */,
 				04AFC81D1A2E971D00EDEC6C /* edit@2x.png in Resources */,
+				04AB6B941A35920C0092C5CA /* square_headBg@2x.png in Resources */,
 				55D539241A22C15A007400F6 /* business_imge.png in Resources */,
 				55C536611A2D3E1500172230 /* home_banner_off@2x.png in Resources */,
 				556EB0F61A1B598F006D5E0F /* nav_code@2x.png in Resources */,
@@ -2201,6 +2208,7 @@
 				04AAED071A1EE0E300B5254B /* Resource.bundle in Resources */,
 				04AFC8191A2E941500EDEC6C /* delete@2x.png in Resources */,
 				55C5365B1A2C6E0200172230 /* fail_image3@2x.png in Resources */,
+				04AB6B921A3591430092C5CA /* save@2x.png in Resources */,
 				55C536621A2D3E1500172230 /* home_banner_on@2x.png in Resources */,
 				55D539331A22C15A007400F6 /* menu_up_img.png in Resources */,
 				04AEC4911A247D470030E3E9 /* cateadvitise@2x.png in Resources */,

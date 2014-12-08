@@ -113,7 +113,9 @@
 #pragma mark 键盘隐藏
 - (void)keyboardWillHiden
 {
-    [_scrollView setContentSize:CGSizeMake(kWidth, kHeight-64)];
+    [UIView animateWithDuration:0.2 animations:^{
+        [_scrollView setContentSize:CGSizeMake(kWidth, kHeight-64)];
+    }];
     bottomSpace = _scrollView.contentSize.height-(pubBtn.frame.origin.y+pubBtn.frame.size.height);
 }
 
@@ -180,7 +182,7 @@
     [bgView addSubview:label];
     
     //内容输入框
-    contentView = [[UITextView alloc] initWithFrame:CGRectMake(0,label.frame.origin.y+label.frame.size.height,width,bgView.frame.size.height-(label.frame.origin.y+label.frame.size.height))];
+    contentView = [[UITextView alloc] initWithFrame:CGRectMake(50,height*2+5,width-50,155-5)];
     contentView.text = @"请填写内容,500字以内";
     contentView.textColor = HexRGB(0xc3c3c3);
     contentView.font = [UIFont systemFontOfSize:labelFont];
