@@ -155,6 +155,8 @@
         
     } company_id:_interfaceIndex CompanyFailure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
 
     }];
 }

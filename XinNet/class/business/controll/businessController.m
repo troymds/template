@@ -133,6 +133,8 @@
             [self addLoadTableView];
         } type_ID:@"" page:self.page failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+
 
         }];
         
@@ -154,6 +156,8 @@
             [self addLoadTableView];
         } type_ID:@"2" page:self.page  failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+
 
         }];
     }
@@ -176,6 +180,8 @@
             [self addLoadTableView];
         } type_ID:@"1" page:self.page  failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+
 
         }];
     }
@@ -202,6 +208,8 @@
                 [self addLoadTableView];
                 [refreshView endRefreshing];
             } type_ID:@"" page:self.page  failure:^(NSError *error) {
+                [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+
             }];
         }else if (_selectedBtn.tag==21){
         [businessTool statusesWithSuccess:^(NSArray *statues) {
@@ -220,6 +228,8 @@
             [self addLoadTableView];
             [refreshView endRefreshing];
         } type_ID:@"2" page:self.page failure:^(NSError *error) {
+            [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+
         }];
     }
     else{
@@ -239,6 +249,8 @@
             [self addLoadTableView];
              [refreshView endRefreshing];
         } type_ID:@"1" page:self.page  failure:^(NSError *error) {
+            [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+
         }];
     }
 }

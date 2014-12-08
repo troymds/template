@@ -137,7 +137,8 @@
             [refreshView endRefreshing];
             [self addLodadTableView];
         } category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
-            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
         }];
     }else if (_selectedBtn.tag==22){
         [productTool statusesWithSuccess:^(NSArray *statues,int code, NSString* message) {
@@ -164,7 +165,8 @@
             [self addLodadTableView];
             
         } category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
-            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
         }];
     }else{
         [productTool statusesWithSuccess:^(NSArray *statues,int code, NSString* message) {
@@ -191,7 +193,8 @@
             [self addLodadTableView];
             
         } category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
-            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
         }];
     }
 }
@@ -236,6 +239,7 @@
 
         } category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
 
             
         }];
@@ -262,6 +266,7 @@
 
         }category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
 
             
         }];
@@ -289,6 +294,7 @@
 
     }category_Id:_productNstrIndex page:self.page failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
 
     }];
     }

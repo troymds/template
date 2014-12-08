@@ -48,7 +48,7 @@
     }
 -(void)addScrollView{
     _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
-    if (IsIos7) {
+    if (kHeight==568.00) {
         _backScrollView.contentSize =CGSizeMake(kWidth, kHeight-64);
 
     }else{
@@ -180,6 +180,8 @@
        
           } company_id:_companyDetailIndex CompanyFailure:^(NSError *error) {
               [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+              [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+
 
     }];
 }
@@ -198,7 +200,7 @@
     
     
     for (int i=0; i<4; i++) {
-        NSArray *titleArr= @[[NSString stringWithFormat:@"  公司名称:%@",companyModel.name],[NSString stringWithFormat:@"   联系人:%@",companyModel.contact],[NSString stringWithFormat:@"   联系方式:%@",companyModel.tel],[NSString stringWithFormat:@"   公司地址:%@",companyModel.address]];
+        NSArray *titleArr= @[[NSString stringWithFormat:@"   公司名称:%@",companyModel.name],[NSString stringWithFormat:@"   联系人:%@",companyModel.contact],[NSString stringWithFormat:@"   联系方式:%@",companyModel.tel],[NSString stringWithFormat:@"   公司地址:%@",companyModel.address]];
         
         
         

@@ -68,14 +68,13 @@
     [classBtn addSubview:backView];
     backView.backgroundColor =[UIColor lightGrayColor];
     
-    UIView *backLineField =[[UIView alloc]initWithFrame:CGRectMake(YYBODERW-1, 91, BtnWidth+2, 45)];
+    UIView *backLineField =[[UIView alloc]initWithFrame:CGRectMake(YYBODERW-1, 66, BtnWidth+2, 45)];
     [self.view addSubview:backLineField];
     backLineField.backgroundColor =[UIColor lightGrayColor];
     
-     keyText =[[UITextField alloc]initWithFrame:CGRectMake(YYBODERW, 92, BtnWidth, 43)];
+     keyText =[[UITextField alloc]initWithFrame:CGRectMake(YYBODERW, 67, BtnWidth, 43)];
     [self.view addSubview:keyText];
     keyText.delegate =self;
-//    keyText.textAlignment = NSTextAlignmentCenter;
     keyText.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 
     keyText.borderStyle =UITextBorderStyleNone;
@@ -84,13 +83,13 @@
     keyText.clearButtonMode = UITextFieldViewModeWhileEditing;
     
     
-    YYSearchButton *searchBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
+    UIButton *searchBtn =[UIButton buttonWithType:UIButtonTypeCustom];
     [searchBtn setTitle:@"搜索" forState:UIControlStateNormal];
     [searchBtn setTitleColor:HexRGB(0xffffff) forState:UIControlStateNormal];
     [self.view addSubview:searchBtn];
     searchBtn.backgroundColor =HexRGB(0x9be4aa);
     searchBtn.contentHorizontalAlignment =UIControlContentHorizontalAlignmentCenter;
-    searchBtn.frame =CGRectMake(YYBODERW, 200, kWidth-YYBODERW*2, 42);
+    searchBtn.frame =CGRectMake(YYBODERW, 175, kWidth-YYBODERW*2, 42);
     [searchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [searchBtn addTarget:self action:@selector(searchBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     

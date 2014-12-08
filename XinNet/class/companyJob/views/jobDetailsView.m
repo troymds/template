@@ -166,7 +166,7 @@
     _bigScrollView.contentSize = CGSizeMake(kWidth*2, kHeight-64);
     _bigScrollView.backgroundColor =[UIColor whiteColor];
     _bigScrollView.delegate = self;
-//    _bigScrollView.bounces = YES;
+    _bigScrollView.bounces = NO;
     _bigScrollView.showsHorizontalScrollIndicator = NO;
     _bigScrollView.showsVerticalScrollIndicator = NO;
     

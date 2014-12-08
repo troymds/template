@@ -127,7 +127,8 @@
         [_tableView reloadData];
     }  keywords_Id:@"" category_Id:_category_Index page:self.page failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        
+        [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+
         
     }];
 
@@ -156,6 +157,8 @@
             [_tableView reloadData];
             [refreshView endRefreshing];
         }  keywords_Id:@"" category_Id:_category_Index page:self.page  failure:^(NSError *error) {
+            [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+
 
         }];
     }else if (_moreSelectedBtn.tag==32){
@@ -175,6 +178,7 @@
             [refreshView endRefreshing];
             
         }  keywords_Id:@"" category_Id:@"4" page:self.page  failure:^(NSError *error) {
+            [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
 
             
         }];
@@ -196,6 +200,7 @@
         [refreshView endRefreshing];
         
     }  keywords_Id:nil category_Id:nil  page:self.page failure:^(NSError *error) {
+        [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
 
         
     }];
@@ -232,7 +237,7 @@
             allMoreBtn.tag = KStartBtnTag + i;
             [allMoreBtn addTarget:self action:@selector(moreBtnClick:) forControlEvents:UIControlEventTouchUpInside];
             _moreSelectedBtn = allMoreBtn;
-            _moreSelectedBtn.selected = YES;
+//            _moreSelectedBtn.selected = YES;
             
         }else
         {
@@ -266,6 +271,7 @@
     isShowPopView =  !isShowPopView;
     
     [categoryLestTool statusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [_cagegoryArray removeAllObjects];
         [_cagegoryArray addObjectsFromArray:statues];
         
@@ -286,7 +292,10 @@
         }
 
     } entity_Type:@"1" failure:^(NSError *error) {
-        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+        [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+
     }];
 }
 
@@ -306,6 +315,7 @@
         
         if (mor.tag == KStartBtnTag) {// 点击的全部
             _category_Index =0;
+          
             
         }else
         {
@@ -313,11 +323,13 @@
             _category_Index = categoryModel.typeID;
         }
         
-        _moreView.hidden = YES;
-        _bigButton.hidden = YES;
-        isShowPopView = !isShowPopView;
-        [self addLoadStatus];
+        
+        
     }
+    _moreView.hidden = YES;
+    _bigButton.hidden = YES;
+    isShowPopView = !isShowPopView;
+    [self addLoadStatus];
 }
 
 #pragma mark---TableViewDelegate

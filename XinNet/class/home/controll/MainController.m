@@ -233,7 +233,7 @@
     CGFloat width;
     CGFloat distance;
     CGFloat topDistace;
-    if (IsIos7) {
+    if (kHeight==568.00) {
         leftDistace = 20;                              //第一列图片距离左边的距离
         width = 70;                                    //图片宽高
         distance = (kWidth-width*3-leftDistace*2)/2;   //每行图片的中间距离
@@ -247,7 +247,7 @@
 
     }
                                  //第一列图片距顶部的距离
-    
+  
     for (int i=0; i<_moduleArray.count; i++) {
         moduleModel *homeMode =[btnImgArray objectAtIndex:i];
         UIImageView *MainImage =[[UIImageView alloc]init];
@@ -306,7 +306,7 @@
     CGFloat width;
     CGFloat distance;
     CGFloat topDistace;
-    if (IsIos7) {
+    if (kHeight==568.00) {
         leftDistace = 20;                              //第一列图片距离左边的距离
         width = 70;                                    //图片宽高
         distance = (kWidth-width*3-leftDistace*2)/2;   //每行图片的中间距离

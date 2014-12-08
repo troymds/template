@@ -160,6 +160,8 @@
 
     } opportunity_Id:_businessDetailIndex failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
  
     }];
 }

@@ -114,6 +114,8 @@
     }  keywords_Id:nil page:self.page failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
+        [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+        
     }];
 }
 #pragma mark ----加载更多数据
@@ -137,6 +139,8 @@
         [_tableView reloadData];
         [refreshView endRefreshing];
     }  keywords_Id:nil page:self.page failure:^(NSError *error) {
+        [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+
         
     }];
 }
