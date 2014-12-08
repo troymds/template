@@ -48,7 +48,7 @@
     }
 -(void)addScrollView{
     _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
-    if (IsIos7) {
+    if (kHeight==568.00) {
         _backScrollView.contentSize =CGSizeMake(kWidth, kHeight-64);
 
     }else{
