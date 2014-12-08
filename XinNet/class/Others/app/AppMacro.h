@@ -75,7 +75,7 @@
 // 2.日志输出宏定义
 #ifdef DEBUG
 // 调试状态
-#define NSLog(...) NSLog(__VA_ARGS__)
+#define myNSLog(...) NSLog(__VA_ARGS__)
 #else
 // 发布状态
 #define NSLog(...)

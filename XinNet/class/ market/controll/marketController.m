@@ -232,7 +232,7 @@
             allMoreBtn.tag = KStartBtnTag + i;
             [allMoreBtn addTarget:self action:@selector(moreBtnClick:) forControlEvents:UIControlEventTouchUpInside];
             _moreSelectedBtn = allMoreBtn;
-            _moreSelectedBtn.selected = YES;
+//            _moreSelectedBtn.selected = YES;
             
         }else
         {
@@ -306,6 +306,7 @@
         
         if (mor.tag == KStartBtnTag) {// 点击的全部
             _category_Index =0;
+          
             
         }else
         {
@@ -313,11 +314,13 @@
             _category_Index = categoryModel.typeID;
         }
         
-        _moreView.hidden = YES;
-        _bigButton.hidden = YES;
-        isShowPopView = !isShowPopView;
-        [self addLoadStatus];
+        
+        
     }
+    _moreView.hidden = YES;
+    _bigButton.hidden = YES;
+    isShowPopView = !isShowPopView;
+    [self addLoadStatus];
 }
 
 #pragma mark---TableViewDelegate
