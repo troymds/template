@@ -200,7 +200,7 @@
     
     
     for (int i=0; i<4; i++) {
-        NSArray *titleArr= @[[NSString stringWithFormat:@"  公司名称:%@",companyModel.name],[NSString stringWithFormat:@"   联系人:%@",companyModel.contact],[NSString stringWithFormat:@"   联系方式:%@",companyModel.tel],[NSString stringWithFormat:@"   公司地址:%@",companyModel.address]];
+        NSArray *titleArr= @[[NSString stringWithFormat:@"   公司名称:%@",companyModel.name],[NSString stringWithFormat:@"   联系人:%@",companyModel.contact],[NSString stringWithFormat:@"   联系方式:%@",companyModel.tel],[NSString stringWithFormat:@"   公司地址:%@",companyModel.address]];
         
         
         

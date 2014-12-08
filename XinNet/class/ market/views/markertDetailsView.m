@@ -168,25 +168,25 @@
     
     
     
-    YYSearchButton *writeBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
-    [self.view addSubview:writeBtn];
-    writeBtn.frame = CGRectMake(40, kHeight-44-64, kWidth-85, 34);
-    writeBtn.contentHorizontalAlignment =UIControlContentVerticalAlignmentCenter;
-    [writeBtn setTitle:@"  评论" forState:UIControlStateNormal];
-    writeBtn.backgroundColor =[UIColor whiteColor];
-    [writeBtn setImage:[UIImage imageNamed:@"write_pre.png"] forState:UIControlStateNormal];
-    
-    [writeBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    writeBtn.titleLabel.font =[UIFont systemFontOfSize:20];
-    
-    [writeBtn addTarget:self action:@selector(writeBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    UIView *linew =[[UIView alloc]initWithFrame:CGRectMake(0, kHeight-120, kWidth, 1)];
+    [self.view addSubview:linew];
+    linew.backgroundColor =HexRGB(0xe6e3e4);
+    YYSearchButton *findBtn = [YYSearchButton buttonWithType:UIButtonTypeCustom];
+    findBtn.frame = CGRectMake(20, kHeight-100,kWidth-40,30);
+    findBtn.backgroundColor =[UIColor clearColor];
+    [findBtn addTarget:self action:@selector(wirteBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [findBtn setTitle:@"  评论" forState:UIControlStateNormal];
+    [findBtn setImage:[UIImage imageNamed:@"write_pre.png"] forState:UIControlStateNormal];
+    findBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(20)];
+    [findBtn setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
+    [self.view addSubview:findBtn];
     
 }
 
 -(void)addwriteView{
     
 }
--(void)writeBtnClick:(UIButton *)write{
+-(void)wirteBtnClick:(UIButton *)write{
     
     
     CommentController *ctl = [[CommentController alloc] init];

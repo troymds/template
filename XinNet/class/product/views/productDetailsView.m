@@ -183,7 +183,7 @@
    
 
     for (int i=0; i<5; i++) {
-        NSArray *titleArr =@[[NSString stringWithFormat:@"产品名称 : %@",prodModel.name],[NSString stringWithFormat:@"现      价 : %@",prodModel.price],[NSString stringWithFormat:@"原      价 : %@",prodModel.old_price],[NSString stringWithFormat:@"所属企业 : %@",prodModel.company_name],[NSString stringWithFormat:@"产品简介 : %@",prodModel.description]];
+        NSArray *titleArr =@[[NSString stringWithFormat:@"产品名称 : %@",prodModel.name],[NSString stringWithFormat:@"现      价 : ￥%@",prodModel.price],[NSString stringWithFormat:@"原      价 : ￥%@",prodModel.old_price],[NSString stringWithFormat:@"所属企业 : %@",prodModel.company_name],[NSString stringWithFormat:@"产品简介 : %@",prodModel.description]];
         TYMyLabel *contentLable=[[TYMyLabel alloc]initWithFrame:CGRectMake(1, 1+i%5*41, kWidth-YYBODER*2-2, 40)withInsets:UIEdgeInsetsMake(0,15,0,0)];
        
         if (i==4) {
