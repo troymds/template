@@ -34,10 +34,19 @@
     self.view.backgroundColor = HexRGB(0xededed);
   
     [self addLoadStatus];
+    [self addMBprogressView];
+}
+#pragma  mark ------显示指示器
+-(void)addMBprogressView{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
+    
+    
 }
 -(void)addLoadStatus{
 
         [aboutTool AboutStatusesWithSuccesscategory:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             abModel =[[aboutModel alloc]init];
             NSDictionary *dict =[statues objectAtIndex:0];
             abModel.name =[dict objectForKey:@"name"];
@@ -53,7 +62,10 @@
             [self addViewWithModel:abModel];
             
         } AboutFailure:^(NSError *error) {
-            
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+            [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+ 
         } ];
 
     

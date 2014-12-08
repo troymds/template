@@ -138,7 +138,8 @@
            
             [refershview endRefreshing];
         } company_Id:@"" keywords_Id:_keyWordesIndex category_Id:@"" page:self.page failure:^(NSError *error) {
-            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
         }   ];
     }else if (_searchSelectedIndex ==201){
                 [businessTool statusesWithSuccess:^(NSArray *statues) {
@@ -163,7 +164,8 @@
                     [refershview endRefreshing];
 
                 } keywords_Id:_keyWordesIndex type_ID:@"" company_Id:@"" page:self.page failure:^(NSError *error) {
-                    
+                    [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
                 }];
    
         
@@ -187,7 +189,8 @@
                         [refershview endRefreshing];
 
         } company_Id:@"" keywords_Str:_keyWordesIndex page:self.page failure:^(NSError *error) {
-            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
         }];
     }
 }
@@ -220,6 +223,8 @@
             
         } company_Id:@"" keywords_Id:_keyWordesIndex category_Id:@"" page:self.page failure:^(NSError *error) {
                         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
             
         }   ];
     }else if (_searchSelectedIndex ==201){
@@ -242,6 +247,8 @@
             
         } keywords_Id:_keyWordesIndex type_ID:@"" company_Id:@"" page:self.page failure:^(NSError *error) {
              [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
         }];
         
         
@@ -263,7 +270,9 @@
             
             
         } company_Id:@"" keywords_Str:_keyWordesIndex page:self.page  failure:^(NSError *error) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES]; 
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
         }];
     }
 }

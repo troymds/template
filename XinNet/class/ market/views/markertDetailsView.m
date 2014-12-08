@@ -38,12 +38,22 @@
     }
     [self addCollectionAndShareSDK];
     [self addLoadStatus];
+    [self addMBprogressView];
     
     
 }
+#pragma  mark ------显示指示器
+-(void)addMBprogressView{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
+    
+    
+}
+
 #pragma mark----加载数据
 -(void)addLoadStatus{
     [mardetDetailsTool statusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *dict = [statues objectAtIndex:0];
         mardetModel =[[mardetDetailsModel alloc]init];
         mardetModel.wapUrl =[dict objectForKey:@"wapUrl"];
@@ -56,6 +66,9 @@
         }
         [self addLabel];
     } newsID:_markIndex failure:^(NSError *error) {
+        [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
         
     }];
 }

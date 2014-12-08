@@ -180,6 +180,8 @@
        
           } company_id:_companyDetailIndex CompanyFailure:^(NSError *error) {
               [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+              [RemindView showViewWithTitle:@"网络错误" location:BELLOW];
+
 
     }];
 }

@@ -76,8 +76,7 @@
 -(void)addMBprogressView{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"加载中...";
-    //    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-    
+        
 }
 
 #pragma mark 集成刷新控件
@@ -122,7 +121,8 @@
             [self addloadTableView];
             [refreshView endRefreshing];
         } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
-        
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
         }];
         
     }else if (_selectedBtn.tag==22){
@@ -141,7 +141,8 @@
             [self addloadTableView];
             [refreshView endRefreshing];
         } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
-            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
         }];
     }else{
         [interfaceTool statusesWithSuccess:^(NSArray *statues) {
@@ -159,6 +160,7 @@
             [self addloadTableView];
             [refreshView endRefreshing];
         } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
 
         }];
     }
@@ -191,6 +193,7 @@
             [self addloadTableView];
         } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
 
             
         }];
@@ -214,6 +217,7 @@
 
         } category_Id:_categoryIndex page:self.page  failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
 
         }];
     }else{
@@ -236,6 +240,7 @@
 
     } category_Id:_categoryIndex page:self.page failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
 
     }];
     }
@@ -244,6 +249,8 @@
 -(void)addLoadcategoryStatus{
     
     [categoryLestTool statusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
         if (statues.count>0) {
             [_categoryArray removeAllObjects];
             [_categoryArray addObjectsFromArray:statues];
@@ -260,7 +267,9 @@
         
         
     } entity_Type:@"7" failure:^(NSError *error) {
-        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
     }];
     
 }
