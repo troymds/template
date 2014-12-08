@@ -14,6 +14,12 @@
 {
     if (self = [super initWithFrame:frame]) {
         
+        
+        UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"square_headBg"]];
+        bgView.frame = CGRectMake(0,0,frame.size.width,frame.size.height);
+        bgView.userInteractionEnabled = YES;
+        [self addSubview:bgView];
+        
         //头像
         _iconImg = [[TJImageView alloc] initWithFrame:CGRectMake(0,0, 80,80)];
         _iconImg.layer.masksToBounds = YES;
