@@ -328,8 +328,8 @@
     return 0;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (_searchSelectedIndex==202) {
-        return 70;
+    if (_searchSelectedIndex==201) {
+        return 50;
     }else{
         return 80;
     }
@@ -372,13 +372,16 @@
         Cell.selectionStyle =UITableViewCellSelectionStyleNone;
         businessModel *busineModel =[_businessArray objectAtIndex:indexPath.row];
         Cell.textLabel.text =busineModel.title;
+        Cell.textLabel.font=[UIFont systemFontOfSize:15];
+
         if ([busineModel.typeId isEqualToString:@"2"]) {
             Cell.imageView.image = [UIImage imageNamed:@"business_imge.png"];
             
         }else{
             Cell.imageView.image = [UIImage imageNamed:@"business_img.png"];
             
-        }        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
+        }
+         UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 49, kWidth, 1)];
         [Cell.contentView addSubview:cellLine];
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
         Cell.textLabel.backgroundColor =[UIColor clearColor];

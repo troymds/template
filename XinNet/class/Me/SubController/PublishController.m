@@ -114,6 +114,7 @@
 - (void)keyboardWillHiden
 {
     [UIView animateWithDuration:0.2 animations:^{
+        [_scrollView setContentOffset:CGPointMake(0, 0)];
         [_scrollView setContentSize:CGSizeMake(kWidth, kHeight-64)];
     }];
     bottomSpace = _scrollView.contentSize.height-(pubBtn.frame.origin.y+pubBtn.frame.size.height);

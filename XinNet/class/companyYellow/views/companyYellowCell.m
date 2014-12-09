@@ -20,27 +20,24 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
-        logoImage = [[UIImageView alloc] initWithFrame:CGRectMake(16, 10, 60, 60)];
+        logoImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 300, 150)];
         logoImage.backgroundColor =[UIColor clearColor];
         [self addSubview:logoImage];
         
         
         
-        nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 10, 240, 20)];
-        nameLabel.font =[UIFont systemFontOfSize:PxFont(23)];
+        nameLabel = [[TYMyLabel alloc] initWithFrame:CGRectMake(10, 160, 300, 35) withInsets:UIEdgeInsetsMake(0, 10, 0, 0)];
+        nameLabel.font =[UIFont systemFontOfSize:PxFont(20)];
         [self addSubview:nameLabel];
         nameLabel.textColor =HexRGB(0x3a3a3a);
+        nameLabel.backgroundColor=[UIColor whiteColor];
+
 
         
         
         
         
-        addressLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, 40, 190, 20)];
-        [self addSubview:addressLabel];
-        addressLabel.numberOfLines = 0;
-        addressLabel.textColor =HexRGB(0x808080);
-        addressLabel.font =[UIFont systemFontOfSize:PxFont(17)];
-        
+              
         
         
     }

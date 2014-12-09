@@ -158,7 +158,7 @@
     
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 80;
+    return 220;
 }
 
 
@@ -181,16 +181,13 @@
     companyYellowCell *cell =[tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIndexfider];
     if (!cell) {
         cell=[[companyYellowCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
-        cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
+        cell.backgroundColor=HexRGB(0xefefef);
 
-        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 79, kWidth, 1)];
-        [cell.contentView addSubview:cellLine];
-        cellLine.backgroundColor =HexRGB(0xe6e3e4);
-        cell.selectionStyle=UITableViewCellSelectionStyleNone;
+
 
     }
     companyListModel *comapnyModel =[_companyArray objectAtIndex:indexPath.row];
-    [cell.logoImage setImageWithURL:[NSURL URLWithString:comapnyModel.logo] placeholderImage:placeHoderImage2];
+    [cell.logoImage setImageWithURL:[NSURL URLWithString:comapnyModel.logo] placeholderImage:placeHoderImage3];
     cell.nameLabel.text =comapnyModel.name;
     cell.addressLabel.text =comapnyModel.address;
     return cell;

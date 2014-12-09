@@ -397,7 +397,7 @@
 }
 #pragma mark  -----TableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 70;
+    return 50;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -430,13 +430,15 @@
             cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
             cell.AccessoryType=UITableViewCellAccessoryDisclosureIndicator;
         }
-        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
+        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 49, kWidth, 1)];
         [cell.contentView addSubview:cellLine];
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
         businessModel *busineModel =[_allBusinessArray objectAtIndex:indexPath.row];
         cell.textLabel.text =busineModel.title;
         cell.textLabel.backgroundColor =[UIColor clearColor];
         cell.selectionStyle=UITableViewCellSelectionStyleNone;
+        cell.textLabel.font=[UIFont systemFontOfSize:15];
+        
 
         if ([busineModel.typeId isEqualToString:@"2"]) {
             cell.imageView.image = [UIImage imageNamed:@"business_imge.png"];
@@ -456,14 +458,15 @@
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
 
         }
-        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
+        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 49, kWidth, 1)];
         [cell.contentView addSubview:cellLine];
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
         businessModel *busineModel =[_supplyBusinessArray objectAtIndex:indexPath.row];
         cell.textLabel.text =busineModel.title;
         cell.imageView.image = [UIImage imageNamed:@"business_imge.png"];
         cell.textLabel.backgroundColor =[UIColor clearColor];
-        
+        cell.textLabel.font=[UIFont systemFontOfSize:15];
+
 
         return cell;
 
@@ -476,11 +479,12 @@
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
 
         }
-        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 69, kWidth, 1)];
+        UIView *cellLine =[[UIView alloc]initWithFrame:CGRectMake(0, 49, kWidth, 1)];
         [cell.contentView addSubview:cellLine];
         cellLine.backgroundColor =HexRGB(0xe6e3e4);
         businessModel *busineModel =[_demandBusinessArray objectAtIndex:indexPath.row];
         cell.textLabel.text =busineModel.title;
+        cell.textLabel.font=[UIFont systemFontOfSize:15];
         cell.imageView.image = [UIImage imageNamed:@"business_img.png"];
         cell.textLabel.backgroundColor =[UIColor clearColor];
 

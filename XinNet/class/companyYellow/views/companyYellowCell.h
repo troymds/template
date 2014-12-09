@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "TYMyLabel.h"
 @interface companyYellowCell : UITableViewCell
 @property (copy, nonatomic)  UIImageView *logoImage;
 @property (copy, nonatomic)  UILabel *nameLabel;
-@property (copy, nonatomic)  UILabel *addressLabel;
+@property (copy, nonatomic)  TYMyLabel *addressLabel;
 @end
